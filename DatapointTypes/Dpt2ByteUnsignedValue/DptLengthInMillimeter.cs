@@ -1,0 +1,16 @@
+using Knx.Common;
+
+namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
+{
+    [DatapointType(7,11, Unit.Millimeter, Usage.FunctionBlock)]
+    public class DptLengthInMillimeter : Dpt2ByteUnsignedValue
+    {
+        public DptLengthInMillimeter(byte[] payload) : base(payload)
+        {
+        }
+
+        public DptLengthInMillimeter(ushort value) : base(value)
+        {
+        }
+    }
+}

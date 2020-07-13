@@ -1,0 +1,16 @@
+using Knx.Common;
+
+namespace Knx.DatapointTypes.Dpt4ByteSignedValue
+{
+    [DatapointType(13, 1, Unit.Pulses, Usage.General)]
+    public class DptValue4Count : Dpt4ByteSignedValue
+    {
+        public DptValue4Count(byte[] payload) : base(payload)
+        {
+        }
+
+        public DptValue4Count(int value) : base(value)
+        {
+        }
+    }
+}

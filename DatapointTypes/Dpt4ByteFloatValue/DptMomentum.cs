@@ -1,0 +1,18 @@
+using Knx.Common;
+
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+{
+    [DatapointType(14, 53, Unit.Momentum, Usage.General, Description = "momentum")]
+    public class DptMomentum : Dpt4ByteFloat
+    {
+        public DptMomentum(byte[] twoBytes)
+            : base(twoBytes)
+        {
+        }
+
+        public DptMomentum(float value)
+            : base(value)
+        {
+        }
+    }
+}

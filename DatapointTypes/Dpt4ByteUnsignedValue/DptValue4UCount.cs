@@ -1,0 +1,16 @@
+using Knx.Common;
+
+namespace Knx.DatapointTypes.Dpt4ByteUnsignedValue
+{
+    [DatapointType(12, 1, Unit.Pulses, Usage.General)]
+    public class DptValue4UCount : Dpt4ByteUnsignedValue
+    {
+        public DptValue4UCount(byte[] payload) : base(payload)
+        {
+        }
+
+        public DptValue4UCount(uint value) : base(value)
+        {
+        }
+    }
+}

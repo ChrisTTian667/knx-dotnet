@@ -1,0 +1,26 @@
+using Knx.Common;
+
+namespace Knx.DatapointTypes.Dpt1Bit
+{
+    [DatapointType(1, 19, Unit.WindowDoor, Usage.General)]
+    public class DptWindowDoor : Dpt1Bit
+    {
+        public DptWindowDoor(byte[] payload)
+            : base(payload)
+        {
+        }
+
+        public DptWindowDoor(bool value)
+            : base(value)
+        {
+        }
+
+        [DatapointProperty]
+        [BooleanEncoding(UnitEncoding.WindowClosed, UnitEncoding.WindowOpen)]
+        public override bool Value
+        {
+            get { return base.Value; }
+            set { base.Value = value; }
+        }
+    }
+}
