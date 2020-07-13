@@ -1,6 +1,6 @@
 using System;
 
-namespace Knx.PropertyInfoFactories
+namespace Knx
 {
     public interface IDatatypePropertyInfo
     {
