@@ -18,20 +18,14 @@ namespace Knx.DatapointTypes.DptString
         }
 
         [DatapointProperty]
-        [StringLength(14, ErrorMessage = "String must not exceed a length of 14 charackters.")]
+        [StringLength(14, ErrorMessage = "String must not exceed a length of 14 characters.")]
         public string Value
         {
-            get
-            {
-                return ToValue(Payload);
-            }
-
+            get => ToValue(Payload);
             set
             {
                 if (value.Length > 14)
-                {
-                    throw new Exception("String must not exceed a length of 14 charackters.");
-                }
+                    throw new Exception("String must not exceed a length of 14 characters.");
 
                 Payload = ToBytes(value);
                 RaisePropertyChanged(() => Value);

@@ -5,6 +5,7 @@ using Knx.Common;
 namespace Knx.DatapointTypes.DptVariableString
 {
     [DatapointType(24, 1, Usage.General)]
+    [DataLength(1,-1)]
     public class DptVariableString_8859_1 : DptVariableString
     {
         public DptVariableString_8859_1(byte[] payload)

@@ -29,17 +29,12 @@ namespace Knx.DatapointTypes
                 var dataLengthAttribute = datapointTypeType.GetFirstCustomAttribute<DataLengthAttribute>(true);
                 var dataLength = dataLengthAttribute.MinimumRequiredBytes;
                 if (dataLength < 0)
-                {
                     dataLength = 0;
-                }
+                
                 var defaultPayload = new byte[dataLength];
 
-                var instance = Activator.CreateInstance(datapointTypeType, new object[] { defaultPayload }) as DatapointType;
-
-                if (instance == null)
-                {
-                    throw new InvalidOperationException(string.Format("The type '{0}' is no {1}", datapointTypeType, typeof(DatapointType)));
-                }
+                if (!(Activator.CreateInstance(datapointTypeType, defaultPayload) is DatapointType instance))
+                    throw new InvalidOperationException($"The type '{datapointTypeType}' is no {typeof(DatapointType)}");
 
                 return instance;
             }
@@ -58,9 +53,7 @@ namespace Knx.DatapointTypes
         {
             var type = GetDatapointTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString() == id);
             if (type == null)
-            {
-                throw new Exception(string.Format("Unable to find DatapointType with id: '{0}'", id));
-            }
+                throw new Exception($"Unable to find DatapointType with id: '{id}'");
 
             return type;
         }

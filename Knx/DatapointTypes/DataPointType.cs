@@ -99,14 +99,11 @@ namespace Knx.DatapointTypes
         [DataMember]
         public virtual byte[] Payload
         {
-            get { return _payload; }
-
+            get => _payload;
             set
             {
                 if (value.Length == 0)
-                {
                     throw new ArgumentOutOfRangeException("Payload", "Datapoint Type needs at least one byte of data.");
-                }
 
                 SetProperty(ref _payload, value, () => Payload);
             }

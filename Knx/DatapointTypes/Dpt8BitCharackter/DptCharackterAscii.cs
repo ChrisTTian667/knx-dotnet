@@ -22,11 +22,7 @@ namespace Knx.DatapointTypes.Dpt8BitCharackter
         [DatapointProperty]
         public char Value
         {
-            get
-            {
-                return ToValue(Payload);
-            }
-
+            get => ToValue(Payload);
             set
             {
                 Payload = ToBytes(value);

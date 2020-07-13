@@ -41,7 +41,11 @@ namespace Knx.Tests
                 }
                 catch (MissingMethodException ex)
                 {
-                    Assert.Fail(string.Format("Type {0}: {1}", type, ex.Message));
+                    Assert.Fail($"Type {type}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail($"Type {type}: {ex.Message}");
                 }
             }
 

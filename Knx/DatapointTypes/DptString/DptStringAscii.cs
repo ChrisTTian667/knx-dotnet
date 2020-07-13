@@ -5,6 +5,7 @@ using Knx.Common;
 namespace Knx.DatapointTypes.DptString
 {
     [DatapointType(16, 0, Usage.General)]
+    [DataLength(1, 14)]
     public class DptStringAscii : DptString
     {
         public DptStringAscii(byte[] payload) : base(payload)
