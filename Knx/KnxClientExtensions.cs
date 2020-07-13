@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using Knx.Common;
 using Knx.Common.Exceptions;
@@ -11,12 +10,6 @@ namespace Knx
 {
     public static class KnxClientExtensions
     {
-        /// <summary>
-        /// The LearnHandler is invoked each time a KNX-Message is retrieved that matches specified conditions during Learn method of a KNX client. 
-        /// </summary>
-        /// <returns><c>true</c>, if driver should stop searching, otherwise <c>false</c></returns>
-        public delegate bool LearnHandler(KnxAddress destination, object message, DatapointType data);
-
         public static void Write(this IKnxClient client, KnxLogicalAddress destination, DatapointType data,
                                  MessagePriority priority = MessagePriority.Auto)
         {
@@ -128,9 +121,7 @@ namespace Knx
                     {
                         // Fallback, if we retrieved a confirmation, but no indication.
                         if (confirmationMessage != null)
-                        {
                             return (DatapointType)Activator.CreateInstance(datapointTypeResultType, confirmationPayload);
-                        }
 
                         throw new KnxTimeoutException(string.Format("Did not retrieve an answer within configured timeout of {0} seconds: {1}", timeOut.TotalSeconds, message));
                     }
@@ -146,72 +137,6 @@ namespace Knx
                 replyEvent.Dispose();
             }
         }
-
-        public static void Learn(this IKnxClient client, Type[] expectedDatapointTypeResultTypes,
-                                 LearnHandler stopRequest, MessageType expectedMessageType = MessageType.Write,
-                                 TimeSpan duration = default(TimeSpan))
-        {
-            if (stopRequest == null)
-                throw new KnxException("You must specify a LearnHandler method to provide the search results.");
-
-            if (!expectedDatapointTypeResultTypes.Any())
-                throw new KnxException("At least one expected Datapoint Type needs to be specified to learn a function.");
-
-            var replyEvent = new AutoResetEvent(false);
-            var learnLock = new object();
-
-            try
-            {
-                KnxMessageReceivedHandler onMessageReceived = delegate(IKnxClient sender, IKnxMessage knxMessage)
-                {
-                    if ((knxMessage == null) || (knxMessage.MessageType != expectedMessageType)) 
-                        return;
-
-                    lock (learnLock)
-                    {
-                        var payload = new byte[knxMessage.Payload.Length];
-                        knxMessage.Payload.CopyTo(payload, 0);
-
-                        foreach (var type in expectedDatapointTypeResultTypes.Distinct())
-                        {
-                            try
-                            {
-                                if (!DatapointType.VerifyPayload(type, payload, true))
-                                    continue;
-
-                                var dataPointType = Activator.CreateInstance(type, payload) as DatapointType;
-                                if (dataPointType != null)
-                                {
-                                    var handler = stopRequest;
-                                    if (handler(knxMessage.DestinationAddress, knxMessage, dataPointType))
-                                    {
-                                        // we stop here, because application told us to.
-                                        replyEvent.Set();
-                                    }
-                                }
-                            }
-                            catch (Exception)
-                            {
-                                continue;
-                            }
-                        }
-                    }
-                };
-
-                try
-                {
-                    client.KnxMessageReceived += onMessageReceived;
-                    replyEvent.WaitOne(duration);
-                }
-                finally
-                {
-                    client.KnxMessageReceived -= onMessageReceived;
-                }
-            }
-            finally
-            {
-                replyEvent.Dispose();
-            }
-        }
+        
     }
 }
