@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Knx.Common
 {
-    public class BitArrayBuilder
+    public sealed class BitArrayBuilder
     {
         #region Constants and Fields
 

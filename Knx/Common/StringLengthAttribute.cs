@@ -7,7 +7,7 @@ namespace Knx.Common
         /// <summary>
         /// Gets the length.
         /// </summary>
-        public int Length { get; private set; }
+        public int Length { get; }
 
         /// <summary>
         /// Gets or sets the error message.

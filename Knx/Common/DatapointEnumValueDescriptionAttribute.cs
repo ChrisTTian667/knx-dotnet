@@ -8,9 +8,9 @@ namespace Knx.Common
     [AttributeUsage(validOn: AttributeTargets.Enum, AllowMultiple = true)]
     public class DatapointEnumValueDescriptionAttribute : Attribute
     {
-        public byte StartIndex { get; private set; }
-        public byte EndIndex { get; private set; }
-        public string Description { get; private set; }
+        public byte StartIndex { get; }
+        public byte EndIndex { get; }
+        public string Description { get; }
 
         public DatapointEnumValueDescriptionAttribute(byte startIdx, byte endIndex, string description)
         {

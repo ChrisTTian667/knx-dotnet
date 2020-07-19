@@ -10,8 +10,6 @@ namespace Knx.Common
     /// </summary>
     public static class ByteExtensions
     {
-        #region Public Methods
-
         public static IEnumerable<bool> ConvertToBits(this int value, byte length)
         {
             return new BitArray(new[] { value }).Cast<bool>().Take(length).Reverse();
@@ -117,7 +115,5 @@ namespace Knx.Common
 
             return value.ConvertToBits(8).ToArray()[index];
         }
-
-        #endregion
     }
 }

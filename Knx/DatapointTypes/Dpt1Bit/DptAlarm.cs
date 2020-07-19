@@ -19,8 +19,8 @@ namespace Knx.DatapointTypes.Dpt1Bit
         [DatapointProperty]
         public override bool Value
         {
-            get { return base.Value; }
-            set { base.Value = value; }
+            get => base.Value;
+            set => base.Value = value;
         }
     }
 }

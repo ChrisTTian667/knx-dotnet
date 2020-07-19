@@ -23,8 +23,6 @@ namespace Knx.Common
         /// <value>The error message.</value>
         public string ErrorMessage { get; set; }
 
-        #region Constructor / Destructor
-
         protected RangeAttribute(object minimum, object maximum)
         {
             Minimum = minimum;
@@ -56,7 +54,5 @@ namespace Knx.Common
             Minimum = Convert.ChangeType(minimum, type, null);
             Maximum = Convert.ChangeType(maximum, type, null);
         }
-
-        #endregion Constructor / Destructor
     }
 }

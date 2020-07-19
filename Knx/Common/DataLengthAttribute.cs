@@ -16,9 +16,9 @@ namespace Knx.Common
         /// <value>
         /// The length.
         /// </value>
-        public int Length { get; private set; }
+        public int Length { get; }
 
-        public int MaximumLength { get; private set; }
+        public int MaximumLength { get; }
 
         public int MinimumRequiredBytes
         {

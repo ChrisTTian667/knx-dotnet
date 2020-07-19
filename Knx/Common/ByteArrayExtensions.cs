@@ -6,8 +6,6 @@ namespace Knx.Common
 {
     public static class ByteArrayExtensions
     {
-        #region Public Methods
-
         /// <summary>
         /// Extracts the bytes from a given Idx.
         /// </summary>
@@ -89,7 +87,5 @@ namespace Knx.Common
                 return collection.ToArray();
             }
         }
-
-        #endregion
     }
 }
