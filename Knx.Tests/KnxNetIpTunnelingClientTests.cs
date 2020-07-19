@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Knx.Tests
 {
-    public class ConnectToKnxNetIpGatewayTest
+    public class KnxNetIpTunnelingClientTests
     {
         public KnxMessage SwitchOfficeLightsOn(bool on)
         {
