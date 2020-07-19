@@ -12,6 +12,8 @@
         <Title>KNX</Title>
         <Description>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Description>
         <PackageVersion>1.1</PackageVersion>
+        <ReleaseVersion>1.1</ReleaseVersion>
+        <SynchReleaseVersion>false</SynchReleaseVersion>
     </PropertyGroup>
 
     <PropertyGroup>
