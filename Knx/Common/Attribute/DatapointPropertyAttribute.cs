@@ -1,12 +1,12 @@
 ﻿using System;
 
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
     /// <summary>
     /// Specifies a more user friendly property name.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class DatapointPropertyAttribute : Attribute
+    public class DatapointPropertyAttribute : System.Attribute
     {
         public string PropertyName { get; private set; }        
         
