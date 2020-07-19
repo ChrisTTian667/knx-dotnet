@@ -24,5 +24,5 @@ jobs:
     - name: Publish Nuget
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-          PROJECT_FILE_PATH: Knx.sln
+          PROJECT_FILE_PATH: /Knx/Knx.csproj
           NUGET_KEY: ${{secrets.NUGETAPIKEY}}
