@@ -21,7 +21,7 @@ namespace Knx
         
         bool IsConnected { get; }
         
-        Task Open();
+        Task Connect();
 
         Task SendMessage(IKnxMessage knxMessage);
     }

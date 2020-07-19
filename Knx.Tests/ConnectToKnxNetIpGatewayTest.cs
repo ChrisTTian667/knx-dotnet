@@ -93,7 +93,7 @@ namespace Knx.Tests
         {
             using (var target = new KnxNetIpTunnelingClient(new IPEndPoint(IPAddress.Parse("10.10.10.11"), 3671), KnxAddress.Device(1, 1, 2)))
             {
-                await target.Open();
+                await target.Connect();
             }
         }
 
@@ -104,7 +104,7 @@ namespace Knx.Tests
 
             try
             {
-               await target.Open();
+               await target.Connect();
                 
                 var message = new KnxMessage
                 {
