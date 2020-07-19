@@ -26,3 +26,4 @@ jobs:
       with:
           PROJECT_FILE_PATH: Knx/Knx.csproj
           NUGET_KEY: ${{secrets.NUGETAPIKEY}}
+          VERSION_REGEX: <PackageVersion>(.*)<\/PackageVersion>  
