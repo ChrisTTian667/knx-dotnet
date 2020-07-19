@@ -120,8 +120,8 @@ namespace Knx.ExtendedMessageInterface
         /// </summary>
         public byte[] Payload
         {
-            get { return _payload ?? (_payload = new byte[] {}); }
-            set { _payload = value; }
+            get { return _payload ??= new byte[] {}; }
+            set => _payload = value;
         }
 
         /// <summary>
