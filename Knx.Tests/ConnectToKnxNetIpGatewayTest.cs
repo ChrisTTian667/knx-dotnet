@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Threading.Tasks;
 using Knx.Common;
 using Knx.DatapointTypes;
+using Knx.DatapointTypes.Dpt1Bit;
 using Knx.DatapointTypes.Dpt2ByteFloat;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
@@ -87,39 +89,39 @@ namespace Knx.Tests
         }
 
         [Test]
-        public void ConnectTest()
+        public async Task ConnectTest()
         {
-            using (var target = new KnxNetIpTunnelingClient(new IPEndPoint(IPAddress.Parse("192.168.2.100"), 3671), KnxAddress.Device(1, 1, 2)))
+            using (var target = new KnxNetIpTunnelingClient(new IPEndPoint(IPAddress.Parse("10.10.10.11"), 3671), KnxAddress.Device(1, 1, 2)))
             {
-                target.Open();
+                await target.Open();
             }
         }
 
         [Test]
-        public void SendKnxMessage()
+        public async Task SendKnxMessage()
         {
-            var target = new KnxNetIpTunnelingClient(new IPEndPoint(IPAddress.Parse("192.168.2.100"), 3671), KnxAddress.Device(1, 1, 2));
+            var target = new KnxNetIpTunnelingClient(new IPEndPoint(IPAddress.Parse("10.10.10.11"), 3671), KnxAddress.Device(1, 1, 2));
 
             try
             {
-                target.Open();
-
+               await target.Open();
+                
                 var message = new KnxMessage
                 {
                     MessageType = MessageType.Write,
                     MessageCode = MessageCode.Request,
                     Priority = MessagePriority.Auto,
                     SourceAddress = new KnxDeviceAddress(1, 1, 2),
-                    DestinationAddress = new KnxLogicalAddress(9, 3, 0),
+                    DestinationAddress = new KnxLogicalAddress(1, 1, 28),
                     TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
                     DataPacketCount = 0,
-                    Payload = (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday).Payload)
+                    Payload = new DptBoolean(false).Payload
                 };
 
-                target.SendMessage(message);
+                await target.SendMessage(message);
 
                 // test for simpler SendMessage calls
-                target.Write(KnxAddress.Logical(9, 3, 0), (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday)));
+                //target.Write(KnxAddress.Logical(9, 3, 0), (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday)));
             }
             finally
             {

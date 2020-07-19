@@ -53,12 +53,11 @@ namespace Knx.KnxNetIp
         internal static KnxNetIpMessage GetConnectRequest(IPEndPoint localEndPoint)
         {
             if (localEndPoint == null)
-                throw new ArgumentNullException("localEndPoint", "LocalEndpoint cannot be null");
+                throw new ArgumentNullException(nameof(localEndPoint));
 
             var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionRequest);
-            var body = msg.Body as ConnectionRequest;
 
-            if (body != null)
+            if (msg.Body is ConnectionRequest body)
             {
                 InitializeHostProtocolAddressInformation(body.ControlEndpoint, localEndPoint);
                 InitializeHostProtocolAddressInformation(body.DataEndpoint, localEndPoint);

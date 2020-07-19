@@ -12,39 +12,15 @@ namespace Knx.KnxNetIp
 
     internal class KnxNetIpClientMessageListener : IDisposable
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// the communication client
-        /// </summary>
-        private IUdpClient _internalUdpClient;
-
-        /// <summary>
-        /// while this is false, the thread will run
-        /// </summary>
-        private bool _stopThread;
-
-        private AutoResetEvent _stopReceivingHandle = new AutoResetEvent(false);
-
-        private AutoResetEvent _receivingStoppedEvent = new AutoResetEvent(false);
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        #region Constructing / Destructing
-
-        public KnxNetIpClientMessageListener()
+        private readonly UdpClient _udpClient;
+        public event KnxNetIpMessageReceivedHandler KnxNetIpMessageReceived;
+        
+        public KnxNetIpClientMessageListener(UdpClient udpClient)
         {
-            _receivingStoppedEvent = new AutoResetEvent(false);
-        }
+            _udpClient = udpClient;
 
-        public KnxNetIpClientMessageListener(IUdpClient udpClient)
-        {
-            _internalUdpClient = udpClient;
+            ReceiveData();
         }
-
-        #endregion
 
         public void Dispose()
         {
@@ -57,72 +33,11 @@ namespace Knx.KnxNetIp
             Dispose(false);
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing)
-            {
-                if (_internalUdpClient != null)
-                {
-                    try
-                    {
-                        Stop();
-
-                        _receivingStoppedEvent.WaitOne(TimeSpan.FromSeconds(1));
-                    }
-                    finally
-                    {
-                        _internalUdpClient = null;
-                    }
-                }
-
-                if (_stopReceivingHandle != null)
-                {
-                    _stopReceivingHandle.Dispose();
-                    _stopReceivingHandle = null;
-                }
-
-                if (_receivingStoppedEvent != null)
-                {
-                    _receivingStoppedEvent.Dispose();
-                    _receivingStoppedEvent = null;
-                }
-            }
+                _udpClient.Dispose();
         }
-
-        #endregion
-
-        #region Events
-
-        public event KnxNetIpMessageReceivedHandler KnxNetIpMessageReceived;
-
-        #endregion
-
-        public bool IsListening { get; private set; }
-
-        #region Public Methods
-
-        public void Start()
-        {
-            _stopThread = false;
-
-            Task.Run(() => ReceiveData());
-        }
-
-        public void Stop()
-        {
-            _stopThread = true;
-            
-            if (_stopReceivingHandle != null)
-            {
-                _stopReceivingHandle.Set();
-            }
-    
-            Debug.WriteLine("KNX Listener stopped");
-        }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Called when [KNX message received].
@@ -130,77 +45,53 @@ namespace Knx.KnxNetIp
         /// <param name="msg">The MSG.</param>
         private void OnKnxMessageReceived(KnxNetIpMessage msg)
         {
-            var handler = KnxNetIpMessageReceived;
-            if (handler != null)
-            {
-                handler(this, msg);
-            }
+            KnxNetIpMessageReceived?.Invoke(this, msg);
         }
 
         /// <summary>
         /// Receives the data from the UDP client.
         /// </summary>
-        private void ReceiveData()
+        private async void ReceiveData()
         {
             KnxNetIpMessage lastMessage = null;
-
+           
             var receivedBuffer = new List<byte>();
             try
             {
-                IsListening = true;
-
-                while (!_stopThread)
+                while (true)
                 {
-                    var receivedStuff = _internalUdpClient.Receive(_stopReceivingHandle);
-                    if (receivedStuff != null && !_stopThread)
+                    var receivedStuff = await _udpClient.ReceiveAsync();
+                    var data = receivedStuff.Buffer.ToArray();
+                    receivedBuffer.AddRange(data);
+
+                    if (receivedBuffer.Any())
                     {
-                        receivedBuffer.AddRange(receivedStuff);
+                        var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
+                        receivedBuffer.Clear();
 
-                        if (receivedBuffer.Any())
+                        try
                         {
-                            var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
-                            receivedBuffer.Clear();
-
-                            try
+                            if (msg != null)
                             {
-                                if (msg != null)
-                                {
-                                    // verify that the message differs from last one.
-                                    if ((lastMessage != null) && (lastMessage.ServiceType == msg.ServiceType))
-                                        if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
-                                            continue;
+                                // verify that the message differs from last one.
+                                if ((lastMessage != null) && (lastMessage.ServiceType == msg.ServiceType))
+                                    if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
+                                        continue;
 
-                                    OnKnxMessageReceived(msg);
-                                }
+                                OnKnxMessageReceived(msg);
                             }
-                            finally
-                            {
-                                lastMessage = msg;
-                            }
+                        }
+                        finally
+                        {
+                            lastMessage = msg;
                         }
                     }
                 }
             }
-            // TODO: Important => think about quitting the thread!
-            //catch (ThreadAbortException)
-            //{
-            //    Debug.WriteLine("KNX Listener Thread aborted.");
-            //}
             catch (Exception exception)
             {
                 Debug.WriteLine("Listener exception: " + exception.Message);
             }
-            finally
-            {
-                IsListening = false;
-
-                if (_stopReceivingHandle != null)
-                {
-                    _receivingStoppedEvent.Set();
-                }
-            }
         }
-
-        #endregion
     }
 }

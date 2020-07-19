@@ -21,8 +21,8 @@ namespace Knx.Common
         
         bool IsConnected { get; }
         
-        void Open();
+        Task Open();
 
-        void SendMessage(IKnxMessage knxMessage);
+        Task SendMessage(IKnxMessage knxMessage);
     }
 }

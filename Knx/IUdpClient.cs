@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Knx
 {
@@ -29,14 +30,7 @@ namespace Knx
         ///     Sends the specified data.
         /// </summary>
         /// <param name="data">The data.</param>
-        void Send(byte[] data);
-
-        /// <summary>
-        /// Sends the specified data.
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <param name="length">The length.</param>
-        void Send(byte[] data, int length);
+        Task Send(byte[] data);
 
         byte[] Receive();
 

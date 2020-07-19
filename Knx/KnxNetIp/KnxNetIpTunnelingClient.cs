@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,24 +18,17 @@ namespace Knx.KnxNetIp
     /// </summary>
     public class KnxNetIpTunnelingClient : IKnxClient, IDisposable
     {
-        #region Static Fields and Constants
-
         private const int MaxKeepAliveRetries = 3;
-
-        #endregion
-
-        #region Fields and Constants
 
         private readonly object _communicationChannelLock = new object();
         private readonly object _connectionStateLock = new object();
-        private readonly Timer _keepAlive;
+        //private readonly Timer _keepAlive;
         private readonly object _keepAliveLock = new object();
-        private readonly KnxNetIpClientMessageListener _messageListener;
-        private readonly object _sendLock = new Object();
+        
+        private KnxNetIpClientMessageListener _messageListener;    // TODO: Refactor this, because its only allowed to exist once per client.
+        private readonly object _sendLock = new object();
 
         private readonly AutoResetEvent _terminationEvent = new AutoResetEvent(false);
-
-        protected IUdpClient InternalUdpClient;
 
         private byte? _currentCommunicationChannel;
         private bool _isClosing;
@@ -42,8 +36,7 @@ namespace Knx.KnxNetIp
         private int _keepAliveRetry;
         private bool _logicalConnected;
         private byte _sequenceCounter;
-
-        #endregion
+        private readonly UdpClient _udpClient;
 
         #region Constructor / Destructor
 
@@ -56,12 +49,12 @@ namespace Knx.KnxNetIp
             ConnectionStateTimeStamp = DateTime.MinValue;
             DeviceAddress = deviceAddress;
 
-            RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException("remoteEndPoint");
+            RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException(nameof(remoteEndPoint));
 
-            InternalUdpClient = DIContainer.Resolve<IUdpClient>();
-            _messageListener = new KnxNetIpClientMessageListener(InternalUdpClient);
-
-            _keepAlive = new Timer(SendKeepAliveMessage, null, Timeout.Infinite, Timeout.Infinite);
+            _udpClient = new UdpClient();
+            
+            // TODO: reenable KeepAlive, but use a better threading approach 
+            // _keepAlive = new Timer(async (state) => await SendKeepAliveMessage(), null, Timeout.Infinite, Timeout.Infinite);
         }
 
         #endregion
@@ -110,10 +103,7 @@ namespace Knx.KnxNetIp
         /// <value>
         ///     <c>true</c> if this instance has keep alive timeouted; otherwise, <c>false</c>.
         /// </value>
-        public bool HasKeepAliveTimeout
-        {
-            get { return (ConnectionStateTimeStamp < DateTime.Now.Subtract(TimeSpan.FromSeconds(61))); }
-        }
+        public bool HasKeepAliveTimeout => (ConnectionStateTimeStamp < DateTime.Now.Subtract(TimeSpan.FromSeconds(61)));
 
         /// <summary>
         ///     Gets the local IPEndPoint.
@@ -125,7 +115,7 @@ namespace Knx.KnxNetIp
             {
                 try
                 {
-                    return InternalUdpClient.LocalEndpoint;
+                    return _udpClient.Client.LocalEndPoint as IPEndPoint;
                 }
                 catch (Exception)
                 {
@@ -161,56 +151,42 @@ namespace Knx.KnxNetIp
             get { return _logicalConnected && (HasKeepAliveTimeout == false) && (ConnectionState == ErrorCode.NoError); }
         }
 
-        public void Open()
+        public async Task Open()
         {
-            lock (_connectionStateLock)
+            StartInternalCommunicationCentral();
+
+            var connectRequest = MessageFactory.GetConnectRequest(LocalEndPoint);
+
+            try
             {
-                StartInternalCommunicationCentral();
+                ConnectionStateTimeStamp = DateTime.Now;
 
-                var connectRequest = MessageFactory.GetConnectRequest(LocalEndPoint);
+                var connectResponse = await SendAndReceiveReply<KnxNetIpMessage<ConnectionResponse>>(connectRequest);
+                if (connectResponse == null)
+                    throw new KnxNetIpException("Did not retrieve any reply message.");
+                if (connectResponse.Body.State != ErrorCode.NoError)
+                    throw new KnxNetIpException(connectResponse.Body.State);
 
-                try
-                {
-                    ConnectionStateTimeStamp = DateTime.Now;
-
-                    KnxNetIpMessage<ConnectionResponse> connectResponse;
-                    SendAndReceiveReply(connectRequest, out connectResponse);
-
-                    if (connectResponse == null)
-                    {
-                        throw new KnxNetIpException("Did not retrieve any reply message.");
-                    }
-
-                    if (connectResponse.Body.State != ErrorCode.NoError)
-                    {
-                        throw new KnxNetIpException(connectResponse.Body.State);
-                    }
-
-                    _logicalConnected = true;
-                }
-                catch (KnxException exception)
-                {
-                    throw new KnxException(string.Format("Unable to connect to KNX gateway ('{0}'): {1}", RemoteEndPoint, exception.Message), exception);
-                }
-                catch (Exception)
-                {
-                    ShutdownInternalCommunicationCentral();
-                    throw;
-                }
-                finally
-                {
-                    var result = IsConnected;
-                }
+                _logicalConnected = true;
+            }
+            catch (KnxException exception)
+            {
+                throw new KnxException($"Unable to connect to KNX gateway ('{RemoteEndPoint}'): {exception.Message}", exception);
+            }
+            catch (Exception)
+            {
+                ShutdownInternalCommunicationCentral();
+                throw;
             }
         }
 
-        public void SendMessage(IKnxMessage knxMessage)
+        public async Task SendMessage(IKnxMessage knxMessage)
         {
             var message = (KnxNetIpMessage<TunnelingRequest>) KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
 
             message.Body.Cemi = knxMessage;
 
-            SendAndReceiveReply(message, out KnxNetIpMessage<TunnelingAcknowledge> _,
+            await SendAndReceiveReply<KnxNetIpMessage<TunnelingAcknowledge>>(message,
                 (ack) => (ack.Body.CommunicationChannel == message.Body.CommunicationChannel)
                          && (ack.Body.SequenceCounter == message.Body.SequenceCounter));
         }
@@ -222,13 +198,9 @@ namespace Knx.KnxNetIp
             if ((disposing) && (!_isDisposed))
             {
                 _terminationEvent.Set();
-
                 Disconnect();
-
-                _keepAlive.Dispose();
                 _messageListener.Dispose();
                 _terminationEvent.Dispose();
-
                 _isDisposed = true;
             }
 
@@ -259,13 +231,17 @@ namespace Knx.KnxNetIp
             }
         }
 
+        private SemaphoreSlim _sendSemaphoreSlim = new SemaphoreSlim(1,1);
+        
         /// <summary>
         ///     Sends the KnxNetIpMessage.
         /// </summary>
         /// <param name="netIpMessage">The message.</param>
-        protected void Send(KnxNetIpMessage netIpMessage)
+        protected async Task Send(KnxNetIpMessage netIpMessage)
         {
-            lock (_sendLock)
+            await _sendSemaphoreSlim.WaitAsync();
+
+            try
             {
                 // this should always be true (except for Routing MessageBodies)
                 if (netIpMessage.Body is TunnelingMessageBody tunnelingBody)
@@ -274,53 +250,58 @@ namespace Knx.KnxNetIp
                     SetSequenceCount(tunnelingBody);
                 }
 
-                Debug.WriteLine(string.Format("{0} SEND => {1}", DateTime.Now.ToLongTimeString(), netIpMessage));
+                Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {netIpMessage}");
 
                 var messageBytes = netIpMessage.ToByteArray();
-                InternalUdpClient.Send(messageBytes, messageBytes.Length);
+                await _udpClient.SendAsync(messageBytes, messageBytes.Length);
+            }
+            finally
+            {
+                _sendSemaphoreSlim.Release();
             }
         }
 
-        protected void SendAndReceiveReply<TResponse>(KnxNetIpMessage message, out TResponse response) where TResponse : KnxNetIpMessage
+        private async Task<TResponse> SendAndReceiveReply<TResponse>(KnxNetIpMessage message) where TResponse : KnxNetIpMessage
         {
-            SendAndReceiveReply(message, out response, (ack) => !ack.Equals(default(KnxNetIpMessage)));
+            return await SendAndReceiveReply<TResponse>(message, (ack) => !ack.Equals(default(KnxNetIpMessage)));
         }
 
         protected void ShutdownInternalCommunicationCentral()
         {
             _messageListener.KnxNetIpMessageReceived -= NetIpMessageListenerKnxNetIpMessageReceived;
-            _messageListener.Stop();
-            InternalUdpClient.Close();
+            _messageListener.Dispose();
         }
 
         protected void StartInternalCommunicationCentral()
         {
-            InternalUdpClient.Connect(RemoteEndPoint);
+            _udpClient.Connect(RemoteEndPoint);
+            
+            _messageListener = new KnxNetIpClientMessageListener(_udpClient);
+            
             _messageListener.KnxNetIpMessageReceived += NetIpMessageListenerKnxNetIpMessageReceived;
-            _messageListener.Start();
         }
 
         /// <summary>
         ///     Starts the keep alive.
         /// </summary>
-        protected void StartKeepAlive(bool immediately = false)
+        private void StartKeepAlive(bool immediately = false)
         {
-            lock (_keepAliveLock)
-            {
-                _keepAlive.Change(TimeSpan.FromSeconds(immediately ? 0 : 59), TimeSpan.FromSeconds(59));
-            }
+            // lock (_keepAliveLock)
+            // {
+            //     _keepAlive.Change(TimeSpan.FromSeconds(immediately ? 0 : 59), TimeSpan.FromSeconds(59));
+            // }
         }
 
         /// <summary>
         ///     Stops the keep alive.
         /// </summary>
-        protected void StopKeepAlive()
+        private void StopKeepAlive()
         {
-            lock (_keepAliveLock)
-            {
-                ConnectionStateTimeStamp = DateTime.MinValue;
-                if (_keepAlive != null) _keepAlive.Change(Timeout.Infinite, Timeout.Infinite);
-            }
+            // lock (_keepAliveLock)
+            // {
+            //     ConnectionStateTimeStamp = DateTime.MinValue;
+            //     _keepAlive?.Change(Timeout.Infinite, Timeout.Infinite);
+            // }
         }
 
         /// <summary>
@@ -356,10 +337,8 @@ namespace Knx.KnxNetIp
             return false;
         }
 
-        private void Disconnect()
+        private async Task Disconnect()
         {
-            lock (_connectionStateLock)
-            {
                 _isClosing = true;
                 try
                 {
@@ -368,13 +347,12 @@ namespace Knx.KnxNetIp
                     if (CommunicationChannel != null)
                     {
                         var disconnectRequest = MessageFactory.GetDisconnectRequest(LocalEndPoint, (byte) CommunicationChannel);
-                        KnxNetIpMessage<DisconnectResponse> disconnectResponse;
-                        SendAndReceiveReply(disconnectRequest, out disconnectResponse, (ack) => ack.Body.CommunicationChannel == ((TunnelingMessageBody) disconnectRequest.Body).CommunicationChannel);
+                        await SendAndReceiveReply<KnxNetIpMessage<DisconnectResponse>>(disconnectRequest, (ack) => ack.Body.CommunicationChannel == ((TunnelingMessageBody) disconnectRequest.Body).CommunicationChannel);
                     }
                 }
                 catch (KnxException exception)
                 {
-                    Debug.WriteLine(string.Format("Unable to disconnect from KNX gateway ('{0}'): {1}", RemoteEndPoint, exception.Message));
+                    Debug.WriteLine($"Unable to disconnect from KNX gateway ('{RemoteEndPoint}'): {exception.Message}");
                 }
                 finally
                 {
@@ -382,7 +360,6 @@ namespace Knx.KnxNetIp
                     ShutdownInternalCommunicationCentral();
                     _isClosing = false;
                 }
-            }
         }
 
         private void HandleConnectionResponse(KnxNetIpMessage<ConnectionResponse> knxNetIpMessage)
@@ -405,47 +382,39 @@ namespace Knx.KnxNetIp
             StopKeepAlive();
         }
 
-        private void HandleTunnelingRequest(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)
+        private async void HandleTunnelingRequest(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)
         {
-            SendAcknowledge(knxNetIpMessage);
+            await SendAcknowledge(knxNetIpMessage);
             InvokeKnxMessageReceived(knxNetIpMessage.Body.Cemi);
         }
 
         private void InvokeKnxMessageReceived(IKnxMessage cemi)
         {
-            if (KnxMessageReceived != null)
-            {
-                KnxMessageReceived(this, cemi);
-            }
+            KnxMessageReceived?.Invoke(this, cemi);
         }
 
-        private void SendAcknowledge(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)
+        private async Task SendAcknowledge(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)
         {
             var acknowledge = KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingAcknowledge);
-            var acknowledgeBody = acknowledge.Body as TunnelingAcknowledge;
-
-            if (acknowledgeBody == null)
-            {
+            if (!(acknowledge.Body is TunnelingAcknowledge acknowledgeBody))
                 return;
-            }
 
             acknowledgeBody.CommunicationChannel = knxNetIpMessage.Body.CommunicationChannel;
             acknowledgeBody.State = ErrorCode.NoError;
             acknowledgeBody.SequenceCounter = knxNetIpMessage.Body.SequenceCounter;
-            Send(acknowledge);
+            await Send(acknowledge);
         }
 
         /// <summary>
         /// TODO: Make a real async call 
         /// </summary>
         /// <param name="message"></param>
-        /// <param name="response"></param>
         /// <param name="condition"></param>
         /// <typeparam name="TResponse"></typeparam>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
         /// <exception cref="NotAcknowledgedException"></exception>
-        private void SendAndReceiveReply<TResponse>(KnxNetIpMessage message, out TResponse response, Func<TResponse, bool> condition) where TResponse : KnxNetIpMessage
+        private async Task<TResponse> SendAndReceiveReply<TResponse>(KnxNetIpMessage message, Func<TResponse, bool> condition) where TResponse : KnxNetIpMessage
         {
             if (_messageListener == null)
                 throw new NullReferenceException("_messageListener");
@@ -457,22 +426,19 @@ namespace Knx.KnxNetIp
 
                 KnxNetIpMessageReceivedHandler knxNetIpMessageReceived = (sender, receivedMessage) =>
                 {
-                    if (receivedMessage is TResponse)
+                    if (receivedMessage is TResponse response && condition.Invoke(response))
                     {
-                        if (condition.Invoke((TResponse) receivedMessage))
-                        {
-                            receivedResponseMessage = (TResponse) receivedMessage;
-                            waitForReplyEvent.Set();
+                        receivedResponseMessage = response;
+                        waitForReplyEvent.Set();
 
-                            Debug.WriteLine(string.Format("{0} RECV <= {1} (HANDLED)", DateTime.Now.ToLongTimeString(), receivedMessage.ToString()));
-                        }
+                        Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} RECV <= {response.ToString()} (HANDLED)");
                     }
                 };
 
                 _messageListener.KnxNetIpMessageReceived += knxNetIpMessageReceived;
                 try
                 {
-                    Send(message);
+                    await Send(message);
 
                     if (SendMessageTimeout.TotalSeconds < 3)
                         SendMessageTimeout = TimeSpan.FromSeconds(3);
@@ -482,54 +448,43 @@ namespace Knx.KnxNetIp
                         case WaitHandle.WaitTimeout:
                             throw new NotAcknowledgedException(string.Format("Expected response was not retrieved during specified timeout of {0}. Message: {1}", SendMessageTimeout, message));
                         case 0: // reply event
-                            response = receivedResponseMessage;
-                            break;
-                        case 1: // termination event
-                            response = null;
-                            break;
-                        default: // should never happen
-                            Debug.WriteLine("KnxNetIpTunnelingClient.SendAndReceiveReply: 'Should Never Happen' HAPPEND!!");
-                            response = null;
-                            break;
+                            return receivedResponseMessage;
+                        default:
+                            return null;
                     }
                 }
                 finally
                 {
-                    // maybe the driver is closed during waiting for a message.
                     if (_messageListener != null)
-                    {
                         _messageListener.KnxNetIpMessageReceived -= knxNetIpMessageReceived;
-                    }
                 }
             }
         }
 
+
         /// <summary>
         ///     Send a keep alive message.
         /// </summary>
-        private void SendKeepAliveMessage(object state)
+        private async Task SendKeepAliveMessage()
         {
             if (_isClosing)
             {
                 return;
             }
 
-            lock (_keepAliveLock)
+            var connectionStateRequest = MessageFactory.GetConnectionStateRequest(LocalEndPoint);
+
+            try
             {
-                var connectionStateRequest = MessageFactory.GetConnectionStateRequest(LocalEndPoint);
+                await SendAndReceiveReply<KnxNetIpMessage<ConnectionStateResponse>>(connectionStateRequest, (ack) => ack.Body.CommunicationChannel == ((TunnelingMessageBody) connectionStateRequest.Body).CommunicationChannel);
+                _keepAliveRetry = 0;
+            }
+            catch (Exception)
+            {
+                _keepAliveRetry++;
 
-                try
-                {
-                    SendAndReceiveReply(connectionStateRequest, out KnxNetIpMessage<ConnectionStateResponse> _, (ack) => ack.Body.CommunicationChannel == ((TunnelingMessageBody) connectionStateRequest.Body).CommunicationChannel);
-                    _keepAliveRetry = 0;
-                }
-                catch (Exception)
-                {
-                    _keepAliveRetry++;
-
-                    if (_keepAliveRetry < MaxKeepAliveRetries)
-                        SendKeepAliveMessage(state);
-                }
+                if (_keepAliveRetry < MaxKeepAliveRetries)
+                    await SendKeepAliveMessage();
             }
         }
 
@@ -539,9 +494,7 @@ namespace Knx.KnxNetIp
         /// <param name="knxTunnelingMessageBody">The KNX message body.</param>
         private void SetSequenceCount(TunnelingMessageBody knxTunnelingMessageBody)
         {
-            PropertyInfo sequenceProperty;
-
-            if (DoesRequireSequenceCountIncrement(knxTunnelingMessageBody, out sequenceProperty))
+            if (DoesRequireSequenceCountIncrement(knxTunnelingMessageBody, out PropertyInfo sequenceProperty))
             {
                 sequenceProperty.SetValue(knxTunnelingMessageBody, _sequenceCounter, null);
                 _sequenceCounter++;
