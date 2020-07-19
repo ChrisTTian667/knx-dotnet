@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Knx.Common
+namespace Knx
 {
     public delegate void KnxMessageReceivedHandler(IKnxClient sender, IKnxMessage message);
 

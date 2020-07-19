@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Threading;
 using Knx.Common;
-using Knx.Common.Exceptions;
 using Knx.DatapointTypes;
+using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
 
 namespace Knx

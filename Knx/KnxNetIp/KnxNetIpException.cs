@@ -1,5 +1,5 @@
 ﻿using System;
-using Knx.Common.Exceptions;
+using Knx.Exceptions;
 
 namespace Knx.KnxNetIp
 {

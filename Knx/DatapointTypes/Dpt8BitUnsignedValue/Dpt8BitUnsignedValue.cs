@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
 {

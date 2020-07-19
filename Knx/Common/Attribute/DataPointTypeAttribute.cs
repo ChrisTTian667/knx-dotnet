@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
     /// <summary>
     /// DatapointTypeAttribute identifies a class as an DataPointType definition.
     /// </summary>
     [AttributeUsage(validOn: AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class DatapointTypeAttribute : Attribute
+    public class DatapointTypeAttribute : System.Attribute
     {
-        public Int16 MainNumber { get; private set; }
-        public Int16 SubNumber { get; private set; }
+        public short MainNumber { get; private set; }
+        public short SubNumber { get; private set; }
         public Unit Unit { get; private set; }
         public Usage Usage { get; private set; }
         public string Description { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt8BitCharackter
 {

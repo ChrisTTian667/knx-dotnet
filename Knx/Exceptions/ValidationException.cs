@@ -1,6 +1,6 @@
 using System;
 
-namespace Knx.Common.Exceptions
+namespace Knx.Exceptions
 {
     public class ValidationException : Exception
     {

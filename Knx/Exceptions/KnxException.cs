@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Knx.Common.Exceptions
+namespace Knx.Exceptions
 {
     /// <summary>
     /// Base exception for all knx protocol relative exceptions

@@ -6,14 +6,13 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Knx.Common;
-using Knx.Common.Exceptions;
+using Knx.Exceptions;
 using Knx.KnxNetIp.MessageBody;
 
 namespace Knx.KnxNetIp
 {
     /// <summary>
-    ///     The KnxClient is used to connect to the knx bus via KnxNetIp protocol.
+    /// Used to connect to the Knx Bus via KnxNetIpTunneling protocol.
     /// </summary>
     public sealed class KnxNetIpTunnelingClient : IKnxClient
     {
@@ -129,7 +128,7 @@ namespace Knx.KnxNetIp
             GC.SuppressFinalize(this);
         }
 
-        public KnxDeviceAddress DeviceAddress { get; private set; }
+        public KnxDeviceAddress DeviceAddress { get; }
 
         public TimeSpan ReadTimeout { get; set; }
 
@@ -262,7 +261,6 @@ namespace Knx.KnxNetIp
         /// </summary>
         private void StartKeepAlive()
         {
-
             // lock (_keepAliveLock)
             // {
             //     _keepAlive.Change(TimeSpan.FromSeconds(immediately ? 0 : 59), TimeSpan.FromSeconds(59));

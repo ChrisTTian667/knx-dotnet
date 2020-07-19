@@ -1,4 +1,5 @@
 ﻿using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt8BitEnumeration
 {

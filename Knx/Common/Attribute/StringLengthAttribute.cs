@@ -1,8 +1,6 @@
-using System;
-
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
-    public class StringLengthAttribute : Attribute
+    public class StringLengthAttribute : System.Attribute
     {
         /// <summary>
         /// Gets the length.

@@ -2,9 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Knx.Common.Exceptions;
+using Knx.Common;
+using Knx.Exceptions;
 
-namespace Knx.Common
+namespace Knx
 {
     /// <summary>
     /// Eventhandler for address changed events.
@@ -52,7 +53,7 @@ namespace Knx.Common
         /// <param name="min">The min.</param>
         /// <param name="max">The max.</param>
         /// <param name="parameter">The parameter.</param>
-        protected void ValidateValue(int value, int min, int max, string parameter)
+        protected static void ValidateValue(int value, int min, int max, string parameter)
         {
             if (value < min || value > max)
                 throw new ValidationException($"Value of {parameter} has to be between {min} and {max}!");
@@ -90,8 +91,7 @@ namespace Knx.Common
         /// </summary>
         protected void InvokeChangeEvent()
         {
-            if (AddressChanged != null)
-                AddressChanged();
+            AddressChanged?.Invoke();
         }
 
         protected abstract void FillBitArray(BitArray bitArray);
@@ -113,24 +113,19 @@ namespace Knx.Common
 
         public static KnxDeviceAddress ParseDevice(string address)
         {
-            var splitChars = new char[] { '\\', '/', '-', ',', '.', ' ' };
-            var exMessage = string.Format("Input string was not in a correct format. For example: '15.15.254'. (Actual: '{0}')", address);
+            var splitChars = new[] { '\\', '/', '-', ',', '.', ' ' };
+            var exMessage =
+                $"Input string was not in a correct format. For example: '15.15.254'. (Actual: '{address}')";
 
             if (string.IsNullOrWhiteSpace(address))
-            {
                 throw new FormatException(exMessage);
-            }
 
             var addressParts = address.Split('\\', '/', '-', ',', '.', ' ');
-            if (addressParts.Count() != 3)
-            {
+            if (addressParts.Length != 3)
                 throw new FormatException(exMessage);
-            }
 
-            for (int i = 0; i < addressParts.Count() - 1; i++)
-            {
+            for (var i = 0; i < addressParts.Count() - 1; i++)
                 addressParts[i] = addressParts[i].Trim(splitChars);
-            }
 
             try
             {
@@ -147,7 +142,7 @@ namespace Knx.Common
             address = null;
             try
             {
-                address = KnxAddress.ParseLogical(input.Trim());
+                address = ParseLogical(input.Trim());
                 return true;
             }
             catch (FormatException)
@@ -158,28 +153,22 @@ namespace Knx.Common
 
         public static KnxLogicalAddress ParseLogical(string address)
         {
-            var splitChars = new char[] { '\\', '/', '-', ',', '.', ' ', '|' };
-            var exMessageText = string.Format("Input string was not in a correct format. For example: '15/7/254'. (Actual: '{0}')", address);
+            var splitChars = new[] { '\\', '/', '-', ',', '.', ' ', '|' };
+            var exMessageText = $"Input string was not in a correct format. For example: '15/7/254'. (Actual: '{address}')";
 
             if (string.IsNullOrWhiteSpace(address))
-            {
                 throw new FormatException(exMessageText);
-            }
 
             var addressParts = address.Split('\\', '/', '-', ',', '.', ' ', '|');
-            if (addressParts.Count() < 2 || addressParts.Count() > 3)
-            {
+            if (addressParts.Length < 2 || addressParts.Count() > 3)
                 throw new FormatException(exMessageText);
-            }
 
-            for (int i = 0; i < addressParts.Count() - 1; i++)
-            {
+            for (var i = 0; i < addressParts.Length - 1; i++)
                 addressParts[i] = addressParts[i].Trim(splitChars);
-            }
 
             try
             {
-                return addressParts.Count() == 2 
+                return addressParts.Length == 2 
                     ? new KnxLogicalAddress(Convert.ToByte(addressParts[0]), Convert.ToByte(addressParts[1])) 
                     : new KnxLogicalAddress(Convert.ToByte(addressParts[0]), Convert.ToByte(addressParts[1]), Convert.ToByte(addressParts[2]));
             }
@@ -191,9 +180,7 @@ namespace Knx.Common
 
         public override bool Equals(object obj)
         {
-            var other = obj as KnxAddress;
-
-            return other != null && _bitArray.ToByteArray().SequenceEqual(other._bitArray.ToByteArray());
+            return obj is KnxAddress other && _bitArray.ToByteArray().SequenceEqual(other._bitArray.ToByteArray());
         }
 
         public override int GetHashCode()

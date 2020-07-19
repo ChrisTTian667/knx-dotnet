@@ -1,11 +1,11 @@
 using System;
 
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
     /// <summary>
     /// Custom RangeAttribute to use within portable class libraries.
     /// </summary>
-    public class RangeAttribute : Attribute
+    public class RangeAttribute : System.Attribute
     {
         /// <summary>
         /// Gets the minimum.

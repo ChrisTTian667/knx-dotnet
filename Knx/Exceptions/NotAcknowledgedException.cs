@@ -1,6 +1,6 @@
 using System;
 
-namespace Knx.Common.Exceptions
+namespace Knx.Exceptions
 {
     /// <summary>
     /// Is thrown when the expected response to a message is not retrieved. (e.g. on SendAndReceiveReply)

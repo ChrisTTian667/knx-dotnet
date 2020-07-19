@@ -1,9 +1,9 @@
 using System;
 
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
     [AttributeUsage(validOn: AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class BooleanEncodingAttribute : Attribute
+    public class BooleanEncodingAttribute : System.Attribute
     {
         public BooleanEncodingAttribute(UnitEncoding falseEncoding, UnitEncoding trueEncoding)
         {

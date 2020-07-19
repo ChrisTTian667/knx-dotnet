@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt4Bit
 {

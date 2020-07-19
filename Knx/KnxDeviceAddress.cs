@@ -1,6 +1,7 @@
 ﻿using System.Collections;
+using Knx.Common;
 
-namespace Knx.Common
+namespace Knx
 {
     public class KnxDeviceAddress : KnxAddress
     {

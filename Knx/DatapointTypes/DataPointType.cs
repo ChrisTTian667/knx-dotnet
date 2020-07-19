@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes
 {
@@ -150,7 +151,7 @@ namespace Knx.DatapointTypes
         /// <returns><c>true</c> if the type could be found; otherwise <c>false</c></returns>
         public static bool TryGetType(string id, out Type datapointTypeType)
         {
-            datapointTypeType = GetTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<DatapointTypeAttribute>(false).ToString() == id);
+            datapointTypeType = GetTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<Knx.Common.Attribute.DatapointTypeAttribute>(false).ToString() == id);
 
             return (datapointTypeType != null);
         }

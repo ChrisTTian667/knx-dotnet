@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Knx.Common
+namespace Knx
 {
     [Flags]
     public enum MessageType

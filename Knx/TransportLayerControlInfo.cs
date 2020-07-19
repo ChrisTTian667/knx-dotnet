@@ -1,4 +1,4 @@
-﻿namespace Knx.Common
+﻿namespace Knx
 {
     public enum TransportLayerControlInfo
     {

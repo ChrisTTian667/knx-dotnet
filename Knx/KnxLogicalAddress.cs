@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using Knx.Common;
+using Knx.Common.Attribute;
 
-namespace Knx.Common
+namespace Knx
 {
     /// <summary>
     /// A logical knx address (GroupAddress)

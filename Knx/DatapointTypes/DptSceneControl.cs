@@ -1,5 +1,6 @@
 using System.Linq;
 using Knx.Common;
+using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes
 {

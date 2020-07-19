@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Knx.Common
+namespace Knx.Common.Attribute
 {
     public enum DataLength
     {
@@ -8,7 +8,7 @@ namespace Knx.Common
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class DataLengthAttribute : Attribute
+    public class DataLengthAttribute : System.Attribute
     {
         /// <summary>
         /// Gets the length in bits.
