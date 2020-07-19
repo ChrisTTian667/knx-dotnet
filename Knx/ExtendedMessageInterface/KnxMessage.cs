@@ -241,7 +241,7 @@ namespace Knx.ExtendedMessageInterface
                                                 ? new KnxDeviceAddress(bytes.ExtractBytes(idx + 4, 2))
                                                 : (KnxAddress) new KnxLogicalAddress(bytes.ExtractBytes(idx + 4, 2));
 
-            var val = (int) bytes[idx + 8] >> 4 << 4;
+            var val = bytes[idx + 8] >> 4 << 4;
             var msgType = (MessageType)Enum.Parse(typeof(MessageType), val.ToString(), true);
 
             var dataLength = bytes[idx + 6];

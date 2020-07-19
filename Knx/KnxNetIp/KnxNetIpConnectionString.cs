@@ -1,5 +1,4 @@
 ﻿using System;
-using Knx.Common;
 using Knx.Common.Attribute;
 
 namespace Knx.KnxNetIp

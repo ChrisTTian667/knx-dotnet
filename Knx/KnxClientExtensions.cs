@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using Knx.Common;
 using Knx.DatapointTypes;
 using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
+using Knx.KnxNetIp;
 
 namespace Knx
 {
     public static class KnxClientExtensions
     {
-        public static void Write(this IKnxClient client, KnxLogicalAddress destination, DatapointType data,
-                                 MessagePriority priority = MessagePriority.Auto)
+        public static void Write(this KnxNetIpClient client, KnxLogicalAddress destination, DatapointType data, MessagePriority priority = MessagePriority.Auto)
         {
             var message = new KnxMessage
                               {
@@ -26,8 +25,7 @@ namespace Knx
             client.SendMessage(message);
         }
 
-        public static void Reply(this IKnxClient client, IKnxMessage replyTo, DatapointType data,
-                                 MessagePriority priority = MessagePriority.Auto)
+        public static void Reply(this KnxNetIpClient client, IKnxMessage replyTo, DatapointType data, MessagePriority priority = MessagePriority.Auto)
         {
             var request = replyTo;
             var message = new KnxMessage
@@ -43,16 +41,12 @@ namespace Knx
             client.SendMessage(message);
         }
 
-        public static T Read<T>(this IKnxClient client, KnxLogicalAddress destination,
-                                MessagePriority priority = MessagePriority.Auto, TimeSpan timeOut = default(TimeSpan))
-            where T : DatapointType
+        public static T Read<T>(this KnxNetIpClient client, KnxLogicalAddress destination, MessagePriority priority = MessagePriority.Auto, TimeSpan timeOut = default) where T : DatapointType
         {
             return Read(client, typeof(T), destination, priority, timeOut) as T;
         }
 
-        public static DatapointType Read(this IKnxClient client, Type datapointTypeResultType,
-                                         KnxLogicalAddress destination, MessagePriority priority = MessagePriority.Auto,
-                                         TimeSpan timeOut = default(TimeSpan))
+        public static DatapointType Read(this KnxNetIpClient client, Type datapointTypeResultType, KnxLogicalAddress destination, MessagePriority priority = MessagePriority.Auto, TimeSpan timeOut = default)
         {
             var replyEvent = new AutoResetEvent(false);
             var indicationPayload = new byte[] { };
@@ -60,18 +54,14 @@ namespace Knx
             var indicationMessage = default(IKnxMessage);
             var confirmationMessage = default(IKnxMessage);
             
-
             if (timeOut.TotalMilliseconds <= 0)
-                timeOut = client.ReadTimeout;
-            if (timeOut.TotalMilliseconds <= 0)
-                timeOut = TimeSpan.FromSeconds(5);
+                timeOut = client.Configuration.ReadTimeout;
 
             try
             {
                 // specify the reply condition
-                KnxMessageReceivedHandler onMessageReceived = delegate(IKnxClient sender, IKnxMessage knxMessage)
+                void KnxMessageReceived(object sender, IKnxMessage knxMessage)
                 {
-                    // it not destination -> ignore
                     if (knxMessage.DestinationAddress.ToString() != destination.ToString())
                         return;
 
@@ -95,9 +85,9 @@ namespace Knx
                         knxMessage.Payload.CopyTo(indicationPayload, 0);
                         replyEvent.Set();
                     }
-                };
+                }
 
-                client.KnxMessageReceived += onMessageReceived;
+                client.KnxMessageReceived += KnxMessageReceived;
                 try
                 {
                     // create and send the read request
@@ -128,7 +118,7 @@ namespace Knx
                 }
                 finally
                 {
-                    client.KnxMessageReceived -= onMessageReceived;
+                    client.KnxMessageReceived -= KnxMessageReceived;
                     Debug.WriteLine("{0} STOPPED READING of {1}", DateTime.Now.ToLongTimeString(), destination);
                 }
             }

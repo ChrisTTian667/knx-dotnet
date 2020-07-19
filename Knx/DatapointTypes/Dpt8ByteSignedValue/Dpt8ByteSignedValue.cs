@@ -21,7 +21,7 @@ namespace Knx.DatapointTypes.Dpt8ByteSignedValue
 
         [DatapointProperty]
         [Range(typeof(Int64), "-9223372036854775808", "9223372036854775807", ErrorMessage = "Value must be within -9223372036854775808 ... 9223372036854775807.")]
-        public virtual Int64 Value
+        public Int64 Value
         {
             get
             {
@@ -32,11 +32,6 @@ namespace Knx.DatapointTypes.Dpt8ByteSignedValue
 
             set
             {
-                if (value < Int64.MinValue || value > Int64.MaxValue)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Value must be within -9223372036854775808 ... 9223372036854775807.");
-                }
-
                 var bytes = BitConverter.GetBytes(value);
 
                 Payload = bytes.Take(8).ToArray();

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
-using Knx.Common;
 using Knx.DatapointTypes;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.DatapointTypes.Dpt2ByteFloat;
