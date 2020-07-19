@@ -1,5 +1,5 @@
 ﻿using Knx.Common;
-using Knx.Common.Exceptions;
+using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
 
 namespace Knx.KnxNetIp.MessageBody

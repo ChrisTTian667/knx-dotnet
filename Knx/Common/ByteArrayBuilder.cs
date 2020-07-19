@@ -128,21 +128,19 @@ namespace Knx.Common
             byteArrayToken = new ByteArrayToken(this._list.Count, length);
 
             for (var i = 0; i < length; i++)
-            {
-                this._list.Add(0);
-            }
+                _list.Add(0);
 
             return this;
         }
 
         public void ReplaceToken(ByteArrayToken byteArrayToken, byte value)
         {
-            this._list[byteArrayToken.Index] = value;
+            _list[byteArrayToken.Index] = value;
         }
 
         public void ReplaceToken(ByteArrayToken byteArrayToken, int value)
         {
-            if ((byteArrayToken.Index + 1) > this._list.Count)
+            if ((byteArrayToken.Index + 1) > _list.Count)
             {
                 throw new InvalidOperationException("no more space to add an integer.");
             }

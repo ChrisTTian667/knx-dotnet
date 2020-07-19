@@ -27,7 +27,7 @@ namespace Knx
         /// <summary>
         ///     Gets the received bytes.
         /// </summary>
-        public byte[] Bytes { get; private set; }
+        public byte[] Bytes { get; }
 
         #endregion
     }

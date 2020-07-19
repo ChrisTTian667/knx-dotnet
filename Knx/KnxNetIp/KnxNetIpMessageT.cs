@@ -67,7 +67,7 @@ namespace Knx.KnxNetIp
             ByteArrayBuilder arrayBuilder =
                 new ByteArrayBuilder()
                     .AddByte(HeaderLength)
-                    .AddByte((byte) ProtocolVersion)
+                    .AddByte(ProtocolVersion)
                     .AddInt((int) ServiceType)
                     .AddToken(2, out totalLengthToken);
 
