@@ -7,8 +7,7 @@ namespace Knx
     {
         public static string GetPropertyName<T>(Expression<Func<T>> expression)
         {
-            var memberExpression = expression.Body as MemberExpression;
-            if (memberExpression == null)
+            if (!(expression.Body is MemberExpression memberExpression))
                 throw new ArgumentException("expression must be a property expression");
 
             return memberExpression.Member.Name;

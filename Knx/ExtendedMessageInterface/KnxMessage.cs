@@ -13,8 +13,8 @@ namespace Knx.ExtendedMessageInterface
     {
         #region private fields
 
-        private readonly ControlByte1 controlByte1 = new ControlByte1();
-        private readonly ControlByte2 controlByte2 = new ControlByte2();
+        private readonly ControlByte1 _controlByte1 = new ControlByte1();
+        private readonly ControlByte2 _controlByte2 = new ControlByte2();
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Knx.ExtendedMessageInterface
 
         #region properties
 
-        private byte[] payload;
+        private byte[] _payload;
 
         /// <summary>
         /// Gets or sets the message code.
@@ -55,8 +55,8 @@ namespace Knx.ExtendedMessageInterface
         /// <value><c>true</c> if repetition; otherwise, <c>false</c>.</value>
         public bool IsRepetition
         {
-            get { return (MessageCode == MessageCode.Indication) ? !controlByte1.IsRepetition : controlByte1.IsRepetition; }
-            set { controlByte1.IsRepetition = (MessageCode == MessageCode.Indication) ? !value : value; }
+            get => (MessageCode == MessageCode.Indication) ? !_controlByte1.IsRepetition : _controlByte1.IsRepetition;
+            set => _controlByte1.IsRepetition = MessageCode == MessageCode.Indication ? !value : value;
         }
 
         /// <summary>
@@ -65,9 +65,9 @@ namespace Knx.ExtendedMessageInterface
         /// <value>The priority.</value>
         public MessagePriority Priority
         {
-            get { return controlByte1.Priority; }
+            get { return _controlByte1.Priority; }
 
-            set { controlByte1.Priority = value; }
+            set { _controlByte1.Priority = value; }
         }
 
         /// <summary>
@@ -78,9 +78,8 @@ namespace Knx.ExtendedMessageInterface
         /// </value>
         public bool IsPositivConfirmation
         {
-            get { return controlByte1.IsPositivConfirmation; }
-
-            set { controlByte1.IsPositivConfirmation = value; }
+            get => _controlByte1.IsPositivConfirmation;
+            set => _controlByte1.IsPositivConfirmation = value;
         }
 
         /// <summary>
@@ -105,10 +104,7 @@ namespace Knx.ExtendedMessageInterface
         /// Gets the hop count, a message did, till it was received.
         /// </summary>
         /// <value>The hop count.</value>
-        public byte HopCount
-        {
-            get { return (controlByte2.Hops); }
-        }
+        public byte HopCount => (_controlByte2.Hops);
 
         /// <summary>
         /// Gets or sets the length of the data (after the 8th Byte).
@@ -124,8 +120,8 @@ namespace Knx.ExtendedMessageInterface
         /// </summary>
         public byte[] Payload
         {
-            get { return payload ?? (payload = new byte[] {}); }
-            set { payload = value; }
+            get { return _payload ?? (_payload = new byte[] {}); }
+            set { _payload = value; }
         }
 
         /// <summary>
@@ -163,14 +159,11 @@ namespace Knx.ExtendedMessageInterface
             // use the first 2 Bits for the Messagetype
             // the next 6 Bits representing the first byte of the payload.
 
-            var firstbyte = (byte) ((Payload.FirstOrDefault() & 0x3F) | (byte) MessageType);
-
-            ByteArrayBuilder resultBuilder = new ByteArrayBuilder().AddByte(firstbyte);
+            var firstByte = (byte) ((Payload.FirstOrDefault() & 0x3F) | (byte) MessageType);
+            var resultBuilder = new ByteArrayBuilder().AddByte(firstByte);
 
             if (Payload.Length > 1)
-            {
                 resultBuilder.Add(Payload.ExtractBytes(1));
-            }
 
             return resultBuilder.ToByteArray();
         }
@@ -183,11 +176,11 @@ namespace Knx.ExtendedMessageInterface
         /// <returns></returns>
         public byte[] ToByteArray()
         {
-            ByteArrayBuilder result = new ByteArrayBuilder()
+            var result = new ByteArrayBuilder()
                 .AddByte((byte) MessageCode)
                 .Add(AdditionalInfo) // by default 1-byte
-                .AddByte(controlByte1.ToByte())
-                .AddByte(controlByte2.ToByte())
+                .AddByte(_controlByte1.ToByte())
+                .AddByte(_controlByte2.ToByte())
 
                 // Source & Destination
                 .AddBitArray(SourceAddress.ToBitArray())
@@ -199,13 +192,9 @@ namespace Knx.ExtendedMessageInterface
 
             // if the length of the payload is bigger than 1, the payload starts on the second byte
             if (PayloadLength > 1)
-            {
                 result.AddByte((byte) MessageType).Add(Payload);
-            }
             else
-            {
                 result.Add(GetMessageTypeAndPayload());
-            }
 
             //Schreibtelegramm (1-6 Bit)
             //bc 2101 0001 e1 00 80 02
@@ -241,40 +230,32 @@ namespace Knx.ExtendedMessageInterface
             if (additionalInfo.Length > 0)
                 additionalInfo = bytes.ExtractBytes(1, additionalInfo.Length);
 
-            int idx = additionalInfo.Length + 2;
-
+            var idx = additionalInfo.Length + 2;
             var controlByte1 = new ControlByte1();
             controlByte1.Deserialize(bytes[idx]);
-
             var controlByte2 = new ControlByte2();
             controlByte2.Deserialize(bytes[idx + 1]);
 
             var sourceAddress = new KnxDeviceAddress(bytes.ExtractBytes(idx + 2, 2));
-            KnxAddress destinationAddress = controlByte2.DestinationAddressIsKnxDeviceAddress
+            var destinationAddress = controlByte2.DestinationAddressIsKnxDeviceAddress
                                                 ? new KnxDeviceAddress(bytes.ExtractBytes(idx + 4, 2))
                                                 : (KnxAddress) new KnxLogicalAddress(bytes.ExtractBytes(idx + 4, 2));
 
             var val = (int) bytes[idx + 8] >> 4 << 4;
             var msgType = (MessageType)Enum.Parse(typeof(MessageType), val.ToString(), true);
 
-            byte dataLength = bytes[idx + 6];
-            byte[] data = null;
-            if (dataLength == 1)
-                data = new byte[] { (byte)(bytes[idx + 8] & 0x0F) }; // cut off the left half of this byte
-            else
-                data = bytes.ExtractBytes(idx + 9);
+            var dataLength = bytes[idx + 6];
+            var data = dataLength == 1 ? new[] { (byte)(bytes[idx + 8] & 0x0F) } : bytes.ExtractBytes(idx + 9);
             
-            var newExtendedMessage = new KnxMessage
-                                         {
-                                             MessageCode = messageCode,
-                                             AdditionalInfo = additionalInfo,
-                                             SourceAddress = sourceAddress,
-                                             DestinationAddress = destinationAddress,
-                                             Payload = data,
-                                             MessageType = msgType,
-                                         };
-
-            return newExtendedMessage;
+            return new KnxMessage
+                     {
+                         MessageCode = messageCode,
+                         AdditionalInfo = additionalInfo,
+                         SourceAddress = sourceAddress,
+                         DestinationAddress = destinationAddress,
+                         Payload = data,
+                         MessageType = msgType,
+                     };
         }
 
         #endregion
@@ -286,7 +267,7 @@ namespace Knx.ExtendedMessageInterface
 
         private string GetPayloadAsString()
         {
-            return payload == null ? string.Empty : payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
+            return _payload == null ? string.Empty : _payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
         }
     }
 
