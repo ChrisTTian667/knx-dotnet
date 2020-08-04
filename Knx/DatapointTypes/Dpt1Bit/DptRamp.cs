@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 4, Unit.RampNoRamp, Usage.FunctionBlock)]
     public class DptRamp : Dpt1Bit
     {
+        private DptRamp()
+        {
+        }
+
         public DptRamp(byte[] payload)
             : base(payload)
         {

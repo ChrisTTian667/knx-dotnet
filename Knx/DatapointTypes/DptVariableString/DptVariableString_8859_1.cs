@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes.DptVariableString
     [DataLength(1,-1)]
     public class DptVariableString_8859_1 : DptVariableString
     {
+        private DptVariableString_8859_1()
+        {
+        }
+
         public DptVariableString_8859_1(byte[] payload)
             : base(payload)
         {

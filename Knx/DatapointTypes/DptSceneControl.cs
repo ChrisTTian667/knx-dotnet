@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes
     [DataLength(8)]
     public class DptSceneControl : DptScene
     {
+        private DptSceneControl()
+        {
+        }
+
         public enum SceneControl : byte
         {
             /// <summary>

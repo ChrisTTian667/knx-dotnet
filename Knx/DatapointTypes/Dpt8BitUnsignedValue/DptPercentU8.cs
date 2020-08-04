@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5, 4, Unit.Percentage, Usage.FunctionBlock)]
     public class DptPercentU8 : Dpt8BitUnsignedValue
     {
+        private DptPercentU8()
+        {
+        }
+
         public DptPercentU8(byte[] payload)
             : base(payload)
         {

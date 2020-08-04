@@ -23,14 +23,8 @@ namespace Knx.DatapointTypes.Dpt4Bit
         [BooleanEncoding(UnitEncoding.Down, UnitEncoding.Up)]
         public override bool Control
         {
-            get
-            {
-                return base.Control;
-            }
-            set
-            {
-                base.Control = value;
-            }
+            get => base.Control;
+            set => base.Control = value;
         }
     }
 }

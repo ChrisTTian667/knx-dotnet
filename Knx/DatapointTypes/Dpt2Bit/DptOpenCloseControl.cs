@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 9, Unit.OpenClose, Usage.FunctionBlock)]
     public class DptOpenCloseControl : Dpt2Bit
     {
+        private DptOpenCloseControl()
+        {
+        }
+    
         public DptOpenCloseControl(byte[] payload)
             : base(payload)
         {

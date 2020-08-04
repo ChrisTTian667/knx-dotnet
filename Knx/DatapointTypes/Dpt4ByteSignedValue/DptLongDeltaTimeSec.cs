@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt4ByteSignedValue
     [DatapointType(13, 100, Unit.Seconds, Usage.General)]
     public class DptLongDeltaTimeSec : Dpt4ByteSignedValue
     {
+        private DptLongDeltaTimeSec()
+        {
+        }
+
         public DptLongDeltaTimeSec(byte[] payload)
             : base(payload)
         {

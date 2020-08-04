@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14,0, Unit.Accelaration, Usage.General, Description = "acceleration")]
     public class DptAcceleration : Dpt4ByteFloat
     {
+        private DptAcceleration()
+        {
+        }
+
         public DptAcceleration(byte[] twoBytes) : base(twoBytes)
         {
         }

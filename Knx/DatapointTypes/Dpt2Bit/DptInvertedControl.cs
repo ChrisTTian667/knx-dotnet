@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 12, Unit.InvertedNotInverted, Usage.FunctionBlock)]
     public class DptInvertedControl : Dpt2Bit
     {
+        private DptInvertedControl()
+        {
+        }
+
         public DptInvertedControl(byte[] payload)
             : base(payload)
         {

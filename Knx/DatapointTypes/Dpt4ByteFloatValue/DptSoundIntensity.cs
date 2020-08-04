@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 64, Unit.SoundIntensity, Usage.General, Description = "sound intensity")]
     public class DptSoundIntensity : Dpt4ByteFloat
     {
+        private DptSoundIntensity()
+        {
+        }
+
         public DptSoundIntensity(byte[] twoBytes)
             : base(twoBytes)
         {

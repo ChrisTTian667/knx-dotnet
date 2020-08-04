@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 15, Unit.Reset, Usage.General)]
     public class DptReset : Dpt1Bit
     {
+        private DptReset()
+        {
+        }
+
         public DptReset(byte[] payload)
             : base(payload)
         {

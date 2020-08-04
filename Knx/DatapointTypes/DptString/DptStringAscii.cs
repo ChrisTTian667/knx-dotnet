@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes.DptString
     [DataLength(1, 14)]
     public class DptStringAscii : DptString
     {
+        private DptStringAscii()
+        {
+        }
+
         public DptStringAscii(byte[] payload) : base(payload)
         {
         }

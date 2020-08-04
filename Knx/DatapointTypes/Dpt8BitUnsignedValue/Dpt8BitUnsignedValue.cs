@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DataLength(8)]
     public abstract class Dpt8BitUnsignedValue : DatapointType
     {
+        protected Dpt8BitUnsignedValue()
+        {
+        }
+            
         protected Dpt8BitUnsignedValue(Byte[] payload)
             : base(payload)
         {

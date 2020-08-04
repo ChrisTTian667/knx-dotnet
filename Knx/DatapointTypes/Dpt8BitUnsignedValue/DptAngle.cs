@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5, 2, Unit.Angle, Usage.General)]
     public class DptAngle : Dpt8BitUnsignedValue
     {
+        private DptAngle()
+        {
+        }
+
         public DptAngle(byte[] payload)
             : base(payload)
         {

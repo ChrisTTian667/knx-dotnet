@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 45, Unit.MagneticFlux, Usage.General, Description = "magnetic flux")]
     public class DptMagneticFlux : Dpt4ByteFloat
     {
+        private DptMagneticFlux()
+        {
+        }
+
         public DptMagneticFlux(byte[] twoBytes)
             : base(twoBytes)
         {

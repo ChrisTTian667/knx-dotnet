@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes.DptString
     [DataLength(1,14)]
     public class DptString_8859_1 : DptString
     {
+        private DptString_8859_1()
+        {
+        }
+
         public DptString_8859_1(byte[] payload)
             : base(payload)
         {

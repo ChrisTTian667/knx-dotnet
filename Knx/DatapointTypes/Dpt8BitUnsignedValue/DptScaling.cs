@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5, 1, Unit.Percentage, Usage.General)]
     public class DptScaling : Dpt8BitUnsignedValue
     {
+        private DptScaling()
+        {
+        }
+
         public DptScaling(byte[] payload)
             : base(payload)
         {

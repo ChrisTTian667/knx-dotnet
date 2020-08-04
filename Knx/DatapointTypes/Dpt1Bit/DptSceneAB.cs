@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 22, Unit.SceneAB, Usage.FunctionBlock)]
     public class DptSceneAB : Dpt1Bit
     {
+        private DptSceneAB()
+        {
+        }
+
         public DptSceneAB(byte[] payload)
             : base(payload)
         {

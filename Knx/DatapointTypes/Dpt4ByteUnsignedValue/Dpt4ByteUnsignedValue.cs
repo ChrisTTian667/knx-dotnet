@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Knx.Common;
 using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt4ByteUnsignedValue
@@ -8,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt4ByteUnsignedValue
     [DataLength(32)]
     public abstract class Dpt4ByteUnsignedValue : DatapointType
     {
+        protected Dpt4ByteUnsignedValue()
+        {
+        }
+
         protected Dpt4ByteUnsignedValue(byte[] payload)
             : base(payload)
         {

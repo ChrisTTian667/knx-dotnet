@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 14, Unit.CalculatedFixed, Usage.FunctionBlock)]
     public class DptInputSource : Dpt1Bit
     {
+        private DptInputSource()
+        {
+        }
+
         public DptInputSource(byte[] payload)
             : base(payload)
         {

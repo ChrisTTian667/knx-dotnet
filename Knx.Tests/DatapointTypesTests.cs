@@ -4,6 +4,8 @@ using System.Linq;
 using Knx.Common;
 using Knx.Common.Attribute;
 using Knx.DatapointTypes;
+using Knx.DatapointTypes.Dpt1Bit;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Knx.Tests
@@ -11,11 +13,57 @@ namespace Knx.Tests
     /// <summary>
     /// General Datapoint types test
     /// </summary>
-    
     public class DatapointTypesTests
     {
         #region Public Methods
 
+        [Test]
+        public void CreateSimpleDatapointType()
+        {
+            var boolDpt = DatapointTypeFactory.Create("1.001", new byte[]{ 1 });
+            Assert.IsNotNull(boolDpt);
+        }
+        
+        [Test]
+        public void SerializeSimpleBooleanDatapointType()
+        {
+            var boolDpt = DatapointTypeFactory.Create("1.001", new byte[]{ 1 });
+            var serializedObject = JsonConvert.SerializeObject(boolDpt);
+            var dpt = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
+            
+            Assert.IsNotNull(boolDpt);
+            Assert.AreEqual(boolDpt.Payload, dpt.Payload);
+        }
+        
+        [Test]
+        public void EachDatapointType_Serialize_NoException()
+        {
+            var count = 0;
+            foreach (var type in GetDatapointTypes().OrderBy((t) => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString()))
+            {
+                try
+                {
+                    var dpt = DatapointTypeFactory.Create(type);
+                    var serializeDpt = JsonConvert.SerializeObject(dpt);
+                    var deserializeDpt =  JsonConvert.DeserializeObject(serializeDpt, type);
+
+                    Assert.IsNotNull(deserializeDpt);
+                    
+                    count++;
+                }
+                catch (MissingMethodException ex)
+                {
+                    Assert.Fail($"Type {type}: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Assert.Fail($"Type {type}: {ex.Message}");
+                }
+            }
+
+            Assert.AreEqual(GetCountOfDatapointTypes(), count);
+        }
+        
         [Test]
         public void EachDatapointTypeHasDataLengthAttribute()
         {

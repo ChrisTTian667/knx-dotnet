@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 67, Unit.SurfaceTension, Usage.General, Description = "surface tension")]
     public class DptSurfaceTension : Dpt4ByteFloat
     {
+        private DptSurfaceTension()
+        {
+        }
+
         public DptSurfaceTension(byte[] twoBytes)
             : base(twoBytes)
         {

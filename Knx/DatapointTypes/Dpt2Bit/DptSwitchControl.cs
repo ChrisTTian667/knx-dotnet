@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 1, Unit.OnOff, Usage.General)]
     public class DptSwitchControl : Dpt2Bit
     {
+        private DptSwitchControl()
+        {
+        }
+
         public DptSwitchControl(byte[] payload) : base(payload)
         {
         }

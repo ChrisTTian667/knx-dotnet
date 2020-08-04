@@ -18,12 +18,8 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
         [DatapointProperty]
         public new TimeSpan Value
         {
-            get
-            {
-                return TimeSpanFromShort(base.Value);
-            }
-
-            set { base.Value = ShortFromTimeSpan(value); }
+            get => TimeSpanFromShort(base.Value);
+            set => base.Value = ShortFromTimeSpan(value);
         }
 
         protected abstract TimeSpan TimeSpanFromShort(short value);

@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5, 5, Usage.FunctionBlock)]
     public class DptDecimalFactor : Dpt8BitUnsignedValue
     {
+        private DptDecimalFactor()
+        {
+        }
+
         public DptDecimalFactor(byte[] payload)
             : base(payload)
         {

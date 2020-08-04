@@ -9,7 +9,7 @@ namespace Knx.ExtendedMessageInterface
     /// <summary>
     /// The extended KnxMessage (Common extended message interface)
     /// </summary>
-    public partial class KnxMessage : IKnxMessage
+    public class KnxMessage : IKnxMessage
     {
         #region private fields
 
@@ -55,7 +55,7 @@ namespace Knx.ExtendedMessageInterface
         /// <value><c>true</c> if repetition; otherwise, <c>false</c>.</value>
         public bool IsRepetition
         {
-            get => (MessageCode == MessageCode.Indication) ? !_controlByte1.IsRepetition : _controlByte1.IsRepetition;
+            get => MessageCode == MessageCode.Indication ? !_controlByte1.IsRepetition : _controlByte1.IsRepetition;
             set => _controlByte1.IsRepetition = MessageCode == MessageCode.Indication ? !value : value;
         }
 
@@ -65,9 +65,8 @@ namespace Knx.ExtendedMessageInterface
         /// <value>The priority.</value>
         public MessagePriority Priority
         {
-            get { return _controlByte1.Priority; }
-
-            set { _controlByte1.Priority = value; }
+            get => _controlByte1.Priority;
+            set => _controlByte1.Priority = value;
         }
 
         /// <summary>
@@ -268,24 +267,6 @@ namespace Knx.ExtendedMessageInterface
         private string GetPayloadAsString()
         {
             return _payload == null ? string.Empty : _payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
-        }
-    }
-
-    public partial class KnxMessage : IKnxMessage
-    {
-        public static IKnxMessage CreateSimpleDPTSwitch(bool value, KnxLogicalAddress destination, KnxDeviceAddress source = null)
-        {
-            return new KnxMessage
-            {
-                MessageCode = MessageCode.Request,
-                MessageType = MessageType.Write,
-                Priority = MessagePriority.Auto,
-                SourceAddress = source ?? new KnxDeviceAddress(1, 1, 250),
-                DestinationAddress = destination,
-                TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
-                DataPacketCount = 0,
-                Payload = new[] { (value ? (byte)1 : (byte)0) }
-            };
         }
     }
 }

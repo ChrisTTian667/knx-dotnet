@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 58, Unit.Pa, Usage.General, Description = "pressure")]
     public class DptPressure : Dpt4ByteFloat
     {
+        private DptPressure()
+        {
+        }
+
         public DptPressure(byte[] twoBytes)
             : base(twoBytes)
         {

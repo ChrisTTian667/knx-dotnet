@@ -8,6 +8,9 @@ namespace Knx.DatapointTypes.Dpt8ByteSignedValue
     [DataLength(64)]
     public abstract class Dpt8ByteSignedValue : DatapointType
     {
+        protected Dpt8ByteSignedValue()
+        {
+        }
 
         protected Dpt8ByteSignedValue(byte[] payload)
             : base(payload)

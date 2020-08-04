@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 6, Unit.HighLow, Usage.FunctionBlock)]
     public class DptBinaryValueControl : Dpt2Bit
     {
+        private DptBinaryValueControl()
+        {
+        }
+        
         public DptBinaryValueControl(byte[] payload)
             : base(payload)
         {

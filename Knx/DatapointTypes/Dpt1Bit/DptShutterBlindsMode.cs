@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 23, Unit.BlindsMode, Usage.FunctionBlock)]
     public class DptShutterBlindsMode : Dpt1Bit
     {
+        private DptShutterBlindsMode()
+        {
+        }
+
         public DptShutterBlindsMode(byte[] payload)
             : base(payload)
         {

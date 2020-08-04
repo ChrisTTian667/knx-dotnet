@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes
     [DataLength(8)]
     public class DptScene : DatapointType
     {
+        protected DptScene()
+        {
+        }
+
         public DptScene(byte[] payload) : base(payload)
         {
         }

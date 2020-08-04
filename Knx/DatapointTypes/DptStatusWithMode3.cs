@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes
     [DataLength(8)]
     public class DptStatusWithMode3 : DatapointType
     {
+        private DptStatusWithMode3()
+        {
+        }
+
         public DptStatusWithMode3(byte[] payload)
             : base(payload)
         {

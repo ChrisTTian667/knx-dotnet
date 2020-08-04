@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DataLength(32)]
     public abstract class Dpt4ByteFloat : DatapointType
     {
+        protected Dpt4ByteFloat()
+        {
+        }
+
         protected Dpt4ByteFloat(byte[] twoBytes)
         {
             Payload = twoBytes;

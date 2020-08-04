@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 8, Unit.UpDown, Usage.FunctionBlock)]
     public class DptUpDownControl : Dpt2Bit
     {
+        private DptUpDownControl()
+        {
+        }
+
         public DptUpDownControl(byte[] payload)
             : base(payload)
         {

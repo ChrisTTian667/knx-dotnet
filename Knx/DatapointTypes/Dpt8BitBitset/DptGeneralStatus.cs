@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt8BitBitset
     [DataLength(8)]
     public class DptGeneralStatus : DatapointType
     {
+        private DptGeneralStatus()
+        {
+        }
+
         public DptGeneralStatus(byte[] payload)
             : base(payload)
         {

@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 22, Unit.ElectricalDisplacement, Usage.General, Description = "electric displacement")]
     public class DptElectricDisplacement : Dpt4ByteFloat
     {
+        private DptElectricDisplacement()
+        {
+        }
+
         public DptElectricDisplacement(byte[] twoBytes)
             : base(twoBytes)
         {

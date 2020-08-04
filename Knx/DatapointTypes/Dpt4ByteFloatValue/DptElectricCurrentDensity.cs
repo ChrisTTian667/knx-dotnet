@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 20, Unit.ElectricalCurrentDensity, Usage.General, Description = "electric current density")]
     public class DptElectricCurrentDensity : Dpt4ByteFloat
     {
+        private DptElectricCurrentDensity()
+        {
+        }
+
         public DptElectricCurrentDensity(byte[] twoBytes)
             : base(twoBytes)
         {

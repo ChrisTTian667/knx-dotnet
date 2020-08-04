@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes
 {
     public abstract class DptEnumeration<T> : DatapointType
     {
+        protected DptEnumeration()
+        {
+        }
+            
         protected DptEnumeration(byte[] payload) : base(payload)
         {
             DoTypeChecks();

@@ -9,6 +9,10 @@ namespace Knx.DatapointTypes.Dpt8BitCharackter
     [DataLength(8)]
     public class DptCharackter_8859_1 : DatapointType
     {
+        private DptCharackter_8859_1()
+        {
+        }
+
         public DptCharackter_8859_1(byte[] payload)
             : base(payload)
         {

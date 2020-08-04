@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DataLength(2)]
     public abstract class Dpt2Bit : Dpt1Bit.Dpt1Bit
     {
+        protected Dpt2Bit()
+        {
+        }
+
         protected Dpt2Bit(Byte[] payload)
             : base(payload)
         {
@@ -38,11 +42,7 @@ namespace Knx.DatapointTypes.Dpt2Bit
         [DatapointProperty]
         public virtual new Boolean Value
         {
-            get
-            {
-                return GetValue(Payload);
-            }
-
+            get => GetValue(Payload);
             set
             {
                 Payload = ToBytes(value, Control);

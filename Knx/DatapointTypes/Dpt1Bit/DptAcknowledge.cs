@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 16, Unit.Acknowledge, Usage.General)]
     public class DptAcknowledge : Dpt1Bit
     {
+        private DptAcknowledge()
+        {
+        }
+
         public DptAcknowledge(byte[] payload)
             : base(payload)
         {
@@ -20,8 +24,8 @@ namespace Knx.DatapointTypes.Dpt1Bit
         [BooleanEncoding(UnitEncoding.NoAction, UnitEncoding.Acknowledge)]
         public override bool Value
         {
-            get { return base.Value; }
-            set { base.Value = value; }
+            get => base.Value;
+            set => base.Value = value;
         }
     }
 }

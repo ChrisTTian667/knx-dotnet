@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.DptString
     [DataLength(0, 112)]
     public abstract class DptString : DatapointType
     {
+        protected DptString()
+        {
+        }
+
         protected DptString(byte[] payload)
             : base(payload)
         {

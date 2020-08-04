@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 5, Unit.AlarmNoAlarm, Usage.FunctionBlock)]
     public class DptAlarmControl : Dpt2Bit
     {
+        private DptAlarmControl()
+        {
+        }
+        
         public DptAlarmControl(byte[] payload)
             : base(payload)
         {
@@ -23,14 +27,8 @@ namespace Knx.DatapointTypes.Dpt2Bit
         [BooleanEncoding(UnitEncoding.NoAlarm, UnitEncoding.Alarm)]
         public override bool Value
         {
-            get
-            {
-                return base.Value;
-            }
-            set
-            {
-                base.Value = value;
-            }
+            get => base.Value;
+            set => base.Value = value;
         }
     }
 }

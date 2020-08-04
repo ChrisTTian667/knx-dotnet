@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteSignedValue
     [DatapointType(13, 15, Unit.kVARh, Usage.General)]
     public class DptReactiveEnergykVARh : Dpt4ByteSignedValue
     {
+        private DptReactiveEnergykVARh()
+        {
+        }
+
         public DptReactiveEnergykVARh(byte[] payload)
             : base(payload)
         {

@@ -25,6 +25,10 @@ namespace Knx.DatapointTypes
 
         #endregion
 
+        private DptDateTime()
+        {
+        }
+
         public DptDateTime(byte[] payload)
             : base(payload)
         {

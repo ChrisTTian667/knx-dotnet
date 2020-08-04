@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteSignedValue
     [DatapointType(13, 14, Unit.kVAh, Usage.General)]
     public class DptApparantEnergykVAh : Dpt4ByteSignedValue
     {
+        private DptApparantEnergykVAh()
+        {
+        }
+
         public DptApparantEnergykVAh(byte[] payload)
             : base(payload)
         {

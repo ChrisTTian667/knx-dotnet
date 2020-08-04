@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 5, Unit.AlarmNoAlarm, Usage.FunctionBlock)]
     public class DptAlarm : Dpt1Bit
     {
+        private DptAlarm()
+        {
+        }
+
         public DptAlarm(byte[] payload)
             : base(payload)
         {

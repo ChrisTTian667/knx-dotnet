@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 2, Unit.TrueFalse, Usage.General)]
     public class DptBoolControl : Dpt2Bit
     {
+        private DptBoolControl()
+        {
+        }
+        
         public DptBoolControl(byte[] payload)
             : base(payload)
         {

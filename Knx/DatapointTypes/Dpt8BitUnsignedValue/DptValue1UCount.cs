@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5,10,Unit.CounterPulses, Usage.General)]
     public class DptValue1UCount : Dpt8BitUnsignedValue
     {
+        private DptValue1UCount()
+        {
+        }
+
         public DptValue1UCount(byte[] payload) : base(payload)
         {
         }

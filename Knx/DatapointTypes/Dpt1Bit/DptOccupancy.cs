@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 18, Unit.Occupancy, Usage.General)]
     public class DptOccupancy : Dpt1Bit
     {
+        private DptOccupancy()
+        {
+        }
+
         public DptOccupancy(byte[] payload)
             : base(payload)
         {

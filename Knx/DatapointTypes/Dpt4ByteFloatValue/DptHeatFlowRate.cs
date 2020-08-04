@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 36, Unit.HeatFlowRate, Usage.General, Description = "heat flow rate")]
     public class DptHeatFlowRate : Dpt4ByteFloat
     {
+        private DptHeatFlowRate()
+        {
+        }
+
         public DptHeatFlowRate(byte[] twoBytes)
             : base(twoBytes)
         {

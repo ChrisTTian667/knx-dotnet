@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt8BitBitset
     [DataLength(8)]
     public class DptDeviceControl : DatapointType
     {
+        private DptDeviceControl()
+        {
+        }
+
         public DptDeviceControl(byte[] payload)
             : base(payload)
         {

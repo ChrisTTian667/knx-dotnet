@@ -1,12 +1,25 @@
 ﻿using System.Collections;
+using System.Text.Json.Serialization;
 using Knx.Common;
+using Knx.DatapointTypes.Dpt1Bit;
+using Knx.ExtendedMessageInterface;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Knx.Tests
 {
-    
     public class KnxDeviceAddressTest
     {
+        [Test]
+        public void SerializeKnxDeviceAddressTest()
+        {
+            var target = new KnxDeviceAddress(3, 2, 1);
+            var serializedAddress = JsonConvert.SerializeObject(target);
+            var result = JsonConvert.DeserializeObject<KnxDeviceAddress>(serializedAddress);
+            
+            Assert.AreEqual(target.Area, result.Area);
+        }
+        
         [Test]
         public void KnxDeviceAddressByteArrayConstructorTest()
         {

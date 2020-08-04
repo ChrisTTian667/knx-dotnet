@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 10, Unit.StartStop, Usage.General)]
     public class DptStartStop : Dpt1Bit
     {
+        private DptStartStop()
+        {
+        } 
+        
         public DptStartStop(byte[] payload)
             : base(payload)
         {

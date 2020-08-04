@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 3, Unit.EnableDisable, Usage.General)]
     public class DptEnable : Dpt1Bit
     {
+        private DptEnable()
+        {
+        }
+
         public DptEnable(byte[] payload)
             : base(payload)
         {

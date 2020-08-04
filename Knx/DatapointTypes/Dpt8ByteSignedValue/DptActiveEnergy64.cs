@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt8ByteSignedValue
     [DatapointType(29, 10, Unit.Wh, Usage.General)]
     public class DptActiveEnergy64 : Dpt8ByteSignedValue
     {
+        private DptActiveEnergy64()
+        {
+        }
+
         public DptActiveEnergy64(byte[] payload)
             : base(payload)
         {

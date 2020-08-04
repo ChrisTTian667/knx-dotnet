@@ -32,7 +32,7 @@ namespace Knx.Common.Attribute
 
         public override string ToString()
         {
-            return string.Format("{0}.{1:000}", MainNumber, SubNumber);
+            return $"{MainNumber}.{SubNumber:000}";
         }
     }
 }

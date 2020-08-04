@@ -13,6 +13,10 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
     [DatapointType(5, 6, Unit.CounterPulses, Usage.General)]
     public class DptTariff : Dpt8BitUnsignedValue
     {
+        private DptTariff()
+        {
+        }
+
         public DptTariff(byte[] payload)
             : base(payload)
         {

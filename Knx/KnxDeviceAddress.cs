@@ -16,6 +16,13 @@ namespace Knx
         #region construction
 
         /// <summary>
+        /// Don't use a parameterless constructor; this is only for serialization
+        /// </summary>
+        private KnxDeviceAddress()
+        {
+        }
+        
+        /// <summary>
         /// Initializes a new instance of the <see cref="KnxDeviceAddress"/> class.
         /// </summary>
         /// <param name="area">The area.</param>
@@ -49,7 +56,7 @@ namespace Knx
         /// <value>The area.</value>
         public byte Area
         {
-            get { return _area; }
+            get => _area;
             set
             {
                 ValidateValue(value, 0, 15, "Area");
@@ -81,8 +88,7 @@ namespace Knx
         /// <value>The device.</value>
         public new byte Device
         {
-            get { return _device; }
-
+            get => _device;
             set
             {
                 ValidateValue(value, 0, 255, "Device");

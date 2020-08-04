@@ -10,7 +10,7 @@ using Knx.Common.Attribute;
 namespace Knx.DatapointTypes
 {
     [DataContract]
-    public abstract class DatapointType : INotifyPropertyChanged
+    public abstract class DatapointType //: INotifyPropertyChanged
     {
         #region Constants and Fields
 
@@ -86,7 +86,7 @@ namespace Knx.DatapointTypes
         
         #region Events
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         #endregion
 
@@ -163,10 +163,7 @@ namespace Knx.DatapointTypes
         /// <param name="propertyExpression">The property expression.</param>
         public void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyExpression.GetPropertyName()));
-            }
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyExpression.GetPropertyName()));
         }
 
         /// <summary>
@@ -186,9 +183,7 @@ namespace Knx.DatapointTypes
         {
             var datapointTypeAttribute = datapointTypeType.GetTypeInfo().GetCustomAttributes(typeof(DatapointTypeAttribute), true).FirstOrDefault() as DatapointTypeAttribute;
             if (datapointTypeAttribute == null)
-            {
                 throw new InvalidOperationException("Type is missing DatapointType attribute.");
-            }
 
             return datapointTypeAttribute.ToString();
         }

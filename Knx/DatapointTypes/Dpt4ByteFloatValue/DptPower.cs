@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 56, Unit.Watt, Usage.General, Description = "power")]
     public class DptPower : Dpt4ByteFloat
     {
+        private DptPower()
+        {
+        }
+
         public DptPower(byte[] twoBytes)
             : base(twoBytes)
         {

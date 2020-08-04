@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 2, Unit.TrueFalse, Usage.General)]
     public class DptBoolean : Dpt1Bit
     {
+        private DptBoolean()
+        {
+        }
+        
         public DptBoolean(byte[] payload)
             : base(payload)
         {
@@ -20,8 +24,8 @@ namespace Knx.DatapointTypes.Dpt1Bit
         [DatapointProperty]
         public override bool Value
         {
-            get { return base.Value; }
-            set { base.Value = value; }
+            get => base.Value;
+            set => base.Value = value;
         }
     }
 }

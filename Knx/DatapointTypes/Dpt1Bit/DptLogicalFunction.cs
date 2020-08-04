@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt1Bit
     [DatapointType(1, 21, Unit.AndOr, Usage.FunctionBlock)]
     public class DptLogicalFunction : Dpt1Bit
     {
+        private DptLogicalFunction()
+        {
+        }
+
         public DptLogicalFunction(byte[] payload)
             : base(payload)
         {

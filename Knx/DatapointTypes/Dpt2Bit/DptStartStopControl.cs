@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 10, Unit.StartStop, Usage.FunctionBlock)]
     public class DptStartStopControl : Dpt2Bit
     {
+        private DptStartStopControl()
+        {
+        }
+
         public DptStartStopControl(byte[] payload)
             : base(payload)
         {

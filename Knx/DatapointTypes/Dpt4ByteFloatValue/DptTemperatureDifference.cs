@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 70, Unit.Kelvin, Usage.General, Description = "temperature difference")]
     public class DptTemperatureDifference : Dpt4ByteFloat
     {
+        private DptTemperatureDifference()
+        {
+        }
+
         public DptTemperatureDifference(byte[] twoBytes)
             : base(twoBytes)
         {

@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 74, Unit.Seconds, Usage.General, Description = "time")]
     public class DptTime : Dpt4ByteFloat
     {
+        private DptTime()
+        {
+        }
+
         public DptTime(byte[] twoBytes)
             : base(twoBytes)
         {

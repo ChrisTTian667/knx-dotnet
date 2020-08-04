@@ -25,16 +25,13 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
             get
             {
                 var payload = Payload.Take(2).ToArray();
-
                 return BitConverter.ToInt16(payload, 0);
             }
 
             set
             {
                 if (value < -32768 || value > 32767)
-                {
                     throw new ArgumentOutOfRangeException("value", "Value must be within -32 768 ... 32 767.");
-                }
 
                 var bytes = BitConverter.GetBytes(value);
 

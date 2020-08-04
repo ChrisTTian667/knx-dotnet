@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
     [DatapointType(14, 71, Unit.TermalCapacity, Usage.General, Description = "thermal capacity")]
     public class DptTermalCapacity : Dpt4ByteFloat
     {
+        private DptTermalCapacity()
+        {
+        }
+
         public DptTermalCapacity(byte[] twoBytes)
             : base(twoBytes)
         {

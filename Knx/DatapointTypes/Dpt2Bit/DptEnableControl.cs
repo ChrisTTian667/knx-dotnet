@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2Bit
     [DatapointType(2, 3, Unit.EnableDisable, Usage.FunctionBlock)]
     public class DptEnableControl : Dpt2Bit
     {
+        private DptEnableControl()
+        {
+        }
+        
         public DptEnableControl(byte[] payload)
             : base(payload)
         {
