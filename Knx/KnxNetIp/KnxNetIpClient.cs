@@ -38,16 +38,38 @@ namespace Knx.KnxNetIp
         public KnxNetIpConfiguration Configuration { get; }
         public KnxDeviceAddress DeviceAddress { get; }
 
-        public virtual Task Connect()
+        /// <summary>
+        /// Connects the client to the bus
+        /// </summary>
+        /// <returns></returns>
+        public virtual Task<EndPoint> Connect()
         {
             UdpClient.Connect(RemoteEndPoint);
-            ReceiveData();
 
-            return Task.FromResult(true);
+            var localEndPoint = UdpClient.Client.LocalEndPoint;
+            
+            ReceiveData(UdpClient);
+            
+            return Task.FromResult(localEndPoint);
         }
+        
+        /// <summary>
+        /// Returns a bool, indicating if the client is currently connected.
+        /// </summary>
         public abstract bool IsConnected { get; protected set; }
+        
+        /// <summary>
+        /// Disconnects from Knx bus
+        /// </summary>
+        /// <returns></returns>
         public abstract Task Disconnect();
+        
+        /// <summary>
+        /// Sends a KnxMessage
+        /// </summary>
+        /// <param name="knxMessage"></param>
         public abstract Task SendMessage(IKnxMessage knxMessage);
+
 
         protected KnxNetIpClient(IPEndPoint remoteEndPoint, KnxDeviceAddress deviceAddress, KnxNetIpConfiguration configuration = null)
         {
@@ -61,7 +83,7 @@ namespace Knx.KnxNetIp
         /// <summary>
         /// Receives the data from the UDP client.
         /// </summary>
-        private async void ReceiveData()
+        protected async void ReceiveData(UdpClient client)
         {
             KnxNetIpMessage lastMessage = null;
            
@@ -70,7 +92,7 @@ namespace Knx.KnxNetIp
             {
                 while (true)
                 {
-                    var receivedResult = await UdpClient.ReceiveAsync();
+                    var receivedResult = await client.ReceiveAsync();
                     var receivedData = receivedResult.Buffer.ToArray();
                     receivedBuffer.AddRange(receivedData);
                     if (!receivedBuffer.Any()) 
@@ -97,11 +119,19 @@ namespace Knx.KnxNetIp
             }
         }
         
+        /// <summary>
+        /// Invoked when a KnxMessage has been received
+        /// </summary>
+        /// <param name="knxMessage"></param>
         protected void InvokeKnxMessageReceived(IKnxMessage knxMessage)
         {
             KnxMessageReceived?.Invoke(this, knxMessage);
         }
 
+        /// <summary>
+        /// Invoked when a new KnxNetIpMessage has been retrieved.
+        /// </summary>
+        /// <param name="message"></param>
         protected virtual void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
         {
             if (message != null)

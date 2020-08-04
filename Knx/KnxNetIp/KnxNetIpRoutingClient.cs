@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Knx.KnxNetIp.MessageBody;
 
@@ -18,6 +19,11 @@ namespace Knx.KnxNetIp
         public KnxNetIpRoutingClient(IPEndPoint remoteEndPoint, KnxDeviceAddress deviceAddress, KnxNetIpConfiguration configuration = null) : base (remoteEndPoint, deviceAddress, configuration)
         {
         }
+
+        /// <summary>
+        /// Called when knx device has been discovered.
+        /// </summary>
+        public event EventHandler<DeviceInfo> KnxDeviceDiscovered;
         
         /// <summary>
         /// Gets a value indicating whether the client is connected.
@@ -30,23 +36,58 @@ namespace Knx.KnxNetIp
         /// <summary>
         /// Connects this instance.
         /// </summary>
-        public override async Task Connect()
+        public override async Task<EndPoint> Connect()
         {
-            UdpClient.MulticastLoopback = false;
+            try
+            {
+                UdpClient.MulticastLoopback = false;
+                var localEndpoint = (IPEndPoint)await base.Connect();
+                UdpClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
 
-            await base.Connect();
-            
-            IsConnected = true;
+                var multiClient = new UdpClient(123, AddressFamily.InterNetwork);
+                multiClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
+                var something = await multiClient.ReceiveAsync();
+                
+
+                return localEndpoint;
+            }
+            finally
+            {
+                IsConnected = true;
+            }
         }
 
         protected override void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
         {
             base.OnKnxNetIpMessageReceived(message);
 
-            if (!(message.Body is RoutingIndication routingIndication))
-                return;
+            switch (message.Body)
+            {
+                case SearchResponse searchResponse:
+                    InvokeKnxDeviceDiscovered(CreateDeviceInfoFromKnxHpai(searchResponse.Endpoint, searchResponse.Endpoint.Description.FriendlyName));
+                    break;
+                case RoutingIndication routingIndication:
+                    InvokeKnxMessageReceived(routingIndication.Cemi);
+                    break;
+            }
+        }
+
+        private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo)
+        {
+            KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
+        }
+
+        private static DeviceInfo CreateDeviceInfoFromKnxHpai(KnxHpai endpoint, string friendlyName)
+        {
+            var connection = new KnxNetIpConnectionString
+            {
+                InternalAddress = $"{endpoint.IpAddress}:{endpoint.Port}",
+                DeviceMain = endpoint.Description.Address.Area,
+                DeviceMiddle = endpoint.Description.Address.Line,
+                DeviceSub = endpoint.Description.Address.Device
+            };
             
-            InvokeKnxMessageReceived(routingIndication.Cemi);
+            return new DeviceInfo(friendlyName, connection.ToString());
         }
 
         public override Task Disconnect()
@@ -56,21 +97,26 @@ namespace Knx.KnxNetIp
         }
 
         /// <summary>
-        /// Sends the message.
+        /// Sends a KnxMessage.
         /// </summary>
         /// <param name="knxMessage">The KNX message.</param>
         public override async Task SendMessage(IKnxMessage knxMessage)
         {
-            // create net ip message
-            var netIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
+            var knxNetIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
+            ((RoutingIndication) knxNetIpMessage.Body).Cemi = knxMessage;
 
-            // set knx message
-            ((RoutingIndication) netIpMessage.Body).Cemi = knxMessage;
+            await SendMessage(knxNetIpMessage);
+        }
 
-            // send
-            Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {netIpMessage}");
+        /// <summary>
+        /// Sends a KnxNetIpMessage
+        /// </summary>
+        /// <param name="message"></param>
+        public async Task SendMessage(KnxNetIpMessage message)
+        {
+            Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {message}");
             
-            var bytes = netIpMessage.ToByteArray();
+            var bytes = message.ToByteArray();
             await UdpClient.SendAsync(bytes, bytes.Length);
         }
     }

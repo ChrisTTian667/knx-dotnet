@@ -8,8 +8,7 @@ namespace Knx.KnxNetIp
     {
         public static KnxNetIpMessage CreateTunnelingRequestMessage()
         {
-            var message = KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
-            return null;
+            return KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
         }
 
         public static KnxNetIpMessage GetTunnelingRequest()

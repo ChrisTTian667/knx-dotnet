@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.ExtendedMessageInterface;
@@ -44,6 +47,27 @@ namespace Knx.Tests
             {
                 target.Dispose();
             }
+        }
+
+        [Test]
+        public async Task DiscoveryTest()
+        {
+            var taskCompletionSource = new TaskCompletionSource<string>();
+            
+            var target = new KnxNetIpRoutingClient();
+            var localEndpoint = (IPEndPoint)await target.Connect();
+            
+            var searchRequest= MessageFactory.GetSearchRequest(localEndpoint);
+            
+            target.KnxDeviceDiscovered += (sender, info) =>
+            {
+                Debug.WriteLine("Device discovered: " + info);
+                taskCompletionSource.TrySetResult(info.ToString());
+            }; 
+            
+            await target.SendMessage(searchRequest);
+
+            await taskCompletionSource.Task;
         }
     }
 }

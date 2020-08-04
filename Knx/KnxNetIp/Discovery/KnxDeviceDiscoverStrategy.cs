@@ -6,7 +6,7 @@
 //
 // namespace Knx.KnxNetIp.Discovery
 // {
-//     public class KnxDeviceDiscoverStrategy : IDeviceDiscoverStrategy, IDisposable
+//     public class KnxDeviceDiscoverStrategy : IDisposable
 //     {
 //         #region Static Fields and Constants
 //
@@ -83,7 +83,7 @@
 //                 DeviceMiddle = endpoint.Description.Address.Line,
 //                 DeviceSub = endpoint.Description.Address.Device
 //             };
-//             return new DeviceInfo(KnxDeviceDriverInfo.Id, connection.ToString());
+//             return new DeviceInfo("KnxDevice", connection.ToString());
 //         }
 //
 //         private void Dispose(bool disposing)

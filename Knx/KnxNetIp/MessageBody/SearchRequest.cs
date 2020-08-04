@@ -10,12 +10,9 @@ namespace Knx.KnxNetIp.MessageBody
             Endpoint = new KnxHpai();
         }
 
-        public override KnxNetIpServiceType ServiceType
-        {
-            get { return KnxNetIpServiceType.SearchRequest; }
-        }
+        public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.SearchRequest;
 
-        public KnxHpai Endpoint { get; set; }
+        public KnxHpai Endpoint { get; }
 
         #region Public Methods
 

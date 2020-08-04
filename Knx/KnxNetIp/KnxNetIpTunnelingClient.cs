@@ -97,9 +97,9 @@ namespace Knx.KnxNetIp
             protected set => throw new InvalidOperationException($"Don't set {nameof(IsConnected)}!");
         }
 
-        public override async Task Connect()
+        public override async Task<EndPoint> Connect()
         {
-            await base.Connect();
+            var localEndpoint = await base.Connect();
             
             try
             {
@@ -118,6 +118,8 @@ namespace Knx.KnxNetIp
             {
                 throw new KnxException($"Unable to connect to KNX gateway ('{RemoteEndPoint}'): {exception.Message}", exception);
             }
+
+            return localEndpoint;
         }
         
         public override async Task Disconnect()
