@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Knx.Common;
 using Knx.Common.Attribute;
 using Knx.DatapointTypes;
@@ -51,7 +52,7 @@ namespace Knx.Tests
         public void EachDatapointType_Serialize_NoException()
         {
             var count = 0;
-            foreach (var type in GetDatapointTypes().OrderBy((t) => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString()))
+            foreach (var type in GetDatapointTypes().OrderBy((t) => ((DatapointTypeAttribute)t.GetCustomAttributes(typeof(DatapointTypeAttribute),true).First())?.ToString()))
             {
                 try
                 {
@@ -91,7 +92,7 @@ namespace Knx.Tests
         public void InstanciateEachDatapointType_NoException()
         {
             var count = 0;
-            foreach (var type in GetDatapointTypes().OrderBy((t) => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString()))
+            foreach (var type in GetDatapointTypes().OrderBy((t) => t.GetCustomAttributes(typeof(DatapointTypeAttribute),true).First()?.ToString()))
             {
                 try
                 {

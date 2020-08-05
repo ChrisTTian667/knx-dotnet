@@ -27,7 +27,7 @@ namespace Knx.DatapointTypes
         {
             lock (CreationLock)
             {
-                var dataLengthAttribute = datapointTypeType.GetFirstCustomAttribute<DataLengthAttribute>(true);
+                var dataLengthAttribute = (DataLengthAttribute)datapointTypeType.GetCustomAttributes(typeof(DataLengthAttribute),true).First();
                 var dataLength = dataLengthAttribute.MinimumRequiredBytes;
                 if (dataLength < 0)
                     dataLength = 0;
@@ -62,7 +62,7 @@ namespace Knx.DatapointTypes
 
         private static Type GetTypeById(string id)
         {
-            var type = GetDatapointTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString() == id);
+            var type = GetDatapointTypes().FirstOrDefault(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute),true).First().ToString() == id);
             if (type == null)
                 throw new Exception($"Unable to find DatapointType with id: '{id}'");
 

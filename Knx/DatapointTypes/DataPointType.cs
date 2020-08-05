@@ -123,8 +123,7 @@ namespace Knx.DatapointTypes
         /// <returns><c>true</c> if the type could be found; otherwise <c>false</c></returns>
         public static bool TryGetType(string id, out Type datapointTypeType)
         {
-            datapointTypeType = GetTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<DatapointTypeAttribute>(false).ToString() == id);
-
+            datapointTypeType = GetTypes().FirstOrDefault(t => t.GetCustomAttribute(typeof(DatapointTypeAttribute),false).ToString() == id);
             return (datapointTypeType != null);
         }
 
