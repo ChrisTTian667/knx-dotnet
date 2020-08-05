@@ -70,11 +70,11 @@ namespace Knx.DatapointTypes
             return isOk;
         }
 
-        [DataMember]
+        [DataMember(Name = "Id", IsRequired = true)]
         public string DatapointTypeId
         {
             get;
-            private set;
+            set;
         }
         
         public virtual byte[] Payload

@@ -95,11 +95,13 @@ namespace Knx.Common
         
         public static byte[] FromReadableString(string hexString)
         {
-            hexString = hexString.Trim().Replace(" ", string.Empty);
+            hexString = hexString.Length switch
+            {
+                0 => "00",
+                1 => $"0{hexString}",
+                _ => hexString.Trim().Replace(" ", string.Empty)
+            };
 
-            if (hexString.Length == 1)
-                hexString = $"0{hexString}";
-            
             var numberChars = hexString.Length;
             var bytes = new byte[numberChars / 2];
             for (var i = 0; i < numberChars; i += 2)
