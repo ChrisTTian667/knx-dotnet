@@ -10,7 +10,7 @@ using Knx.Common.Attribute;
 namespace Knx.DatapointTypes
 {
     [DataContract]
-    public abstract class DatapointType
+    public class DatapointType
     {
         private static IQueryable<Type> _datapointTypes;
         private byte[] _payload = new byte[0];
@@ -19,10 +19,12 @@ namespace Knx.DatapointTypes
 
         protected DatapointType()
         {
+            DatapointTypeId = GetId(GetType());
         }
 
         protected DatapointType(byte[] payload) : this(payload, false)
         {
+            DatapointTypeId = GetId(GetType());
         }
 
         protected DatapointType(byte[] payload, bool verifyExactPayloadLength) : this()
@@ -70,8 +72,12 @@ namespace Knx.DatapointTypes
             return isOk;
         }
 
-
-        public string DatapointTypeId => GetId(GetType());
+        [DataMember]
+        public string DatapointTypeId
+        {
+            get;
+            private set;
+        }
         
         [DataMember]
         public virtual byte[] Payload
@@ -93,11 +99,8 @@ namespace Knx.DatapointTypes
         /// <returns>Type</returns>
         public static Type GetType(string id)
         {
-            Type datapointTypeType;
-            if (!TryGetType(id, out datapointTypeType))
-            {
-                throw new Exception(string.Format("There is no datapoint type with the specified id '{0}'", id));
-            }
+            if (!TryGetType(id, out var datapointTypeType))
+                throw new Exception($"There is no datapoint type with the specified id '{id}'");
 
             return datapointTypeType;
         }
@@ -107,12 +110,7 @@ namespace Knx.DatapointTypes
         /// </summary>
         public static IQueryable<Type> GetTypes()
         {
-            //return _datapointTypes ??
-            //       (_datapointTypes =
-            //        typeof(DatapointType).Assembly.GetTypes().Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any() && !t.IsAbstract).AsQueryable());
-            return _datapointTypes ??
-                   (_datapointTypes =
-                    typeof(DatapointType).GetTypeInfo().Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any() && !t.IsAbstract).Select(ti => ti.AsType()).AsQueryable());
+            return _datapointTypes ??= typeof(DatapointType).GetTypeInfo().Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any() && !t.IsAbstract).Select(ti => ti.AsType()).AsQueryable();
         }
 
         /// <summary>
@@ -129,6 +127,9 @@ namespace Knx.DatapointTypes
 
         public static string GetId(Type datapointTypeType)
         {
+            if (datapointTypeType == typeof(DatapointType))
+                return string.Empty;
+            
             var datapointTypeAttribute = datapointTypeType.GetTypeInfo().GetCustomAttributes(typeof(DatapointTypeAttribute), true).FirstOrDefault() as DatapointTypeAttribute;
             if (datapointTypeAttribute == null)
                 throw new InvalidOperationException("Type is missing DatapointType attribute.");

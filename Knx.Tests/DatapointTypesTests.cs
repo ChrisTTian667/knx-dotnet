@@ -49,6 +49,21 @@ namespace Knx.Tests
         }
         
         [Test]
+        public void DeserializeSpecificToBaseType()
+        {
+            var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[]{1});
+            var serializedSpecific = JsonConvert.SerializeObject(dpt);
+            
+            var deserializeBase = JsonConvert.DeserializeObject<DatapointType>(serializedSpecific);
+            var serializedBase = JsonConvert.SerializeObject(deserializeBase);
+            
+            var deserializeSpecific = JsonConvert.DeserializeObject<DptAlarmControl>(serializedBase);
+            
+            Assert.IsNotNull(dpt);
+            Assert.AreEqual(dpt.Payload, deserializeSpecific.Payload);
+        }
+        
+        [Test]
         public void EachDatapointType_Serialize_NoException()
         {
             var count = 0;
@@ -58,9 +73,10 @@ namespace Knx.Tests
                 {
                     var dpt = DatapointTypeFactory.Create(type);
                     var serializeDpt = JsonConvert.SerializeObject(dpt);
-                    var deserializeDpt =  JsonConvert.DeserializeObject(serializeDpt, type);
+                    var deserializeDpt =  (DatapointType)JsonConvert.DeserializeObject(serializeDpt, type);
 
                     Assert.IsNotNull(deserializeDpt);
+                    Assert.IsNotEmpty(deserializeDpt.DatapointTypeId);
                     
                     count++;
                 }
