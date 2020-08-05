@@ -73,6 +73,7 @@ namespace Knx.DatapointTypes
 
         public string DatapointTypeId => GetId(GetType());
         
+        [DataMember]
         public virtual byte[] Payload
         {
             get => _payload;

@@ -41,7 +41,7 @@ namespace Knx.Tests
         {
             var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[]{1});
             var serializedObject = JsonConvert.SerializeObject(dpt);
-            var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
+            var deserializeObject = JsonConvert.DeserializeObject<DptAlarmControl>(serializedObject);
             
             Assert.IsNotNull(dpt);
             Assert.AreEqual(dpt.Payload, deserializeObject.Payload);
