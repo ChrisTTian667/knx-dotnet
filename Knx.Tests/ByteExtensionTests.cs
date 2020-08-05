@@ -65,5 +65,14 @@ namespace Knx.Tests
             Assert.IsTrue(testByte.GetBit(6));
             Assert.IsFalse(testByte.GetBit(7));
         }
+
+        [Test]
+        public void ReadableStringTest()
+        {
+            var expected = new byte[] {1};
+            var readableByteArray = "1";
+            var array = ByteArrayExtensions.FromReadableString(readableByteArray);
+            Assert.AreEqual(expected, array);
+        }
     }
 }

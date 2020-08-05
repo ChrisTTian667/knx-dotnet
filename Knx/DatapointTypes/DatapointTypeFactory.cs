@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Knx.Common;
 using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes
@@ -44,6 +43,13 @@ namespace Knx.DatapointTypes
             }
         }
 
+        public static IEnumerable<string> GetSupportedDatapointTypeIds()
+        {
+            return GetDatapointTypes().Select(dptType =>
+                ((DatapointTypeAttribute) dptType.GetCustomAttributes(typeof(DatapointTypeAttribute), false).First())
+                .ToString());
+        }
+        
         #endregion
 
         #region Methods
@@ -51,13 +57,6 @@ namespace Knx.DatapointTypes
         private static IEnumerable<Type> GetDatapointTypes()
         {
             return typeof(DatapointType).GetTypeInfo().Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any()).Where(t => !t.IsAbstract).Select(ti => ti.AsType());
-        }
-        
-        public static IEnumerable<string> GetSupportedDatapointTypeIds()
-        {
-            return GetDatapointTypes().Select(dptType =>
-                ((DatapointTypeAttribute) dptType.GetCustomAttributes(typeof(DatapointTypeAttribute), false).First())
-                .ToString());
         }
 
         private static Type GetTypeById(string id)

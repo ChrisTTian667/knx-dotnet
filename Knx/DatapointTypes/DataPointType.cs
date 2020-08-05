@@ -49,10 +49,8 @@ namespace Knx.DatapointTypes
         public static bool VerifyPayload(Type datapointType, byte[] payload, bool exactMatch = false)
         {
             var dataLengthAttribute = datapointType.GetTypeInfo().GetCustomAttributes(typeof(DataLengthAttribute), true).Cast<DataLengthAttribute>().FirstOrDefault();
-            if  ((dataLengthAttribute == null) || (dataLengthAttribute.MinimumRequiredBytes < 0))
-            {
+            if  (dataLengthAttribute == null || dataLengthAttribute.MinimumRequiredBytes < 0)
                 return true;
-            }
 
             return payload != null && (!exactMatch ? payload.Length >= dataLengthAttribute.MinimumRequiredBytes : payload.Length == dataLengthAttribute.MinimumRequiredBytes);
         }
@@ -79,7 +77,6 @@ namespace Knx.DatapointTypes
             private set;
         }
         
-        [DataMember]
         public virtual byte[] Payload
         {
             get => _payload;
@@ -90,6 +87,13 @@ namespace Knx.DatapointTypes
 
                 _payload = value;
             }
+        }
+
+        [DataMember(Name = nameof(Payload))]
+        private string ReadablePayload
+        {
+            get => _payload.ToReadableString();
+            set => _payload = ByteArrayExtensions.FromReadableString(value);
         }
 
         /// <summary>

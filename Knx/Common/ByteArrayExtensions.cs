@@ -87,5 +87,25 @@ namespace Knx.Common
                 return collection.ToArray();
             }
         }
+        
+        public static string ToReadableString(this byte[] ba)
+        {
+            return BitConverter.ToString(ba).Replace("-"," ");
+        }
+        
+        public static byte[] FromReadableString(string hexString)
+        {
+            hexString = hexString.Trim().Replace(" ", string.Empty);
+
+            if (hexString.Length == 1)
+                hexString = $"0{hexString}";
+            
+            var numberChars = hexString.Length;
+            var bytes = new byte[numberChars / 2];
+            for (var i = 0; i < numberChars; i += 2)
+                bytes[i / 2] = Convert.ToByte(hexString.Substring(i, 2), 16);
+            
+            return bytes;
+        }
     }
 }

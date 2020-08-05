@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Knx.Common;
 using Knx.Common.Attribute;
 using Knx.DatapointTypes;
@@ -19,6 +18,15 @@ namespace Knx.Tests
     {
         #region Public Methods
 
+        [Test]
+        public void PayloadConversion()
+        {
+            var byteArray = new byte[] {0, 1, 2, 255, 255};
+            var readableString = byteArray.ToReadableString();
+            var result = ByteArrayExtensions.FromReadableString(readableString);
+            Assert.AreEqual(byteArray, result);
+        }
+        
         [Test]
         public void CreateSimpleDatapointType()
         {
