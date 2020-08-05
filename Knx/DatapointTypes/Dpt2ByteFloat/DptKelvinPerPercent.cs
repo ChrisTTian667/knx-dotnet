@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 23, Unit.KelvinPerPercent, Usage.FunctionBlock)]
     public class DptKelvinPerPercent : Dpt2ByteFloat
     {
+        private DptKelvinPerPercent()
+        {
+        }
+
         public DptKelvinPerPercent(byte[] twoBytes)
             : base(twoBytes)
         {

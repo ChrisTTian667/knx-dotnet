@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
     [DatapointType(7, 12, Unit.mA, Usage.FunctionBlock)]
     public class DptUEICurrentmA : Dpt2ByteUnsignedValue
     {
+        private DptUEICurrentmA()
+        {
+        }
+
         public DptUEICurrentmA(byte[] payload)
             : base(payload)
         {

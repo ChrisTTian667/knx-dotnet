@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 28, Unit.WindSpeedKmh, Usage.General)]
     public class DptWindSpeedKmh : Dpt2ByteFloat
     {
+        private DptWindSpeedKmh()
+        {
+        }
+
         public DptWindSpeedKmh(byte[] twoBytes)
             : base(twoBytes)
         {

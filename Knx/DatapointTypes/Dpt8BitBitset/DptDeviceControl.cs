@@ -1,3 +1,4 @@
+using System;
 using Knx.Common;
 using Knx.Common.Attribute;
 
@@ -28,34 +29,22 @@ namespace Knx.DatapointTypes.Dpt8BitBitset
         [DatapointProperty]
         public bool UserStopped
         {
-            get { return Payload[0].GetBit(7); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(7, value);
-                RaisePropertyChanged(() => UserStopped);
-            }
+            get => Payload[0].GetBit(7);
+            set => Payload[0] = Payload[0].SetBit(7, value);
         }
 
         [DatapointProperty]
         public bool DatagramWithOwnIndividualAddressReceived
         {
-            get { return Payload[0].GetBit(6); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(6, value);
-                RaisePropertyChanged(() => DatagramWithOwnIndividualAddressReceived);
-            }
+            get => Payload[0].GetBit(6);
+            set => Payload[0] = Payload[0].SetBit(6, value);
         }
 
         [DatapointProperty]
         public bool VerifyMode
         {
-            get { return Payload[0].GetBit(5); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(5, value);
-                RaisePropertyChanged(() => VerifyMode);
-            }
+            get => Payload[0].GetBit(5);
+            set => Payload[0] = Payload[0].SetBit(5, value);
         }
     }
 }

@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 4, Unit.Lux, Usage.General)]
     public class DptLightIntensity : Dpt2ByteFloat
     {
+        private DptLightIntensity()
+        {
+        }
+
         public DptLightIntensity(byte[] twoBytes)
             : base(twoBytes)
         {

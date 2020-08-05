@@ -24,16 +24,8 @@ namespace Knx.DatapointTypes.DptVariableString
         [DatapointProperty]
         public string Value
         {
-            get
-            {
-                return ToValue(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(value).Terminate();
-                RaisePropertyChanged(() => Value);
-            }
+            get => ToValue(Payload);
+            set => Payload = ToBytes(value).Terminate();
         }
 
         protected abstract byte[] ToBytes(string value);

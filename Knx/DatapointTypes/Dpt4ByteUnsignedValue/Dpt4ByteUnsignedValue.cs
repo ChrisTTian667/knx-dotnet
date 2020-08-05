@@ -29,7 +29,6 @@ namespace Knx.DatapointTypes.Dpt4ByteUnsignedValue
             get
             {
                 var payload = Payload.Take(2).ToArray();
-
                 return BitConverter.ToUInt16(payload, 0);
             }
 
@@ -41,9 +40,7 @@ namespace Knx.DatapointTypes.Dpt4ByteUnsignedValue
                 }
 
                 var bytes = BitConverter.GetBytes(value);
-
                 Payload = bytes.Take(4).ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

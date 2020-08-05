@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
 {
     public abstract class DptDeltaTime : Dpt2ByteSignedValue
     {
+        protected DptDeltaTime()
+        {
+        }
+
         protected DptDeltaTime(byte[] payload) : base(payload)
         {
         }

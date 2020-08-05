@@ -10,24 +10,10 @@ using Knx.Common.Attribute;
 namespace Knx.DatapointTypes
 {
     [DataContract]
-    public abstract class DatapointType //: INotifyPropertyChanged
+    public abstract class DatapointType
     {
-        #region Constants and Fields
-
-        #region Static Fields and Constants
-
         private static IQueryable<Type> _datapointTypes;
-
-        #endregion
-
-        #region Fields and Constants
-
         private byte[] _payload = new byte[0];
-
-
-        #endregion
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -83,21 +69,10 @@ namespace Knx.DatapointTypes
             
             return isOk;
         }
+
+
+        public string DatapointTypeId => GetId(GetType());
         
-        #region Events
-
-        //public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
-        #region Properties
-
-        public string DatapointTypeId
-        {
-            get { return GetId(GetType()); }
-        }
-
-        [DataMember]
         public virtual byte[] Payload
         {
             get => _payload;
@@ -106,13 +81,9 @@ namespace Knx.DatapointTypes
                 if (value.Length == 0)
                     throw new ArgumentOutOfRangeException("Payload", "Datapoint Type needs at least one byte of data.");
 
-                SetProperty(ref _payload, value, () => Payload);
+                _payload = value;
             }
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Gets the datapointtype type for the specified id.
@@ -156,29 +127,6 @@ namespace Knx.DatapointTypes
             return (datapointTypeType != null);
         }
 
-        /// <summary>
-        /// Raises the property changed.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="propertyExpression">The property expression.</param>
-        public void RaisePropertyChanged<T>(Expression<Func<T>> propertyExpression)
-        {
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyExpression.GetPropertyName()));
-        }
-
-        /// <summary>
-        /// Sets the properties backing end field and raises the property change.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="backingField">The backing field.</param>
-        /// <param name="value">The value.</param>
-        /// <param name="propertyExpression">The property expression.</param>
-        protected void SetProperty<T>(ref T backingField, T value, Expression<Func<T>> propertyExpression)
-        {
-            backingField = value;
-            RaisePropertyChanged(propertyExpression);
-        }
-
         public static string GetId(Type datapointTypeType)
         {
             var datapointTypeAttribute = datapointTypeType.GetTypeInfo().GetCustomAttributes(typeof(DatapointTypeAttribute), true).FirstOrDefault() as DatapointTypeAttribute;
@@ -187,7 +135,5 @@ namespace Knx.DatapointTypes
 
             return datapointTypeAttribute.ToString();
         }
-
-        #endregion
     }
 }

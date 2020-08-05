@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
     [DataLength(16)]
     public abstract class Dpt2ByteSignedValue : DatapointType
     {
+        protected Dpt2ByteSignedValue()
+        {
+        }
+
         protected Dpt2ByteSignedValue(byte[] payload)
             : base(payload)
         {
@@ -36,7 +40,6 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
                 var bytes = BitConverter.GetBytes(value);
 
                 Payload = bytes.Take(2).ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

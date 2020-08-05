@@ -54,7 +54,6 @@ namespace Knx.DatapointTypes.Dpt8BitUnsignedValue
                 var computedValue = (byte)((255.0 / maxValue) * value);
 
                 Payload = new[] { computedValue };
-                RaisePropertyChanged(() => Value);
             }
         }
     }

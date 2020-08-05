@@ -25,11 +25,7 @@ namespace Knx.DatapointTypes.Dpt1Bit
         public virtual Boolean Value
         {
             get => ToValue(Payload);
-            set
-            {
-                Payload = ToBytes(value);
-                RaisePropertyChanged(() => Value);
-            }
+            set => Payload = ToBytes(value);
         }
 
         private static byte[] ToBytes(bool value)

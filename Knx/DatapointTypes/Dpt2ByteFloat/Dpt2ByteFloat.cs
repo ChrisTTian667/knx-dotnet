@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DataLength(16)]
     public abstract class Dpt2ByteFloat : DatapointType
     {
+        protected Dpt2ByteFloat()
+        {
+        }
+
         protected Dpt2ByteFloat(byte[] twoBytes) : base(twoBytes, true)
         {
             Payload = twoBytes;
@@ -20,24 +24,14 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
         [DatapointProperty]
         public virtual double Value
         {
-            get
-            {
-                return ToValue(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(value);
-                RaisePropertyChanged(() => Value);
-            }
+            get => ToValue(Payload);
+            set => Payload = ToBytes(value);
         }
 
         private static double ToValue(byte[] bytes)
         {
             if (bytes.Length != 2)
-            {
                 throw new ArgumentOutOfRangeException("bytes", "Datapoint Type needs exactly 2 bytes of data.");
-            }
 
             byte firstByte = bytes[0];
             byte secondByte = bytes[1];

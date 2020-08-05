@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
     [DatapointType(8, 7, Unit.Hours, Usage.General)]
     public class DptDeltaTimePeriodHours : DptDeltaTime
     {
+        private DptDeltaTimePeriodHours()
+        {
+        }
+
         public DptDeltaTimePeriodHours(byte[] payload)
             : base(payload)
         {

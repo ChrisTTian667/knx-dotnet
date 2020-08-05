@@ -18,19 +18,12 @@ namespace Knx.DatapointTypes
             return (T)Create(typeof(T));
         }
 
-        public static DatapointType Create(string id)
+        public static DatapointType Create(string id, byte[] payload = null)
         {
-            return Create(GetTypeById(id));
+            return Create(GetTypeById(id), payload);
         }
         
-        public static DatapointType Create(string id, byte[] payload)
-        {
-            var dpt = Create(id);
-            dpt.Payload = payload;
-            return dpt;
-        }
-
-        public static DatapointType Create(Type datapointTypeType)
+        public static DatapointType Create(Type datapointTypeType, byte[] value = null)
         {
             lock (CreationLock)
             {
@@ -44,6 +37,9 @@ namespace Knx.DatapointTypes
                 if (!(Activator.CreateInstance(datapointTypeType, defaultPayload) is DatapointType instance))
                     throw new InvalidOperationException($"The type '{datapointTypeType}' is no {typeof(DatapointType)}");
 
+                if (value != null)
+                    instance.Payload = value;
+                
                 return instance;
             }
         }

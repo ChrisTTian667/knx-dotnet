@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 24, Unit.Power, Usage.FunctionBlock)]
     public class DptPower : Dpt2ByteFloat
     {
+        private DptPower()
+        {
+        }
+
         public DptPower(byte[] twoBytes)
             : base(twoBytes)
         {

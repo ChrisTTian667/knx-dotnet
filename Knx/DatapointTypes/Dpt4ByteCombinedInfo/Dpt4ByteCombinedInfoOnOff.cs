@@ -7,6 +7,11 @@ namespace Knx.DatapointTypes.Dpt4ByteCombinedInfo
     [DatapointType(27, 1, Usage.General)]
     public class Dpt4ByteCombinedInfoOnOff : DatapointType
     {
+        private Dpt4ByteCombinedInfoOnOff()
+        {
+            
+        }
+        
         public Dpt4ByteCombinedInfoOnOff(byte[] fourBytes)
         {
             Payload = fourBytes;
@@ -54,449 +59,225 @@ namespace Knx.DatapointTypes.Dpt4ByteCombinedInfo
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output0
         {
-            get
-            {
-                return Payload.GetBitAtPosition(31);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(31, value);
-                RaisePropertyChanged(() => Output0);
-            }
+            get => Payload.GetBitAtPosition(31);
+            set => Payload.SetBitAtPosition(31, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output1
         {
-            get
-            {
-                return Payload.GetBitAtPosition(30);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(30, value);
-                RaisePropertyChanged(() => Output1);
-            }
+            get => Payload.GetBitAtPosition(30);
+            set => Payload.SetBitAtPosition(30, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output2
         {
-            get
-            {
-                return Payload.GetBitAtPosition(29);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(29, value);
-                RaisePropertyChanged(() => Output2);
-            }
+            get => Payload.GetBitAtPosition(29);
+            set => Payload.SetBitAtPosition(29, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output3
         {
-            get
-            {
-                return Payload.GetBitAtPosition(28);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(28, value);
-                RaisePropertyChanged(() => Output3);
-            }
+            get => Payload.GetBitAtPosition(28);
+            set => Payload.SetBitAtPosition(28, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output4
         {
-            get
-            {
-                return Payload.GetBitAtPosition(27);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(27, value);
-                RaisePropertyChanged(() => Output4);
-            }
+            get => Payload.GetBitAtPosition(27);
+            set => Payload.SetBitAtPosition(27, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output5
         {
-            get
-            {
-                return Payload.GetBitAtPosition(26);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(26, value);
-                RaisePropertyChanged(() => Output5);
-            }
+            get => Payload.GetBitAtPosition(26);
+            set => Payload.SetBitAtPosition(26, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output6
         {
-            get
-            {
-                return Payload.GetBitAtPosition(25);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(25, value);
-                RaisePropertyChanged(() => Output6);
-            }
+            get => Payload.GetBitAtPosition(25);
+            set => Payload.SetBitAtPosition(25, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output7
         {
-            get
-            {
-                return Payload.GetBitAtPosition(24);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(24, value);
-                RaisePropertyChanged(() => Output7);
-            }
+            get => Payload.GetBitAtPosition(24);
+            set => Payload.SetBitAtPosition(24, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output8
         {
-            get
-            {
-                return Payload.GetBitAtPosition(23);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(23, value);
-                RaisePropertyChanged(() => Output8);
-            }
+            get => Payload.GetBitAtPosition(23);
+            set => Payload.SetBitAtPosition(23, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output9
         {
-            get
-            {
-                return Payload.GetBitAtPosition(22);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(22, value);
-                RaisePropertyChanged(() => Output9);
-            }
+            get => Payload.GetBitAtPosition(22);
+            set => Payload.SetBitAtPosition(22, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output10
         {
-            get
-            {
-                return Payload.GetBitAtPosition(21);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(21, value);
-                RaisePropertyChanged(() => Output10);
-            }
+            get => Payload.GetBitAtPosition(21);
+            set => Payload.SetBitAtPosition(21, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output11
         {
-            get
-            {
-                return Payload.GetBitAtPosition(20);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(20, value);
-                RaisePropertyChanged(() => Output11);
-            }
+            get => Payload.GetBitAtPosition(20);
+            set => Payload.SetBitAtPosition(20, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output12
         {
-            get
-            {
-                return Payload.GetBitAtPosition(19);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(19, value);
-                RaisePropertyChanged(() => Output12);
-            }
+            get => Payload.GetBitAtPosition(19);
+            set => Payload.SetBitAtPosition(19, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output13
         {
-            get
-            {
-                return Payload.GetBitAtPosition(18);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(18, value);
-                RaisePropertyChanged(() => Output13);
-            }
+            get => Payload.GetBitAtPosition(18);
+            set => Payload.SetBitAtPosition(18, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output14
         {
-            get
-            {
-                return Payload.GetBitAtPosition(17);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(17, value);
-                RaisePropertyChanged(() => Output14);
-            }
+            get => Payload.GetBitAtPosition(17);
+            set => Payload.SetBitAtPosition(17, value);
         }
 
         [DatapointProperty(Unit.OnOff)]
         public virtual bool Output15
         {
-            get
-            {
-                return Payload.GetBitAtPosition(16);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(16, value);
-                RaisePropertyChanged(() => Output15);
-            }
+            get => Payload.GetBitAtPosition(16);
+            set => Payload.SetBitAtPosition(16, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output0Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(15);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(15, value);
-                RaisePropertyChanged(() => Output0Valid);
-            }
+            get => Payload.GetBitAtPosition(15);
+            set => Payload.SetBitAtPosition(15, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output1Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(14);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(14, value);
-                RaisePropertyChanged(() => Output1Valid);
-            }
+            get => Payload.GetBitAtPosition(14);
+            set => Payload.SetBitAtPosition(14, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output2Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(13);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(13, value);
-                RaisePropertyChanged(() => Output2Valid);
-            }
+            get => Payload.GetBitAtPosition(13);
+            set => Payload.SetBitAtPosition(13, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output3Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(12);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(12, value);
-                RaisePropertyChanged(() => Output3Valid);
-            }
+            get => Payload.GetBitAtPosition(12);
+            set => Payload.SetBitAtPosition(12, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output4Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(11);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(11, value);
-                RaisePropertyChanged(() => Output4Valid);
-            }
+            get => Payload.GetBitAtPosition(11);
+            set => Payload.SetBitAtPosition(11, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output5Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(10);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(10, value);
-                RaisePropertyChanged(() => Output5Valid);
-            }
+            get => Payload.GetBitAtPosition(10);
+            set => Payload.SetBitAtPosition(10, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output6Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(9);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(9, value);
-                RaisePropertyChanged(() => Output6Valid);
-            }
+            get => Payload.GetBitAtPosition(9);
+            set => Payload.SetBitAtPosition(9, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output7Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(8);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(8, value);
-                RaisePropertyChanged(() => Output7Valid);
-            }
+            get => Payload.GetBitAtPosition(8);
+            set => Payload.SetBitAtPosition(8, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output8Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(7);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(7, value);
-                RaisePropertyChanged(() => Output8Valid);
-            }
+            get => Payload.GetBitAtPosition(7);
+            set => Payload.SetBitAtPosition(7, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output9Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(6);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(6, value);
-                RaisePropertyChanged(() => Output9Valid);
-            }
+            get => Payload.GetBitAtPosition(6);
+            set => Payload.SetBitAtPosition(6, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output10Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(5);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(5, value);
-                RaisePropertyChanged(() => Output10Valid);
-            }
+            get => Payload.GetBitAtPosition(5);
+            set => Payload.SetBitAtPosition(5, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output11Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(4);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(4, value);
-                RaisePropertyChanged(() => Output11Valid);
-            }
+            get => Payload.GetBitAtPosition(4);
+            set => Payload.SetBitAtPosition(4, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output12Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(3);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(3, value);
-                RaisePropertyChanged(() => Output12Valid);
-            }
+            get => Payload.GetBitAtPosition(3);
+            set => Payload.SetBitAtPosition(3, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output13Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(2);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(2, value);
-                RaisePropertyChanged(() => Output13Valid);
-            }
+            get => Payload.GetBitAtPosition(2);
+            set => Payload.SetBitAtPosition(2, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output14Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(1);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(1, value);
-                RaisePropertyChanged(() => Output14Valid);
-            }
+            get => Payload.GetBitAtPosition(1);
+            set => Payload.SetBitAtPosition(1, value);
         }
 
         [DatapointProperty(Unit.TrueFalse)]
         public virtual bool Output15Valid
         {
-            get
-            {
-                return Payload.GetBitAtPosition(0);
-            }
-            set
-            {
-                Payload.SetBitAtPosition(0, value);
-                RaisePropertyChanged(() => Output15Valid);
-            }
+            get => Payload.GetBitAtPosition(0);
+            set => Payload.SetBitAtPosition(0, value);
         }
     }
 }

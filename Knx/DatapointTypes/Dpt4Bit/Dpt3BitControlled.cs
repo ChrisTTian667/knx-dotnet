@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt4Bit
     [DataContract]
     public abstract class Dpt3BitControlled : Dpt4Bit
     {
+        protected Dpt3BitControlled()
+        {
+        }
+            
         protected Dpt3BitControlled(bool control, byte stepcode)
             : base()
         {
@@ -19,37 +23,19 @@ namespace Knx.DatapointTypes.Dpt4Bit
         {
         }
 
-        [DataMember]
         [DatapointProperty]
         public virtual bool Control
         {
-            get
-            {
-                return GetControlFlag(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(value, Stepcode);
-                RaisePropertyChanged(() => Control);
-            }
+            get => GetControlFlag(Payload);
+            set => Payload = ToBytes(value, Stepcode);
         }
-
-        [DataMember]
+        
         [DatapointProperty]
         [Range(0, 7, ErrorMessage = "Stepcount must be within 0 and 7")]
         public virtual byte Stepcode
         {
-            get
-            {
-                return GetStepcode(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(Control, value);
-                RaisePropertyChanged(() => Stepcode);
-            }
+            get => GetStepcode(Payload);
+            set => Payload = ToBytes(Control, value);
         }
 
         private static bool GetControlFlag(byte[] bytes)

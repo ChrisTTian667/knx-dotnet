@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 7, Unit.Percentage, Usage.General)]
     public class DptHumidity : Dpt2ByteFloat
     {
+        private DptHumidity()
+        {
+        }
+
         public DptHumidity(byte[] twoBytes)
             : base(twoBytes)
         {

@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
     [DataLength(16)]
     public abstract class Dpt2ByteUnsignedValue : DatapointType
     {
+        protected Dpt2ByteUnsignedValue()
+        {
+        }
+        
         protected Dpt2ByteUnsignedValue(byte[] payload)
             : base(payload)
         {
@@ -40,7 +44,6 @@ namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
                 byte[] bytes = BitConverter.GetBytes(value);
 
                 Payload = bytes.Take(2).ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

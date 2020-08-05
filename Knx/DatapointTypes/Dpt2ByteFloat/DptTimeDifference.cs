@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 11, Unit.TimeDifferenceMS, Usage.General)]
     public class DptTimeDifference : Dpt2ByteFloat
     {
+        private DptTimeDifference()
+        {
+        }
+
         public DptTimeDifference(byte[] twoBytes)
             : base(twoBytes)
         {

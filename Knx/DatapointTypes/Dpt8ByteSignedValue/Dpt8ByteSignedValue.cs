@@ -29,16 +29,13 @@ namespace Knx.DatapointTypes.Dpt8ByteSignedValue
             get
             {
                 var payload = Payload.Take(8).ToArray();
-
                 return BitConverter.ToInt64(payload, 0);
             }
 
             set
             {
                 var bytes = BitConverter.GetBytes(value);
-
                 Payload = bytes.Take(8).ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

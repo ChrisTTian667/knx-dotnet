@@ -41,7 +41,7 @@ namespace Knx.DatapointTypes
                 }
                 catch (Exception exception)
                 {
-                    throw new Exception(string.Format("Unable to recognize enum value '{0}' in type '{1}'.", Payload[0], typeof(T)), exception);
+                    throw new Exception($"Unable to recognize enum value '{Payload[0]}' in type '{typeof(T)}'.", exception);
                 }
             }
             set
@@ -56,14 +56,11 @@ namespace Knx.DatapointTypes
                 }
                 catch (Exception exception)
                 {
-                    throw new Exception(string.Format("Unable to find byte interpretation of enum value '{0}' in type '{1}'.", value, typeof(T)), exception);
-                }
-                finally
-                {
-                    RaisePropertyChanged(() => Value);
+                    throw new Exception(
+                        $"Unable to find byte interpretation of enum value '{value}' in type '{typeof(T)}'.", exception);
                 }
 
-                throw new Exception(string.Format("Unable to find byte interpretation of enum value '{0}'.", value));
+                throw new Exception($"Unable to find byte interpretation of enum value '{value}'.");
             }
         }
 

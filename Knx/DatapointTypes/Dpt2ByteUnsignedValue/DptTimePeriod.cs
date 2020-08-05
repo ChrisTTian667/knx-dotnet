@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
 {
     public abstract class DptTimePeriod : Dpt2ByteUnsignedValue
     {
+        protected DptTimePeriod()
+        {
+        }
+
         protected DptTimePeriod(byte[] payload) : base(payload)
         {
         }

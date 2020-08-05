@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 8, Unit.Ppm, Usage.General)]
     public class DptAirQuality : Dpt2ByteFloat
     {
+        private DptAirQuality()
+        {
+        }
+
         public DptAirQuality(byte[] twoBytes)
             : base(twoBytes)
         {

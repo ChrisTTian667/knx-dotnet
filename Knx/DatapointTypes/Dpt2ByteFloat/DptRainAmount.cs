@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 26, Unit.RainAmount, Usage.General)]
     public class DptRainAmount : Dpt2ByteFloat
     {
+        private DptRainAmount()
+        {
+        }
+
         public DptRainAmount(byte[] twoBytes)
             : base(twoBytes)
         {

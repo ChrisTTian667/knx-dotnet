@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
     [DatapointType(7, 6, Unit.Minutes, Usage.General)]
     public class DptTimePeriodMinutes : DptTimePeriod
     {
+        private DptTimePeriodMinutes()
+        {
+        }
+
         public DptTimePeriodMinutes(byte[] payload)
             : base(payload)
         {

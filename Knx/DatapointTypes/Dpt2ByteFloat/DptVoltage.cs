@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 20, Unit.Voltage, Usage.General)]
     public class DptVoltage : Dpt2ByteFloat
     {
+        private DptVoltage()
+        {
+        }
+
         public DptVoltage(byte[] twoBytes)
             : base(twoBytes)
         {

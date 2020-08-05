@@ -27,27 +27,15 @@ namespace Knx.DatapointTypes.Dpt2Bit
         [BooleanEncoding(UnitEncoding.NoControl, UnitEncoding.Control)]
         public Boolean Control
         {
-            get
-            {
-                return GetControl(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(Value, value);
-                RaisePropertyChanged(() => Control);
-            }
+            get => GetControl(Payload);
+            set => Payload = ToBytes(Value, value);
         }
 
         [DatapointProperty]
-        public virtual new Boolean Value
+        public new virtual bool Value
         {
             get => GetValue(Payload);
-            set
-            {
-                Payload = ToBytes(value, Control);
-                RaisePropertyChanged(() => Value);
-            }
+            set => Payload = ToBytes(value, Control);
         }
 
         private static byte[] ToBytes(bool value, bool control)

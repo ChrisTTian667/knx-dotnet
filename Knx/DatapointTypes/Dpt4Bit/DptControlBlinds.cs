@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt4Bit
     [DatapointType(3, 8, Usage.FunctionBlock)]
     public class DptControlBlinds : Dpt3BitControlled
     {
+        private DptControlBlinds()
+        {
+        }
+
         public DptControlBlinds(bool increase, byte stepcode)
             : base(increase, stepcode)
         {
@@ -18,7 +22,6 @@ namespace Knx.DatapointTypes.Dpt4Bit
         {
         }
 
-        [DataMember]
         [DatapointProperty]
         [BooleanEncoding(UnitEncoding.Down, UnitEncoding.Up)]
         public override bool Control

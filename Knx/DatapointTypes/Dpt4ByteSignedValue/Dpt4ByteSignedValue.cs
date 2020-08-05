@@ -43,7 +43,6 @@ namespace Knx.DatapointTypes.Dpt4ByteSignedValue
                 var bytes = BitConverter.GetBytes(value);
 
                 Payload = bytes.Take(4).ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

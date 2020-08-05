@@ -52,15 +52,9 @@ namespace Knx.DatapointTypes
         {
             get
             {
-                DateTime result;
-                string datetimeString = string.Format("{0:0000}-{1:00}-{2:00} {3}:{4}:{5}", Year, Month, Day, Hour,
-                                                      Minute, Second);
-
-                if (DateTime.TryParse(datetimeString, out result))
-                {
+                var datetimeString = $"{Year:0000}-{Month:00}-{Day:00} {Hour}:{Minute}:{Second}";
+                if (DateTime.TryParse(datetimeString, out var result))
                     throw new Exception("Unable to convert this instance to a CLR DateTime.");
-                }
-
 
                 return result;
             }
@@ -68,9 +62,7 @@ namespace Knx.DatapointTypes
             set
             {
                 if (value.Year < 1900 || value.Year > 2155)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Year must be within 1900 ... 2155.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Year must be within 1900 ... 2155.");
 
                 Year = value.Year;
                 Month = value.Month;
@@ -91,8 +83,6 @@ namespace Knx.DatapointTypes
                 IsWorkingDay = (value.DayOfWeek != System.DayOfWeek.Saturday) &&
                                (value.DayOfWeek != System.DayOfWeek.Sunday);
                 IsWorkingDayValid = false;
-
-                RaisePropertyChanged(() => Value);
             }
         }
 
@@ -100,17 +90,15 @@ namespace Knx.DatapointTypes
         [Range(1900, 2155)]
         public int Year
         {
-            get { return (short)(Payload[0] + 1900); }
-
+            get => (short)(Payload[0] + 1900);
             set
             {
                 if (value < 1900 || value > 2155)
                 {
-                    throw new ArgumentOutOfRangeException("value", "Year must be within 1900 ... 2155.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Year must be within 1900 ... 2155.");
                 }
 
                 Payload[0] = (byte)(value - 1900);
-                RaisePropertyChanged(() => Year);
             }
         }
 
@@ -118,17 +106,13 @@ namespace Knx.DatapointTypes
         [Range(1, 12)]
         public int Month
         {
-            get { return ((byte)(Payload[1] & 0x0F)); }
-
+            get => ((byte)(Payload[1] & 0x0F));
             set
             {
                 if (value < 1 || value > 12)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Month must be within 1 ... 12.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Month must be within 1 ... 12.");
 
                 Payload[1] = (byte)((Payload[1] & 0xF0) | value);
-                RaisePropertyChanged(() => Month);
             }
         }
 
@@ -136,17 +120,13 @@ namespace Knx.DatapointTypes
         [Range(1, 31)]
         public int Day
         {
-            get { return (byte)(Payload[2] & 0x1F); }
-
+            get => (byte)(Payload[2] & 0x1F);
             set
             {
                 if (value < 1 || value > 31)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Day must be within 1 ... 31.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Day must be within 1 ... 31.");
 
                 Payload[2] = (byte)((Payload[2] & 0xE0) | value);
-                RaisePropertyChanged(() => Day);
             }
         }
 
@@ -157,17 +137,13 @@ namespace Knx.DatapointTypes
         [DatapointProperty]
         public int DayOfWeek
         {
-            get { return (byte)(Payload[3] >> 5); }
-
+            get => (byte)(Payload[3] >> 5);
             set
             {
                 if (value < 0 || value > 7)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Day must be within 0 ... 7.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Day must be within 0 ... 7.");
 
                 Payload[3] = (byte)((Payload[3] & 0x1F) | (byte)(value << 5));
-                RaisePropertyChanged(() => DayOfWeek);
             }
         }
 
@@ -175,17 +151,13 @@ namespace Knx.DatapointTypes
         [DatapointProperty(Unit.Hours)]
         public int Hour
         {
-            get { return (byte)(Payload[3] & 0x1F); }
-
+            get => (byte)(Payload[3] & 0x1F);
             set
             {
                 if (value < 0 || value > 24)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Hour must be within 0 ... 24.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Hour must be within 0 ... 24.");
 
                 Payload[3] = (byte)(Payload[3] | value);
-                RaisePropertyChanged(() => Hour);
             }
         }
 
@@ -193,17 +165,13 @@ namespace Knx.DatapointTypes
         [DatapointProperty(Unit.Minutes)]
         public int Minute
         {
-            get { return (byte)(Payload[4] & 0x3F); }
-
+            get => (byte)(Payload[4] & 0x3F);
             set
             {
                 if (value < 0 || value > 59)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Minute must be within 0 ... 59.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Minute must be within 0 ... 59.");
 
                 Payload[4] = (byte)((Payload[4] & 0xC0) | value);
-                RaisePropertyChanged(() => Minute);
             }
         }
 
@@ -211,127 +179,80 @@ namespace Knx.DatapointTypes
         [DatapointProperty(Unit.Seconds)]
         public int Second
         {
-            get { return (byte)(Payload[5] & 0x3F); }
-
+            get => (byte)(Payload[5] & 0x3F);
             set
             {
                 if (value < 0 || value > 59)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Second must be within 0 ... 59.");
-                }
+                    throw new ArgumentOutOfRangeException(nameof(value), "Second must be within 0 ... 59.");
 
                 Payload[5] = (byte)((Payload[5] & 0xC0) | value);
-                RaisePropertyChanged(() => Second);
             }
         }
 
         [DatapointProperty]
         public bool IsFault
         {
-            get { return Payload[6].GetBit(0); }
-
-            set
-            {
-                Payload[6] = Payload[6].SetBit(0, value);
-                RaisePropertyChanged(() => IsFault);
-            }
+            get => Payload[6].GetBit(0);
+            set => Payload[6] = Payload[6].SetBit(0, value);
         }
 
         [DatapointProperty]
         public bool IsWorkingDay
         {
-            get { return Payload[6].GetBit(1); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(1, value);
-                RaisePropertyChanged(() => IsWorkingDay);
-            }
+            get => Payload[6].GetBit(1);
+            set => Payload[6] = Payload[6].SetBit(1, value);
         }
 
         [DatapointProperty]
         public bool IsWorkingDayValid
         {
-            get { return Payload[6].GetBit(2); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(2, value);
-                RaisePropertyChanged(() => IsWorkingDayValid);
-            }
+            get => Payload[6].GetBit(2);
+            set => Payload[6] = Payload[6].SetBit(2, value);
         }
 
         [DatapointProperty]
         public bool IsYearValid
         {
-            get { return Payload[6].GetBit(3); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(3, value);
-                RaisePropertyChanged(() => IsYearValid);
-            }
+            get => Payload[6].GetBit(3);
+            set => Payload[6] = Payload[6].SetBit(3, value);
         }
 
         [DatapointProperty]
         public bool AreMonthAndDayOfMonthValid
         {
-            get { return Payload[6].GetBit(4); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(4, value);
-                RaisePropertyChanged(() => AreMonthAndDayOfMonthValid);
-            }
+            get => Payload[6].GetBit(4);
+            set => Payload[6] = Payload[6].SetBit(4, value);
         }
 
         [DatapointProperty]
         public bool IsDayOfWeekValid
         {
-            get { return Payload[6].GetBit(5); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(5, value);
-                RaisePropertyChanged(() => IsDayOfWeekValid);
-            }
+            get => Payload[6].GetBit(5);
+            set => Payload[6] = Payload[6].SetBit(5, value);
         }
 
         [DatapointProperty]
         public bool AreHoursMinutesSecondsValid
         {
-            get { return Payload[6].GetBit(6); }
-            set
-            {
-                Payload[6] = Payload[6].SetBit(6, value);
-                RaisePropertyChanged(() => AreHoursMinutesSecondsValid);
-            }
+            get => Payload[6].GetBit(6);
+            set => Payload[6] = Payload[6].SetBit(6, value);
         }
 
         [DatapointProperty]
         public bool IsSummerTime
         {
-            get
-            {
-                return Payload[6].GetBit(7);
-            }
-
-            set
-            {
-                Payload[6] = Payload[6].SetBit(7, value);
-                RaisePropertyChanged(() => IsSummerTime);
-            }
+            get => Payload[6].GetBit(7);
+            set => Payload[6] = Payload[6].SetBit(7, value);
         }
 
         [DatapointProperty]
         public ClockQuality Quality
         {
-            get
-            {
-                return (Payload[7].GetBit(0))
-                           ? ClockQuality.WithoutExternalSyncSignal
-                           : ClockQuality.WithExternalSyncSignal;
-            }
-            set
-            {
-                Payload[7] = Payload[7].SetBit(0, value == ClockQuality.WithExternalSyncSignal);
-                RaisePropertyChanged(() => Quality);
-            }
+            get =>
+                (Payload[7].GetBit(0))
+                    ? ClockQuality.WithoutExternalSyncSignal
+                    : ClockQuality.WithExternalSyncSignal;
+            set => Payload[7] = Payload[7].SetBit(0, value == ClockQuality.WithExternalSyncSignal);
         }
 
         private static int GetDayOfWeekFromDateTime(DateTime value)

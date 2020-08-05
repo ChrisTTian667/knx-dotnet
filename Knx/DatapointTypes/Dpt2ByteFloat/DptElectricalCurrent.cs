@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 21,Unit.mA, Usage.General)]
     public class DptElectricalCurrent : Dpt2ByteFloat
     {
+        private DptElectricalCurrent()
+        {
+        }
+
         public DptElectricalCurrent(byte[] twoBytes)
             : base(twoBytes)
         {

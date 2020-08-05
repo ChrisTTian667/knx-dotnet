@@ -32,7 +32,6 @@ namespace Knx.DatapointTypes.DptString
                     throw new Exception("String must not exceed a length of 14 characters.");
 
                 Payload = ToBytes(value);
-                RaisePropertyChanged(() => Value);
             }
         }
 

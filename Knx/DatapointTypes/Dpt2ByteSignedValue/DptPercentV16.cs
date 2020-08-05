@@ -7,6 +7,10 @@ namespace Knx.DatapointTypes.Dpt2ByteSignedValue
     [DatapointType(8, 10, Unit.Percentage, Usage.General)]
     public class DptPercentV16 : Dpt2ByteSignedValue
     {
+        private DptPercentV16()
+        {
+        }
+
         public DptPercentV16(byte[] payload)
             : base(payload)
         {

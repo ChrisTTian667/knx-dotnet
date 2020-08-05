@@ -30,56 +30,36 @@ namespace Knx.DatapointTypes.Dpt8BitBitset
         [DatapointProperty]
         public bool OutOfService
         {
-            get { return Payload[0].GetBit(7); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(7, value);
-                RaisePropertyChanged(() => OutOfService);
-            }
+            get => Payload[0].GetBit(7);
+            set => Payload[0] = Payload[0].SetBit(7, value);
         }
 
         [DatapointProperty]
         public bool Fault
         {
-            get { return Payload[0].GetBit(6); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(6, value);
-                RaisePropertyChanged(() => Fault);
-            }
+            get => Payload[0].GetBit(6);
+            set => Payload[0] = Payload[0].SetBit(6, value);
         }
 
         [DatapointProperty]
         public bool Overridden
         {
-            get { return Payload[0].GetBit(5); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(5, value);
-                RaisePropertyChanged(() => Overridden);
-            }
+            get => Payload[0].GetBit(5);
+            set => Payload[0] = Payload[0].SetBit(5, value);
         }
 
         [DatapointProperty]
         public bool InAlarm
         {
-            get { return Payload[0].GetBit(4); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(4, value);
-                RaisePropertyChanged(() => InAlarm);
-            }
+            get => Payload[0].GetBit(4);
+            set => Payload[0] = Payload[0].SetBit(4, value);
         }
 
         [DatapointProperty]
         public bool AlarmUnacknowledged
         {
-            get { return Payload[0].GetBit(3); }
-            set
-            {
-                Payload[0] = Payload[0].SetBit(3, value);
-                RaisePropertyChanged(() => AlarmUnacknowledged);
-            }
+            get => Payload[0].GetBit(3);
+            set => Payload[0] = Payload[0].SetBit(3, value);
         }
     }
 }

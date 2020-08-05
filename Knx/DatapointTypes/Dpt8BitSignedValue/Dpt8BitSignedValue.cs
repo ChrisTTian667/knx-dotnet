@@ -27,17 +27,13 @@ namespace Knx.DatapointTypes.Dpt8BitSignedValue
             get
             {
                 var sb = unchecked((sbyte)Payload[0]);
-
                 return sb;
             }
 
             set
             {
                 var payload = (byte)value;
-
                 Payload = new[] { payload };
-
-                RaisePropertyChanged(() => Value);
             }
         }
     }

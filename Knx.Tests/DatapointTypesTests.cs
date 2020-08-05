@@ -5,6 +5,7 @@ using Knx.Common;
 using Knx.Common.Attribute;
 using Knx.DatapointTypes;
 using Knx.DatapointTypes.Dpt1Bit;
+using Knx.DatapointTypes.Dpt2Bit;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -27,12 +28,23 @@ namespace Knx.Tests
         [Test]
         public void SerializeSimpleBooleanDatapointType()
         {
-            var boolDpt = DatapointTypeFactory.Create("1.001", new byte[]{ 1 });
-            var serializedObject = JsonConvert.SerializeObject(boolDpt);
-            var dpt = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
+            var dpt = DatapointTypeFactory.Create("1.001", new byte[]{ 1 });
+            var serializedObject = JsonConvert.SerializeObject(dpt);
+            var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
             
-            Assert.IsNotNull(boolDpt);
-            Assert.AreEqual(boolDpt.Payload, dpt.Payload);
+            Assert.IsNotNull(dpt);
+            Assert.AreEqual(dpt.Payload, deserializeObject.Payload);
+        }
+        
+        [Test]
+        public void SerializeDptAlarmControl()
+        {
+            var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[]{1});
+            var serializedObject = JsonConvert.SerializeObject(dpt);
+            var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
+            
+            Assert.IsNotNull(dpt);
+            Assert.AreEqual(dpt.Payload, deserializeObject.Payload);
         }
         
         [Test]

@@ -21,8 +21,7 @@ namespace Knx.DatapointTypes.Dpt2Bit
             : base(value, control)
         {
         }
-
-        [DataMember]
+        
         [DatapointProperty]
         [BooleanEncoding(UnitEncoding.NoAlarm, UnitEncoding.Alarm)]
         public override bool Value

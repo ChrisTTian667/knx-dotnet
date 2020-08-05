@@ -6,6 +6,10 @@ namespace Knx.DatapointTypes.Dpt2ByteFloat
     [DatapointType(9, 27, Unit.TemperatureF, Usage.General)]
     public class DptTemperatureF : Dpt2ByteFloat
     {
+        private DptTemperatureF()
+        {
+        }
+
         public DptTemperatureF(byte[] twoBytes)
             : base(twoBytes)
         {

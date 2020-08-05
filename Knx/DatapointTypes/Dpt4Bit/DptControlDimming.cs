@@ -8,6 +8,10 @@ namespace Knx.DatapointTypes.Dpt4Bit
     [DatapointType(3, 7, Usage.FunctionBlock)]
     public class DptControlDimming : Dpt3BitControlled
     {
+        private DptControlDimming()
+        {
+        }
+        
         public DptControlDimming(bool increase, byte stepcode) : base(increase, stepcode)
         {
         }
@@ -16,19 +20,12 @@ namespace Knx.DatapointTypes.Dpt4Bit
         {
         }
 
-        [DataMember]
         [DatapointProperty]
         [BooleanEncoding(UnitEncoding.Decrease, UnitEncoding.Increase)]
         public override bool Control
         {
-            get
-            {
-                return base.Control;
-            }
-            set
-            {
-                base.Control = value;
-            }
+            get => base.Control;
+            set => base.Control = value;
         }
     }
 }

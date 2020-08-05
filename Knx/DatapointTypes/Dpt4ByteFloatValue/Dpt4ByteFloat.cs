@@ -40,7 +40,6 @@ namespace Knx.DatapointTypes.Dpt4ByteFloatValue
                 }
 
                 Payload = bytes.ToArray();
-                RaisePropertyChanged(() => Value);
             }
         }
     }

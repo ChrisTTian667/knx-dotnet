@@ -33,78 +33,46 @@ namespace Knx.DatapointTypes
         [DatapointProperty]
         public SetClear A
         {
-            get { return (SetClear)(Payload[0] >> 7); }
-
-            set
-            {
-                Payload[0] = Payload[0].SetBit(0, Convert.ToBoolean((byte)value));
-                RaisePropertyChanged(() => A);
-            }
+            get => (SetClear)(Payload[0] >> 7);
+            set => Payload[0] = Payload[0].SetBit(0, Convert.ToBoolean((byte)value));
         }
 
         [DatapointProperty]
         public SetClear B
         {
-            get { return (SetClear)((Payload[0] & 0x40) >> 6); }
-
-            set
-            {
-                Payload[0] = Payload[0].SetBit(1, Convert.ToBoolean((byte)value));
-                RaisePropertyChanged(() => B);
-            }
+            get => (SetClear)((Payload[0] & 0x40) >> 6);
+            set => Payload[0] = Payload[0].SetBit(1, Convert.ToBoolean((byte)value));
         }
 
         [DatapointProperty]
         public SetClear C
         {
-            get { return (SetClear)((Payload[0] & 0x20) >> 5); }
-
-            set
-            {
-                Payload[0] = Payload[0].SetBit(2, Convert.ToBoolean((byte)value));
-                RaisePropertyChanged(() => C);
-            }
+            get => (SetClear)((Payload[0] & 0x20) >> 5);
+            set => Payload[0] = Payload[0].SetBit(2, Convert.ToBoolean((byte)value));
         }
 
         [DatapointProperty]
         public SetClear D
         {
-            get { return (SetClear)((Payload[0] & 0x10) >> 4); }
-
-            set
-            {
-                Payload[0] = Payload[0].SetBit(3, Convert.ToBoolean((byte)value));
-                RaisePropertyChanged(() => D);
-            }
+            get => (SetClear)((Payload[0] & 0x10) >> 4);
+            set => Payload[0] = Payload[0].SetBit(3, Convert.ToBoolean((byte)value));
         }
 
         [DatapointProperty]
         public SetClear E
         {
-            get { return (SetClear)((Payload[0] & 0x08) >> 3); }
-
-            set
-            {
-                Payload[0] = Payload[0].SetBit(4, Convert.ToBoolean((byte)value));
-
-                RaisePropertyChanged(() => E);
-            }
+            get => (SetClear)((Payload[0] & 0x08) >> 3);
+            set => Payload[0] = Payload[0].SetBit(4, Convert.ToBoolean((byte)value));
         }
 
         [DatapointProperty]
         public Mode3 Mode
         {
-            get
-            {
-                return ((Mode3)(Payload[0] & 0x07));
-            }
-
+            get => ((Mode3)(Payload[0] & 0x07));
             set
             {
                 Payload[0] = (byte)(Payload[0] & 0xF8);         // reset mode to 0
                 Payload[0] = (byte)(Payload[0] + (byte)value);  // set the mode
-
-                RaisePropertyChanged(() => Mode);
             }
         }
     }
