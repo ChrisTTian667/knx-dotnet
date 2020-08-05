@@ -3,7 +3,6 @@ using NUnit.Framework;
 
 namespace Knx.Tests
 {
-    
     public class ByteExtensionTests
     {
         [Test]
