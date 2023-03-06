@@ -14,7 +14,6 @@
         <PackageVersion>1.2.4-alpha</PackageVersion>
         <ReleaseVersion>1.2.4-alpha</ReleaseVersion>
         <SynchReleaseVersion>false</SynchReleaseVersion>
-        <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>knxKey.snk</AssemblyOriginatorKeyFile>
         <RepositoryUrl>https://github.com/ChrisTTian667/KNX</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
@@ -25,7 +24,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PortableDI" Version="1.3.1" />
         <PackageReference Include="NuGet.Build.Packaging" Version="0.2.5-dev.8">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

@@ -38,7 +38,7 @@ public class KnxNetIpRoutingClientTests
                 Payload = new DptBoolean(false).Payload
             };
 
-            await target.SendMessage(message);
+            await target.SendMessageAsync(message);
         }
         finally
         {
@@ -62,7 +62,7 @@ public class KnxNetIpRoutingClientTests
             taskCompletionSource.TrySetResult(info.ToString());
         };
 
-        await target.SendMessage(searchRequest);
+        await target.SendMessageAsync(searchRequest);
 
         await taskCompletionSource.Task;
     }

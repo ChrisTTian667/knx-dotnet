@@ -26,7 +26,7 @@ public static class KnxClientExtensions
             Priority = priority
         };
 
-        client.SendMessage(message);
+        client.SendMessageAsync(message);
     }
 
     public static void Reply(
@@ -46,7 +46,7 @@ public static class KnxClientExtensions
             Priority = priority
         };
 
-        client.SendMessage(message);
+        client.SendMessageAsync(message);
     }
 
     public static T Read<T>(
@@ -119,7 +119,7 @@ public static class KnxClientExtensions
                 };
 
                 Debug.WriteLine("{0} START READING from {1}", DateTime.Now.ToLongTimeString(), destination);
-                client.SendMessage(message);
+                client.SendMessageAsync(message);
 
                 if (replyEvent.WaitOne(timeOut) && indicationMessage != null)
                     return (DatapointType)Activator.CreateInstance(datapointTypeResultType, indicationPayload);

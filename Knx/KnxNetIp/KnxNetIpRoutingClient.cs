@@ -83,10 +83,8 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
         }
     }
 
-    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo)
-    {
+    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo) =>
         KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
-    }
 
     private static DeviceInfo CreateDeviceInfoFromKnxHpai(KnxHpai endpoint, string friendlyName)
     {
@@ -112,19 +110,19 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
     ///     Sends a KnxMessage.
     /// </summary>
     /// <param name="knxMessage">The KNX message.</param>
-    public override async Task SendMessage(IKnxMessage knxMessage)
+    public override async Task SendMessageAsync(IKnxMessage knxMessage)
     {
         var knxNetIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
         ((RoutingIndication)knxNetIpMessage.Body).Cemi = knxMessage;
 
-        await SendMessage(knxNetIpMessage);
+        await SendMessageAsync(knxNetIpMessage);
     }
 
     /// <summary>
     ///     Sends a KnxNetIpMessage
     /// </summary>
     /// <param name="message"></param>
-    public async Task SendMessage(KnxNetIpMessage message)
+    public async Task SendMessageAsync(KnxNetIpMessage message)
     {
         Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {message}");
 

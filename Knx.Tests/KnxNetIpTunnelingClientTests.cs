@@ -90,12 +90,11 @@ public class KnxNetIpTunnelingClientTests
     [Test]
     public async Task ConnectTest()
     {
-        using (var target = new KnxNetIpTunnelingClient(
-                   new IPEndPoint(IPAddress.Parse("10.10.10.11"), 3671),
-                   KnxAddress.Device(1, 1, 2)))
-        {
-            await target.Connect();
-        }
+        using var target = new KnxNetIpTunnelingClient(
+            new IPEndPoint(IPAddress.Parse("10.0.2.5"), 3671),
+            KnxAddress.Device(1, 1, 2));
+
+        await target.Connect();
     }
 
     [Test]
@@ -121,7 +120,7 @@ public class KnxNetIpTunnelingClientTests
                 Payload = new DptBoolean(false).Payload
             };
 
-            await target.SendMessage(message);
+            await target.SendMessageAsync(message);
 
             // test for simpler SendMessage calls
             //target.Write(KnxAddress.Logical(9, 3, 0), (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday)));

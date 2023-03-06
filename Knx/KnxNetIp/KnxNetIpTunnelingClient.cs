@@ -32,7 +32,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         ConnectionStateTimeStamp = DateTime.MinValue;
 
         _keepAliveTimer = new Timer(59000) { Enabled = false, AutoReset = true };
-        _keepAliveTimer.Elapsed += async (sender, args) => await SendKeepAliveMessage();
+        _keepAliveTimer.Elapsed += async (_, _) => await SendKeepAliveMessage();
     }
 
     /// <summary>
@@ -147,6 +147,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         catch (KnxException exception)
         {
             Debug.WriteLine($"Unable to disconnect from KNX gateway ('{RemoteEndPoint}'): {exception.Message}");
+            throw;
         }
         finally
         {
@@ -154,7 +155,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         }
     }
 
-    public override async Task SendMessage(IKnxMessage knxMessage)
+    public override async Task SendMessageAsync(IKnxMessage knxMessage)
     {
         var message = (KnxNetIpMessage<TunnelingRequest>)KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
 
@@ -202,6 +203,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
             return;
 
         _terminationEvent.Set();
+        _keepAliveTimer.Dispose();
         Disconnect().Wait();
         _terminationEvent?.Dispose();
 
@@ -237,10 +239,8 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
     }
 
     private async Task<TResponse> SendAndReceiveReply<TResponse>(KnxNetIpMessage message)
-        where TResponse : KnxNetIpMessage
-    {
-        return await SendAndReceiveReply<TResponse>(message, ack => !ack.Equals(default(KnxNetIpMessage)));
-    }
+        where TResponse : KnxNetIpMessage =>
+        await SendAndReceiveReply<TResponse>(message, ack => !ack.Equals(default(KnxNetIpMessage)));
 
     /// <summary>
     ///     Checks, if the messageBody requires the sequence counter to be incremented.
@@ -250,7 +250,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
     /// <returns>
     ///     <c>true</c>, if the sequenceCounter needs to be incremented; otherwise <c>false</c>
     /// </returns>
-    private static bool DoesRequireSequenceCountIncrement(
+    private static bool GetRequiresSequenceCountIncrement(
         TunnelingMessageBody knxTunnelingMessageBody,
         out PropertyInfo sequenceCounterProperty)
     {
@@ -262,12 +262,12 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
 
         foreach (var property in bodyProperties)
         {
-            var sequnceCounterAttributeArray =
+            var sequenceCounterAttributeArray =
                 property.GetCustomAttributes(typeof(SequenceCounterAttribute), true).ToArray();
 
-            if (!sequnceCounterAttributeArray.Any()) continue;
+            if (!sequenceCounterAttributeArray.Any()) continue;
 
-            var sequenceCounterAttribute = (SequenceCounterAttribute)sequnceCounterAttributeArray[0];
+            var sequenceCounterAttribute = (SequenceCounterAttribute)sequenceCounterAttributeArray[0];
             sequenceCounterProperty = property;
 
             return sequenceCounterAttribute.IncrementOnSendMessage;
@@ -308,12 +308,13 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
     {
         var acknowledge = KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingAcknowledge);
 
-        if (!(acknowledge.Body is TunnelingAcknowledge acknowledgeBody))
+        if (acknowledge.Body is not TunnelingAcknowledge acknowledgeBody)
             return;
 
         acknowledgeBody.CommunicationChannel = knxNetIpMessage.Body.CommunicationChannel;
         acknowledgeBody.State = ErrorCode.NoError;
         acknowledgeBody.SequenceCounter = knxNetIpMessage.Body.SequenceCounter;
+
         await Send(acknowledge);
     }
 
@@ -364,6 +365,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         try
         {
             var connectionStateRequest = MessageFactory.GetConnectionStateRequest(LocalEndPoint);
+
             await SendAndReceiveReply<KnxNetIpMessage<ConnectionStateResponse>>(
                 connectionStateRequest,
                 ack => ack.Body.CommunicationChannel ==
@@ -387,15 +389,13 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
     /// <param name="knxTunnelingMessageBody">The KNX message body.</param>
     private void SetSequenceCount(TunnelingMessageBody knxTunnelingMessageBody)
     {
-        if (DoesRequireSequenceCountIncrement(knxTunnelingMessageBody, out var sequenceProperty))
+        if (GetRequiresSequenceCountIncrement(knxTunnelingMessageBody, out var sequenceProperty))
         {
             sequenceProperty.SetValue(knxTunnelingMessageBody, _sequenceCounter, null);
             _sequenceCounter++;
         }
     }
 
-    private void InvokeKnxNetIpMessageReceived(KnxNetIpMessage message)
-    {
+    private void InvokeKnxNetIpMessageReceived(KnxNetIpMessage message) =>
         KnxNetIpMessageReceived?.Invoke(this, message);
-    }
 }

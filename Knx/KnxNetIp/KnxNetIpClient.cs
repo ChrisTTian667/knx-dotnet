@@ -12,7 +12,6 @@ public abstract class KnxNetIpClient : IDisposable
 {
     protected readonly UdpClient UdpClient;
 
-
     protected KnxNetIpClient(
         IPEndPoint remoteEndPoint,
         KnxDeviceAddress deviceAddress,
@@ -40,10 +39,8 @@ public abstract class KnxNetIpClient : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    ~KnxNetIpClient()
-    {
+    ~KnxNetIpClient() =>
         Dispose(false);
-    }
 
     protected virtual void Dispose(bool disposing)
     {
@@ -81,48 +78,41 @@ public abstract class KnxNetIpClient : IDisposable
     ///     Sends a KnxMessage
     /// </summary>
     /// <param name="knxMessage"></param>
-    public abstract Task SendMessage(IKnxMessage knxMessage);
+    public abstract Task SendMessageAsync(IKnxMessage knxMessage);
 
     /// <summary>
     ///     Receives the data from the UDP client.
     /// </summary>
-    protected async void ReceiveData(UdpClient client)
+    private async void ReceiveData(UdpClient client)
     {
         KnxNetIpMessage lastMessage = null;
 
         var receivedBuffer = new List<byte>();
-        try
+        while (true)
         {
-            while (true)
+            var receivedResult = await client.ReceiveAsync();
+            var receivedData = receivedResult.Buffer.ToArray();
+            receivedBuffer.AddRange(receivedData);
+
+            if (!receivedBuffer.Any())
+                continue;
+
+            var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
+
+            if (msg == null)
+                continue;
+
+            receivedBuffer.Clear();
+
+            // verify that the message differ from last one.
+            if (lastMessage != null && lastMessage.ServiceType == msg.ServiceType)
             {
-                var receivedResult = await client.ReceiveAsync();
-                var receivedData = receivedResult.Buffer.ToArray();
-                receivedBuffer.AddRange(receivedData);
-
-                if (!receivedBuffer.Any())
+                if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
                     continue;
-
-                var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
-
-                if (msg == null)
-                    continue;
-
-                receivedBuffer.Clear();
-
-                // verify that the message differ from last one.
-                if (lastMessage != null && lastMessage.ServiceType == msg.ServiceType)
-                {
-                    if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
-                        continue;
-                }
-
-                OnKnxNetIpMessageReceived(msg);
-                lastMessage = msg;
             }
-        }
-        catch (Exception exception)
-        {
-            Debug.WriteLine("Listener exception: " + exception.Message);
+
+            OnKnxNetIpMessageReceived(msg);
+            lastMessage = msg;
         }
     }
 
@@ -130,10 +120,8 @@ public abstract class KnxNetIpClient : IDisposable
     ///     Invoked when a KnxMessage has been received
     /// </summary>
     /// <param name="knxMessage"></param>
-    protected void InvokeKnxMessageReceived(IKnxMessage knxMessage)
-    {
+    protected void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
         KnxMessageReceived?.Invoke(this, knxMessage);
-    }
 
     /// <summary>
     ///     Invoked when a new KnxNetIpMessage has been retrieved.
