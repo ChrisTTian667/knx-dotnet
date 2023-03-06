@@ -36,21 +36,3 @@ public class KnxException : Exception
     {
     }
 }
-
-/// <summary>
-///     Is thrown when a message could not be processed in the given timespan.
-/// </summary>
-public class KnxTimeoutException : KnxException
-{
-    public KnxTimeoutException(string message) : base(message)
-    {
-    }
-
-    public KnxTimeoutException(Exception innerException) : base(innerException)
-    {
-    }
-
-    public KnxTimeoutException(string message, Exception innerException) : base(message, innerException)
-    {
-    }
-}

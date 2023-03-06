@@ -12,7 +12,10 @@ public static class BitArrayExtensions
     /// <returns>a <c>byte</c> representing the count of positive bits in the specified array.</returns>
     public static byte CountOfPositiveBits(this BitArray array)
     {
-        return array.Cast<bool>().Aggregate<bool, byte>(0, (current, bit) => (byte)(current + (byte)(bit ? 1 : 0)));
+        return array
+            .Cast<bool>()
+            .Aggregate<bool, byte>(0,
+                (current, bit) => (byte)(current + (byte)(bit ? 1 : 0)));
     }
 
     /// <summary>

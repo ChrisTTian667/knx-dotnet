@@ -40,7 +40,9 @@ public class KnxHpai
         };
         try
         {
-            if (bytes.Length > 8) result.Description = DeviceDescriptionInformationBlock.Parse(bytes.ExtractBytes(8));
+            if (bytes.Length > 8)
+                result.Description =
+                    DeviceDescriptionInformationBlock.Parse(bytes.ExtractBytes(8));
         }
         catch
         {
@@ -52,11 +54,9 @@ public class KnxHpai
 
     public byte[] ToByteArray()
     {
-        ByteArrayToken lengthToken;
-
         var arrayBuilder =
             new ByteArrayBuilder()
-                .AddToken(1, out lengthToken)
+                .AddToken(1, out var lengthToken)
                 .AddByte((byte)HostProtocolCode)
                 .Add(IpAddress)
                 .AddInt(Port);

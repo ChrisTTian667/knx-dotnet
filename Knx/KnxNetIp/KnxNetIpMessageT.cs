@@ -10,9 +10,6 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new()
 {
-    /// <summary>
-    ///     The protocol version
-    /// </summary>
     private const int ProtocolVersion = 0x10;
 
     /// <summary>
@@ -52,15 +49,11 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
     ///     Deserializes the specified bytes.
     /// </summary>
     /// <param name="bytes">The bytes to be deserialized.</param>
-    protected override void Deserialize(byte[] bytes)
-    {
-        Body.Deserialize(bytes.ExtractBytes(HeaderLength, bytes.Count() - HeaderLength));
-    }
+    protected override void Deserialize(byte[] bytes) =>
+        Body.Deserialize(bytes.ExtractBytes(HeaderLength, bytes.Length - HeaderLength));
 
-    public override string ToString()
-    {
-        return string.Format("KnxNetIp {0}", Body != null ? Body.ToString() : "empty");
-    }
+    public override string ToString() =>
+        $"KnxNetIp {(Body != null ? Body.ToString() : "empty")}";
 
     /// <summary>
     ///     Gets or sets the body.

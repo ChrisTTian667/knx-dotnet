@@ -14,7 +14,7 @@ public sealed class KnxNetIpConnectionString
     {
         InternalProtocol = KnxNetIpProtocol.Tunneling;
         ExternalProtocol = KnxNetIpProtocol.Tunneling;
-        InternalMulticastUrl = Defaults.IPv4MulticastAddress.Address.ToString();
+        InternalMulticastUrl = Default.IPv4MulticastAddress.Address.ToString();
     }
 
     public KnxNetIpConnectionString(string connectionString) : this()
@@ -51,7 +51,7 @@ public sealed class KnxNetIpConnectionString
         }
         catch (Exception exception)
         {
-            throw new ArgumentException("ConnectionString is not formated correctly.", exception);
+            throw new ArgumentException("ConnectionString is not formatted correctly.", exception);
         }
     }
 

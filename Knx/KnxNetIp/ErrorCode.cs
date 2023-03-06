@@ -3,7 +3,7 @@
 public enum ErrorCode
 {
     /// <summary>
-    ///     Operation successfull.
+    ///     Operation successful.
     /// </summary>
     NoError = 0,
 

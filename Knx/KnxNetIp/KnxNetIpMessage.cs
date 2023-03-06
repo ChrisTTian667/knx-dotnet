@@ -13,7 +13,7 @@ public abstract class KnxNetIpMessage
     /// <summary>
     ///     The size of the header (in bytes)
     /// </summary>
-    public static readonly byte HeaderLength = 6;
+    public const byte HeaderLength = 6;
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -38,42 +38,25 @@ public abstract class KnxNetIpMessage
     /// </summary>
     /// <param name="serviceType">Type of the message.</param>
     /// <returns></returns>
-    public static KnxNetIpMessage Create(KnxNetIpServiceType serviceType)
-    {
-        switch (serviceType)
+    public static KnxNetIpMessage Create(KnxNetIpServiceType serviceType) =>
+        serviceType switch
         {
-            case KnxNetIpServiceType.ConnectionRequest:
-                return new KnxNetIpMessage<ConnectionRequest>();
-            case KnxNetIpServiceType.ConnectionResponse:
-                return new KnxNetIpMessage<ConnectionResponse>();
-            case KnxNetIpServiceType.ConnectionStateRequest:
-                return new KnxNetIpMessage<ConnectionStateRequest>();
-            case KnxNetIpServiceType.ConnectionStateResponse:
-                return new KnxNetIpMessage<ConnectionStateResponse>();
-            case KnxNetIpServiceType.DescriptionRequest:
-                return new KnxNetIpMessage<DescriptionRequest>();
-            case KnxNetIpServiceType.DescriptionResponse:
-                return new KnxNetIpMessage<DescriptionResponse>();
-            case KnxNetIpServiceType.DisconnectRequest:
-                return new KnxNetIpMessage<DisconnectRequest>();
-            case KnxNetIpServiceType.DisconnectResponse:
-                return new KnxNetIpMessage<DisconnectResponse>();
-            case KnxNetIpServiceType.SearchRequest:
-                return new KnxNetIpMessage<SearchRequest>();
-            case KnxNetIpServiceType.SearchResponse:
-                return new KnxNetIpMessage<SearchResponse>();
-            case KnxNetIpServiceType.TunnelingRequest:
-                return new KnxNetIpMessage<TunnelingRequest>();
-            case KnxNetIpServiceType.TunnelingAcknowledge:
-                return new KnxNetIpMessage<TunnelingAcknowledge>();
-            case KnxNetIpServiceType.RoutingIndication:
-                return new KnxNetIpMessage<RoutingIndication>();
-            case KnxNetIpServiceType.RoutingLostMessage:
-                return new KnxNetIpMessage<LostMessageIndication>();
-            default:
-                throw new ArgumentException("Knx message body unknown!");
-        }
-    }
+            KnxNetIpServiceType.ConnectionRequest => new KnxNetIpMessage<ConnectionRequest>(),
+            KnxNetIpServiceType.ConnectionResponse => new KnxNetIpMessage<ConnectionResponse>(),
+            KnxNetIpServiceType.ConnectionStateRequest => new KnxNetIpMessage<ConnectionStateRequest>(),
+            KnxNetIpServiceType.ConnectionStateResponse => new KnxNetIpMessage<ConnectionStateResponse>(),
+            KnxNetIpServiceType.DescriptionRequest => new KnxNetIpMessage<DescriptionRequest>(),
+            KnxNetIpServiceType.DescriptionResponse => new KnxNetIpMessage<DescriptionResponse>(),
+            KnxNetIpServiceType.DisconnectRequest => new KnxNetIpMessage<DisconnectRequest>(),
+            KnxNetIpServiceType.DisconnectResponse => new KnxNetIpMessage<DisconnectResponse>(),
+            KnxNetIpServiceType.SearchRequest => new KnxNetIpMessage<SearchRequest>(),
+            KnxNetIpServiceType.SearchResponse => new KnxNetIpMessage<SearchResponse>(),
+            KnxNetIpServiceType.TunnelingRequest => new KnxNetIpMessage<TunnelingRequest>(),
+            KnxNetIpServiceType.TunnelingAcknowledge => new KnxNetIpMessage<TunnelingAcknowledge>(),
+            KnxNetIpServiceType.RoutingIndication => new KnxNetIpMessage<RoutingIndication>(),
+            KnxNetIpServiceType.RoutingLostMessage => new KnxNetIpMessage<LostMessageIndication>(),
+            _ => throw new ArgumentException("Knx message body unknown!")
+        };
 
     /// <summary>
     ///     Parses the specified bytes.

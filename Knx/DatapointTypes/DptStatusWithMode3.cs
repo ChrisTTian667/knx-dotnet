@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Knx.Common;
 using Knx.Common.Attribute;
 

@@ -11,7 +11,7 @@ public class DptSceneControl : DptScene
     public enum SceneControl : byte
     {
         /// <summary>
-        ///     Activate the scene corresponsing to the field scene Number.
+        ///     Activate the scene corresponding to the field scene Number.
         /// </summary>
         Activate = 0x00,
 
@@ -31,17 +31,14 @@ public class DptSceneControl : DptScene
     }
 
     public DptSceneControl(SceneControl control, byte scene)
-        : base(scene)
-    {
+        : base(scene) =>
         Control = control;
-    }
 
     [DatapointProperty]
     public SceneControl Control
     {
         get => Payload.Length > 0 ? (SceneControl)(Payload[0] >> 7) : 0;
-
-        set
+        private init
         {
             if (!Payload.Any()) Payload = new byte[1];
 

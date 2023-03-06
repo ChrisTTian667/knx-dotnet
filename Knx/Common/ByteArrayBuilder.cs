@@ -24,7 +24,7 @@ public class ByteArrayBuilder
 
     public int Length => _list.Count;
 
-    public static byte[] IntToByteArray(int integer)
+    private static byte[] IntToByteArray(int integer)
     {
         var temp = BitConverter.GetBytes(integer);
         var intBytes = new byte[2];
@@ -35,17 +35,15 @@ public class ByteArrayBuilder
         return intBytes;
     }
 
-    public ByteArrayBuilder Add(byte[] array)
+    public ByteArrayBuilder Add(IEnumerable<byte> array)
     {
         _list.AddRange(array);
-
         return this;
     }
 
     public ByteArrayBuilder Add(IPAddress ipAddress)
     {
         _list.AddRange(ipAddress.GetAddressBytes());
-
         return this;
     }
 
@@ -77,24 +75,17 @@ public class ByteArrayBuilder
     public ByteArrayBuilder AddByte(byte b)
     {
         _list.Add(b);
-
         return this;
     }
 
     public ByteArrayBuilder AddByte(byte? b)
     {
-        if (b == null) b = 0x00;
-        _list.Add((byte)b);
-
+        _list.Add(b ??= 0x00);
         return this;
     }
 
-    public ByteArrayBuilder AddInt(int integer)
-    {
+    public ByteArrayBuilder AddInt(int integer) =>
         Add(IntToByteArray(integer));
-
-        return this;
-    }
 
     /// <summary>
     ///     Adds the length byteArrayToken.
@@ -110,26 +101,23 @@ public class ByteArrayBuilder
         return this;
     }
 
-    public void ReplaceToken(ByteArrayToken byteArrayToken, byte value)
-    {
+    private void ReplaceToken(ByteArrayToken byteArrayToken, byte value) =>
         _list[byteArrayToken.Index] = value;
-    }
 
     public void ReplaceToken(ByteArrayToken byteArrayToken, int value)
     {
         if (byteArrayToken.Index + 1 > _list.Count)
             throw new InvalidOperationException("no more space to add an integer.");
 
-        if (byteArrayToken.BytesToAdd > 2)
-            throw new NotSupportedException("ByteArrayBuilder supports only tokens with a length of one or two bytes.");
-
-        if (byteArrayToken.BytesToAdd == 1)
+        switch (byteArrayToken.BytesToAdd)
         {
-            if (value > byte.MaxValue) throw new ArgumentException("Value to big to pass to an single byte");
-
-            ReplaceToken(byteArrayToken, Convert.ToByte(value));
-
-            return;
+            case > 2:
+                throw new NotSupportedException("ByteArrayBuilder supports only tokens with a length of one or two bytes.");
+            case 1 when value > byte.MaxValue:
+                throw new ArgumentException("Value to big to pass to an single byte");
+            case 1:
+                ReplaceToken(byteArrayToken, Convert.ToByte(value));
+                return;
         }
 
         var byteArray = IntToByteArray(value);
@@ -141,8 +129,6 @@ public class ByteArrayBuilder
     ///     Returns the completed byteArray
     /// </summary>
     /// <returns></returns>
-    public byte[] ToByteArray()
-    {
-        return _list.ToArray();
-    }
+    public byte[] ToByteArray() =>
+        _list.ToArray();
 }

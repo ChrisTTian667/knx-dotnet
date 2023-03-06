@@ -4,9 +4,9 @@ using Knx.Resources;
 
 namespace Knx.KnxNetIp;
 
-public class DeviceDescriptionInformationBlock : DescriptionInformationBlock
+public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBlock
 {
-    protected DeviceDescriptionInformationBlock(byte[] bytes) : base(bytes)
+    private DeviceDescriptionInformationBlock(byte[] bytes) : base(bytes)
     {
         if (Type != DescriptionType.DeviceInfo)
             throw new KnxNetIpException("Unable to determine Device Description. Wrong Description Type!");
@@ -22,31 +22,26 @@ public class DeviceDescriptionInformationBlock : DescriptionInformationBlock
         if (Information.Length > 22)
         {
             var name = new DptString_8859_1(Information.ExtractBytes(22)).Value;
-            if (name.IndexOf('\0') >= 0)
+            if (name.Contains('\0'))
                 name = name.Substring(0, name.IndexOf('\0'));
             FriendlyName = name;
         }
     }
 
-    public KnxMedium Medium { get; protected set; }
+    public KnxMedium Medium { get; }
 
-    public short Status { get; protected set; }
+    public short Status { get; }
 
-    public byte[] MacAddress { get; protected set; }
+    public byte[] MacAddress { get; }
 
-    public string SerialNumber { get; protected set; }
+    public string SerialNumber { get; }
 
-    public int ProjectInstallId { get; protected set; }
+    public int ProjectInstallId { get; }
 
-    public string FriendlyName { get; protected set; }
+    public string FriendlyName { get; }
 
-    /// <summary>
-    ///     Gets the knx device address.
-    /// </summary>
-    public KnxDeviceAddress Address { get; protected set; }
+    public KnxDeviceAddress Address { get; }
 
-    public new static DeviceDescriptionInformationBlock Parse(byte[] bytes)
-    {
-        return new DeviceDescriptionInformationBlock(bytes);
-    }
+    public new static DeviceDescriptionInformationBlock Parse(byte[] bytes) =>
+        new (bytes);
 }

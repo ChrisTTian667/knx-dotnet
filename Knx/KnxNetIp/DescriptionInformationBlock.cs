@@ -4,10 +4,6 @@ namespace Knx.KnxNetIp;
 
 public class DescriptionInformationBlock
 {
-    protected DescriptionInformationBlock()
-    {
-    }
-
     protected DescriptionInformationBlock(byte[] bytes)
     {
         Payload = bytes;
@@ -16,16 +12,14 @@ public class DescriptionInformationBlock
         Information = bytes.ExtractBytes(2);
     }
 
-    public int Length { get; protected set; }
+    public int Length { get; }
 
-    public DescriptionType Type { get; protected set; }
+    public DescriptionType Type { get; }
 
-    public byte[] Information { get; protected set; }
+    public byte[] Information { get; }
 
     public byte[] Payload { get; }
 
-    public static DescriptionInformationBlock Parse(byte[] bytes)
-    {
-        return new DescriptionInformationBlock(bytes);
-    }
+    public static DescriptionInformationBlock Parse(byte[] bytes) =>
+        new(bytes);
 }

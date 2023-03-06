@@ -108,14 +108,14 @@ public class DatapointTypesTests
             typeof(DatapointType).Assembly.GetTypes()
                 .Where(
                     t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
-                .Where(t => t.GetCustomAttributes(typeof(DataLengthAttribute), true).Count() == 1)
+                .Where(t => t.GetCustomAttributes(typeof(DataLengthAttribute), true).Length == 1)
                 .Count(t => !t.IsAbstract);
 
         Assert.AreEqual(datapointTypesCount, allDatapointTypesWithDataLengthAttributeCount);
     }
 
     [Test]
-    public void InstanciateEachDatapointType_NoException()
+    public void CreateEachDatapointType_NoException()
     {
         var count = 0;
         foreach (var type in GetDatapointTypes()

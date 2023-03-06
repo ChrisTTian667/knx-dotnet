@@ -5,6 +5,7 @@ using Knx.DatapointTypes;
 using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
+using TimeoutException = Knx.Exceptions.TimeoutException;
 
 namespace Knx;
 
@@ -129,7 +130,7 @@ public static class KnxClientExtensions
                     if (confirmationMessage != null)
                         return (DatapointType)Activator.CreateInstance(datapointTypeResultType, confirmationPayload);
 
-                    throw new KnxTimeoutException(
+                    throw new TimeoutException(
                         string.Format(
                             "Did not retrieve an answer within configured timeout of {0} seconds: {1}",
                             timeOut.TotalSeconds,

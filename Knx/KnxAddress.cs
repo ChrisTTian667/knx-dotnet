@@ -42,7 +42,7 @@ public abstract class KnxAddress
     protected static void ValidateValue(int value, int min, int max, string parameter)
     {
         if (value < min || value > max)
-            throw new ValidationException($"Value of {parameter} has to be between {min} and {max}!");
+            throw new ArgumentOutOfRangeException(parameter, $"Has to be between {min} and {max}");
     }
 
     /// <summary>
