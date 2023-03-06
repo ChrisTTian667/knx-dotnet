@@ -69,7 +69,7 @@ namespace Knx.Tests
         public void ReadableStringTest()
         {
             var expected = new byte[] {1};
-            var readableByteArray = "1";
+            const string readableByteArray = "1";
             var array = ByteArrayExtensions.FromReadableString(readableByteArray);
             Assert.AreEqual(expected, array);
         }
