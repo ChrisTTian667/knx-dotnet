@@ -14,8 +14,6 @@ internal class ControlByte2
     /// </summary>
     private const byte MaxRoutes = 7;
 
-    #region construction
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ControlByte2" /> class.
     /// </summary>
@@ -24,10 +22,6 @@ internal class ControlByte2
         DestinationAddressIsKnxDeviceAddress = false;
         RoutingCounter = MaxRoutes - 1;
     }
-
-    #endregion
-
-    #region properties
 
     public bool DestinationAddressIsKnxDeviceAddress { get; set; }
 
@@ -44,10 +38,6 @@ internal class ControlByte2
     /// </summary>
     /// <value>The count of hops.</value>
     public byte Hops => (byte)(MaxRoutes - RoutingCounter);
-
-    #endregion
-
-    #region (de-)serialization
 
     /// <summary>
     ///     Toes the byte.
@@ -87,6 +77,4 @@ internal class ControlByte2
                 controlBitArray[3]
             }).ToByteArray()[0];
     }
-
-    #endregion
 }

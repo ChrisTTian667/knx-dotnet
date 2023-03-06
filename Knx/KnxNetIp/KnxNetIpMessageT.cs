@@ -10,16 +10,10 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new()
 {
-    #region Constants and Fields
-
     /// <summary>
     ///     The protocol version
     /// </summary>
     private const int ProtocolVersion = 0x10;
-
-    #endregion
-
-    #region Constructors and Destructors
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxNetIpMessage{T}" /> class.
@@ -29,10 +23,6 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
         Body = Activator.CreateInstance<T>();
         ServiceType = Body.ServiceType;
     }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Does the byte array.
@@ -58,10 +48,6 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
         return arrayBuilder.ToByteArray();
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     ///     Deserializes the specified bytes.
     /// </summary>
@@ -71,14 +57,10 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
         Body.Deserialize(bytes.ExtractBytes(HeaderLength, bytes.Count() - HeaderLength));
     }
 
-    #endregion
-
     public override string ToString()
     {
         return string.Format("KnxNetIp {0}", Body != null ? Body.ToString() : "empty");
     }
-
-    #region Properties
 
     /// <summary>
     ///     Gets or sets the body.
@@ -95,6 +77,4 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
     /// </summary>
     /// <value>The length.</value>
     public int Length => ToByteArray().Length;
-
-    #endregion
 }

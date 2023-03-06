@@ -17,22 +17,12 @@ public delegate void TopologyItemChangedHandler( /*ref bool changeAllowed*/);
 /// </summary>
 public abstract class KnxAddress
 {
-    #region private fields
-
     private readonly BitArray _bitArray;
-
-    #endregion
-
-    #region events
 
     /// <summary>
     ///     Occures, when the address changed.
     /// </summary>
     public TopologyItemChangedHandler AddressChanged;
-
-    #endregion
-
-    #region construction
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxAddress" /> class.
@@ -41,10 +31,6 @@ public abstract class KnxAddress
     {
         _bitArray = new BitArray(16, false);
     }
-
-    #endregion
-
-    #region Validator
 
     /// <summary>
     ///     Validates the value.
@@ -59,8 +45,6 @@ public abstract class KnxAddress
             throw new ValidationException($"Value of {parameter} has to be between {min} and {max}!");
     }
 
-    #endregion
-
     /// <summary>
     ///     Invokes the change event.
     /// </summary>
@@ -71,20 +55,14 @@ public abstract class KnxAddress
 
     protected abstract void FillBitArray(BitArray bitArray);
 
-    public static KnxDeviceAddress Device(byte area, byte line, byte device)
-    {
-        return new KnxDeviceAddress(area, line, device);
-    }
+    public static KnxDeviceAddress Device(byte area, byte line, byte device) =>
+        new(area, line, device);
 
-    public static KnxLogicalAddress Logical(byte group, byte subGroup)
-    {
-        return new KnxLogicalAddress(group, subGroup);
-    }
+    public static KnxLogicalAddress Logical(byte group, byte subGroup) => new
+        (group, subGroup);
 
-    public static KnxLogicalAddress Logical(byte group, byte? middleGroup, byte subGroup)
-    {
-        return new KnxLogicalAddress(group, middleGroup, subGroup);
-    }
+    public static KnxLogicalAddress Logical(byte group, byte? middleGroup, byte subGroup) =>
+        new(group, middleGroup, subGroup);
 
     public static KnxDeviceAddress ParseDevice(string address)
     {
@@ -100,20 +78,13 @@ public abstract class KnxAddress
         if (addressParts.Length != 3)
             throw new FormatException(exMessage);
 
-        for (var i = 0; i < addressParts.Count() - 1; i++)
+        for (var i = 0; i < addressParts.Length - 1; i++)
             addressParts[i] = addressParts[i].Trim(splitChars);
 
-        try
-        {
-            return new KnxDeviceAddress(
-                Convert.ToByte(addressParts[0]),
-                Convert.ToByte(addressParts[1]),
-                Convert.ToByte(addressParts[2]));
-        }
-        catch (FormatException)
-        {
-            throw new FormatException(exMessage);
-        }
+        return new KnxDeviceAddress(
+            Convert.ToByte(addressParts[0]),
+            Convert.ToByte(addressParts[1]),
+            Convert.ToByte(addressParts[2]));
     }
 
     public static bool TryParseLogical(string input, out KnxLogicalAddress address)
@@ -169,10 +140,8 @@ public abstract class KnxAddress
 
     public override int GetHashCode()
     {
-        return ToString().GetHashCode();
+        return ToString()!.GetHashCode();
     }
-
-    #region (de-)serialization
 
     /// <summary>
     ///     Converts to bits.
@@ -180,10 +149,8 @@ public abstract class KnxAddress
     /// <param name="value">The value.</param>
     /// <param name="length">The length.</param>
     /// <returns>a list of bool values</returns>
-    protected IEnumerable<bool> ConvertToBits(int value, byte length)
-    {
-        return new BitArray(new[] { value }).Cast<bool>().Take(length).Reverse();
-    }
+    protected IEnumerable<bool> ConvertToBits(int value, byte length) =>
+        new BitArray(new[] { value }).Cast<bool>().Take(length).Reverse();
 
     /// <summary>
     ///     Toes the bit array.
@@ -192,9 +159,6 @@ public abstract class KnxAddress
     public BitArray ToBitArray()
     {
         FillBitArray(_bitArray);
-
         return _bitArray;
     }
-
-    #endregion
 }

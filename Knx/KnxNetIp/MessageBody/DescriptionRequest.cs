@@ -8,8 +8,6 @@ public class DescriptionRequest : TunnelingMessageBody
 {
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.DescriptionRequest;
 
-    #region Public Methods
-
     public override void Deserialize(byte[] bytes)
     {
         throw new NotImplementedException();
@@ -19,6 +17,4 @@ public class DescriptionRequest : TunnelingMessageBody
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }

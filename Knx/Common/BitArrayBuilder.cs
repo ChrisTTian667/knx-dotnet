@@ -6,13 +6,7 @@ namespace Knx.Common;
 
 public sealed class BitArrayBuilder
 {
-    #region Constants and Fields
-
     private readonly List<BitArray> _bitArrayList = new();
-
-    #endregion
-
-    #region Public Methods
 
     public BitArrayBuilder Add(bool bit)
     {
@@ -58,6 +52,4 @@ public sealed class BitArrayBuilder
 
         return resultArray;
     }
-
-    #endregion
 }

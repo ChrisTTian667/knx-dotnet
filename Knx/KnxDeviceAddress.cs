@@ -32,15 +32,9 @@ public class KnxDeviceAddress : KnxAddress
         return Area + "." + Line + "." + Device;
     }
 
-    #region private fields
-
     private byte _area;
     private byte _device;
     private byte _line;
-
-    #endregion
-
-    #region construction
 
     /// <summary>
     ///     Don't use a parameterless constructor; this is only for serialization
@@ -72,10 +66,6 @@ public class KnxDeviceAddress : KnxAddress
         _line = bytes[0].LowBits();
         _device = bytes[1];
     }
-
-    #endregion
-
-    #region properties
 
     /// <summary>
     ///     Gets or sets the area address.
@@ -124,6 +114,4 @@ public class KnxDeviceAddress : KnxAddress
             InvokeChangeEvent();
         }
     }
-
-    #endregion
 }

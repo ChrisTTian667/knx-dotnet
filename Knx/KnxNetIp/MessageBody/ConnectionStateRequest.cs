@@ -6,8 +6,6 @@ namespace Knx.KnxNetIp.MessageBody;
 [ResponseMessage(typeof(ConnectionStateResponse))]
 public class ConnectionStateRequest : TunnelingMessageBody
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConnectionStateRequest" /> class.
     /// </summary>
@@ -16,10 +14,6 @@ public class ConnectionStateRequest : TunnelingMessageBody
         HostProtocolAddressInfo = new KnxHpai();
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the host protocol address info.
     /// </summary>
@@ -27,10 +21,6 @@ public class ConnectionStateRequest : TunnelingMessageBody
     public KnxHpai HostProtocolAddressInfo { get; private set; }
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.ConnectionStateRequest;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -57,6 +47,4 @@ public class ConnectionStateRequest : TunnelingMessageBody
             .Add(
                 HostProtocolAddressInfo.ToByteArray());
     }
-
-    #endregion
 }

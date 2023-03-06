@@ -5,8 +5,6 @@ namespace Knx.Common;
 
 public static class BitArrayExtensions
 {
-    #region Public Methods
-
     /// <summary>
     ///     Counts the positiv bit's of a BitArray.
     /// </summary>
@@ -47,6 +45,4 @@ public static class BitArrayExtensions
 
         return bytes;
     }
-
-    #endregion
 }

@@ -4,8 +4,6 @@ namespace Knx.KnxNetIp.MessageBody;
 
 public class DisconnectResponse : TunnelingMessageBody
 {
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the state of the connection.
     /// </summary>
@@ -13,10 +11,6 @@ public class DisconnectResponse : TunnelingMessageBody
     public ErrorCode State { get; private set; }
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.DisconnectResponse;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -37,6 +31,4 @@ public class DisconnectResponse : TunnelingMessageBody
     {
         byteArrayBuilder.AddByte(CommunicationChannel).AddByte((byte)State);
     }
-
-    #endregion
 }

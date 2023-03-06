@@ -19,8 +19,6 @@ public class TunnelingRequest : TunnelingMessageBody
             Cemi != null ? Cemi.ToString() : "empty");
     }
 
-    #region Properties
-
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.TunnelingRequest;
 
     /// <summary>
@@ -42,10 +40,6 @@ public class TunnelingRequest : TunnelingMessageBody
     /// </summary>
     /// <value>The length.</value>
     private static byte Length => 4;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -76,6 +70,4 @@ public class TunnelingRequest : TunnelingMessageBody
             .AddByte(0) // reserved
             .Add(Cemi.ToByteArray());
     }
-
-    #endregion
 }

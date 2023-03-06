@@ -10,8 +10,6 @@ public static class DatapointTypeFactory
 {
     private static readonly object CreationLock = new();
 
-    #region Public Methods
-
     public static T Create<T>() where T : DatapointType
     {
         return (T)Create(typeof(T));
@@ -53,10 +51,6 @@ public static class DatapointTypeFactory
                     .ToString());
     }
 
-    #endregion
-
-    #region Methods
-
     private static IEnumerable<Type> GetDatapointTypes()
     {
         return typeof(DatapointType).GetTypeInfo()
@@ -75,6 +69,4 @@ public static class DatapointTypeFactory
 
         return type;
     }
-
-    #endregion
 }

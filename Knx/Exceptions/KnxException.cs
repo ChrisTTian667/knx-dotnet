@@ -7,8 +7,6 @@ namespace Knx.Exceptions;
 /// </summary>
 public class KnxException : Exception
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxException" /> class.
     /// </summary>
@@ -37,8 +35,6 @@ public class KnxException : Exception
         : base(message, innerException)
     {
     }
-
-    #endregion
 }
 
 /// <summary>

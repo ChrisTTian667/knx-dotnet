@@ -11,8 +11,6 @@ namespace Knx.ExtendedMessageInterface;
 /// </summary>
 public class KnxMessage : IKnxMessage
 {
-    #region construction
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxMessage" /> class.
     ///     (sets the default values)
@@ -23,8 +21,6 @@ public class KnxMessage : IKnxMessage
         IsPositivConfirmation = false;
         AdditionalInfo = new byte[] { 0 };
     }
-
-    #endregion
 
     /// <summary>
     ///     Calculates the security byte.
@@ -78,14 +74,8 @@ public class KnxMessage : IKnxMessage
             : _payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
     }
 
-    #region private fields
-
     private readonly ControlByte1 _controlByte1 = new();
     private readonly ControlByte2 _controlByte2 = new();
-
-    #endregion
-
-    #region properties
 
     private byte[] _payload;
 
@@ -183,10 +173,6 @@ public class KnxMessage : IKnxMessage
     /// <value>The data packet count.</value>
     public byte DataPacketCount { get; set; }
 
-    #endregion
-
-    #region serialization / deserialization
-
     /// <summary>
     ///     Toes the byte array.
     /// </summary>
@@ -274,6 +260,4 @@ public class KnxMessage : IKnxMessage
             MessageType = msgType
         };
     }
-
-    #endregion
 }

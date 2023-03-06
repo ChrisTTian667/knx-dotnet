@@ -16,8 +16,6 @@ namespace Knx.Tests;
 /// </summary>
 public class DatapointTypesTests
 {
-    #region Public Methods
-
     [Test]
     public void PayloadConversion()
     {
@@ -141,10 +139,6 @@ public class DatapointTypesTests
         Assert.AreEqual(GetCountOfDatapointTypes(), count);
     }
 
-    #endregion Public Methods
-
-    #region Methods
-
     private static int GetCountOfDatapointTypes()
     {
         return GetDatapointTypes().Count();
@@ -156,6 +150,4 @@ public class DatapointTypesTests
             .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
             .Where(t => !t.IsAbstract);
     }
-
-    #endregion Methods
 }

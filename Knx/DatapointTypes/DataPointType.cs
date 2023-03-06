@@ -125,8 +125,6 @@ public class DatapointType
         return datapointTypeAttribute.ToString();
     }
 
-    #region Constructors and Destructors
-
     protected DatapointType()
     {
         DatapointTypeId = GetId(GetType());
@@ -156,6 +154,4 @@ public class DatapointType
                     requiredBytes));
         }
     }
-
-    #endregion
 }

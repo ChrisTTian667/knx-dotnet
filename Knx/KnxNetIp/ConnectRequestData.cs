@@ -7,8 +7,6 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class ConnectRequestData
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConnectRequestData" /> class.
     /// </summary>
@@ -16,10 +14,6 @@ public class ConnectRequestData
     {
         SetDefaultValues();
     }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Toes the byte array.
@@ -41,10 +35,6 @@ public class ConnectRequestData
         return arrayBuilder.ToByteArray();
     }
 
-    #endregion
-
-    #region Methods
-
     /// <summary>
     ///     Sets the default values.
     /// </summary>
@@ -53,10 +43,6 @@ public class ConnectRequestData
         ConnectionType = ConnectionType.TunnelingConnection;
         NetIpLayer = KnxNetIpLayer.Link;
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     ///     Gets or sets the type of the connection.
@@ -69,6 +55,4 @@ public class ConnectRequestData
     /// </summary>
     /// <value>The KNX layer.</value>
     public KnxNetIpLayer NetIpLayer { get; set; }
-
-    #endregion
 }

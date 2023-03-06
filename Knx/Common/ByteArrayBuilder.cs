@@ -7,40 +7,22 @@ namespace Knx.Common;
 
 public sealed class ByteArrayToken
 {
-    #region Constructors and Destructors
-
     public ByteArrayToken(int index, int bytesToAdd)
     {
         Index = index;
         BytesToAdd = bytesToAdd;
     }
 
-    #endregion
-
-    #region Properties
-
     public int BytesToAdd { get; }
 
     public int Index { get; }
-
-    #endregion
 }
 
 public class ByteArrayBuilder
 {
-    #region Constants and Fields
-
     private readonly List<byte> _list = new();
 
-    #endregion
-
-    #region Properties
-
     public int Length => _list.Count;
-
-    #endregion
-
-    #region Public Methods
 
     public static byte[] IntToByteArray(int integer)
     {
@@ -163,6 +145,4 @@ public class ByteArrayBuilder
     {
         return _list.ToArray();
     }
-
-    #endregion
 }

@@ -9,8 +9,6 @@ namespace Knx.KnxNetIp.MessageBody;
 [ResponseMessage(typeof(DisconnectResponse))]
 public class DisconnectRequest : TunnelingMessageBody
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="DisconnectRequest" /> class.
     /// </summary>
@@ -30,10 +28,6 @@ public class DisconnectRequest : TunnelingMessageBody
         HostProtocolAddressInfo = hostProtocolAddressInfo;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the host protocol address info.
     /// </summary>
@@ -41,10 +35,6 @@ public class DisconnectRequest : TunnelingMessageBody
     public KnxHpai HostProtocolAddressInfo { get; set; }
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.DisconnectRequest;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -71,6 +61,4 @@ public class DisconnectRequest : TunnelingMessageBody
             .Add(
                 HostProtocolAddressInfo.ToByteArray());
     }
-
-    #endregion
 }

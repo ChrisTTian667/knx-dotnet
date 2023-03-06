@@ -4,8 +4,6 @@ namespace Knx.KnxNetIp.MessageBody;
 
 public class ConnectionStateResponse : TunnelingMessageBody
 {
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the state.
     /// </summary>
@@ -13,10 +11,6 @@ public class ConnectionStateResponse : TunnelingMessageBody
     public ErrorCode State { get; private set; }
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.ConnectionStateResponse;
-
-    #endregion
-
-    #region Public Methods
 
     public override void Deserialize(byte[] bytes)
     {
@@ -29,6 +23,4 @@ public class ConnectionStateResponse : TunnelingMessageBody
     {
         byteArrayBuilder.AddByte(CommunicationChannel).AddByte((byte)State);
     }
-
-    #endregion
 }

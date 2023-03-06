@@ -14,8 +14,6 @@ public class KnxHpai
 {
     private IPAddress _ipAddress;
 
-    #region Properties
-
     public HostProtocolCode HostProtocolCode { get; set; }
 
     public IPAddress IpAddress
@@ -27,10 +25,6 @@ public class KnxHpai
     public int Port { get; set; }
 
     public DeviceDescriptionInformationBlock Description { get; internal set; }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Parses the specified bytes.
@@ -71,6 +65,4 @@ public class KnxHpai
 
         return arrayBuilder.ToByteArray();
     }
-
-    #endregion
 }

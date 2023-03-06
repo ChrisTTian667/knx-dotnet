@@ -14,8 +14,6 @@ public class SearchRequest : TunnelingMessageBody
 
     public KnxHpai Endpoint { get; }
 
-    #region Public Methods
-
     public override void Deserialize(byte[] bytes)
     {
         //throw new NotImplementedException();
@@ -25,6 +23,4 @@ public class SearchRequest : TunnelingMessageBody
     {
         byteArrayBuilder.Add(Endpoint.ToByteArray());
     }
-
-    #endregion
 }

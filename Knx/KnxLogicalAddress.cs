@@ -10,69 +10,9 @@ namespace Knx;
 /// </summary>
 public class KnxLogicalAddress : KnxAddress
 {
-    /// <summary>
-    ///     Fills the bit array with the corresponding values.
-    /// </summary>
-    /// <param name="bitArray">The bit array.</param>
-    protected override void FillBitArray(BitArray bitArray)
-    {
-        bitArray[0] = false; // reserved for special addressing methods
-
-        var currentIdx = 1;
-
-        // add MAIN group (always 4-bit)
-        foreach (var bit in Group.ConvertToBits(4))
-        {
-            bitArray[currentIdx] = bit;
-            currentIdx++;
-        }
-
-        // add MIDDLE group (3-bit, but it's not mandatory)
-        if (MiddleGroup != null)
-        {
-            foreach (var bit in MiddleGroup.ConvertToBits(3))
-            {
-                bitArray[currentIdx] = bit;
-                currentIdx++;
-            }
-        }
-
-        var length = (byte)(MiddleGroup != null ? 8 : 11);
-
-        foreach (var bit in ((int)SubGroup).ConvertToBits(length))
-        {
-            bitArray[currentIdx] = bit;
-            currentIdx++;
-        }
-    }
-
-    /// <summary>
-    ///     Returns a <see cref="System.String" /> that represents this instance.
-    /// </summary>
-    /// <returns>
-    ///     A <see cref="System.String" /> that represents this instance.
-    /// </returns>
-    public override string ToString()
-    {
-        return MiddleGroup == null ? Group + "/" + SubGroup : Group + "/" + MiddleGroup + "/" + SubGroup;
-    }
-
-    #region private fields
-
     private byte _group;
     private byte? _middleGroup;
     private ushort _subGroup;
-
-    #endregion
-
-    #region construction
-
-    /// <summary>
-    ///     Initializes a new instance of the <see cref="KnxLogicalAddress" /> class.
-    /// </summary>
-    private KnxLogicalAddress()
-    {
-    }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxLogicalAddress" /> class.
@@ -106,9 +46,11 @@ public class KnxLogicalAddress : KnxAddress
     public KnxLogicalAddress(byte[] data)
     {
         if (data.Length != 2)
+        {
             throw new ArgumentException(
                 @"LogicalAddress bytes array length did not match the length of 2 bytes.",
                 "data");
+        }
 
         _group = (byte)((data[0] & 0x78) >> 3); // bit 1-4 of byte 0;
         _middleGroup = (byte)(data[0] & 0x07);
@@ -132,10 +74,6 @@ public class KnxLogicalAddress : KnxAddress
             ? Convert.ToByte(stringElements[1])
             : Convert.ToByte(stringElements[2]);
     }
-
-    #endregion
-
-    #region properties
 
     /// <summary>
     ///     Gets or sets the group address.
@@ -196,5 +134,44 @@ public class KnxLogicalAddress : KnxAddress
         }
     }
 
-    #endregion
+    /// <summary>
+    ///     Fills the bit array with the corresponding values.
+    /// </summary>
+    /// <param name="bitArray">The bit array.</param>
+    protected override void FillBitArray(BitArray bitArray)
+    {
+        bitArray[0] = false; // reserved for special addressing methods
+
+        var currentIdx = 1;
+
+        // add MAIN group (always 4-bit)
+        foreach (var bit in Group.ConvertToBits(4))
+        {
+            bitArray[currentIdx] = bit;
+            currentIdx++;
+        }
+
+        // add MIDDLE group (3-bit, but it's not mandatory)
+        if (MiddleGroup != null)
+        {
+            foreach (var bit in MiddleGroup.ConvertToBits(3))
+            {
+                bitArray[currentIdx] = bit;
+                currentIdx++;
+            }
+        }
+
+        var length = (byte)(MiddleGroup != null ? 8 : 11);
+
+        foreach (var bit in ((int)SubGroup).ConvertToBits(length))
+        {
+            bitArray[currentIdx] = bit;
+            currentIdx++;
+        }
+    }
+
+    public override string ToString() =>
+        MiddleGroup == null
+            ? $"{Group}/{SubGroup}"
+            : $"{Group}/{MiddleGroup}/{SubGroup}";
 }

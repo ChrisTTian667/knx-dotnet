@@ -51,8 +51,6 @@ public class DptTime : DatapointType
         return new TimeAndWeekDay(new TimeSpan(hour, minutes, seconds), GetDayOfWeek(day));
     }
 
-    #region Constructor / Destructor
-
     public DptTime()
     {
     }
@@ -68,10 +66,6 @@ public class DptTime : DatapointType
         Payload = bytes;
     }
 
-    #endregion
-
-    #region Properties
-
     [DatapointProperty]
     public TimeSpan Value
     {
@@ -82,6 +76,4 @@ public class DptTime : DatapointType
 
     [DatapointProperty]
     public DayOfWeek? DayOfWeek { get; set; }
-
-    #endregion
 }

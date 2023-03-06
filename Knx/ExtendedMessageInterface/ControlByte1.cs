@@ -8,8 +8,6 @@ namespace Knx.ExtendedMessageInterface;
 /// </summary>
 internal class ControlByte1
 {
-    #region construction
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ControlByte1" /> class.
     /// </summary>
@@ -20,10 +18,6 @@ internal class ControlByte1
         IsPositivConfirmation = true;
         Priority = MessagePriority.Auto;
     }
-
-    #endregion
-
-    #region properties
 
     /// <summary>
     ///     Gets or sets a value indicating whether this instance is repetition.
@@ -54,10 +48,6 @@ internal class ControlByte1
     /// </summary>
     /// <value>The priority.</value>
     public MessagePriority Priority { get; set; }
-
-    #endregion
-
-    #region (de-)serialization
 
     /// <summary>
     ///     Serializes this instance into a single byte.
@@ -95,6 +85,4 @@ internal class ControlByte1
         Priority.Deserialize(controlBitArray[4], controlBitArray[5]);
         IsPositivConfirmation = controlBitArray[7];
     }
-
-    #endregion
 }

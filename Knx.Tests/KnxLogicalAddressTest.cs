@@ -101,8 +101,6 @@ public class KnxLogicalAddressTest
         }
     }
 
-    #region Additional test attributes
-
     // 
     //You can use the following additional attributes as you write your tests:
     //
@@ -130,6 +128,4 @@ public class KnxLogicalAddressTest
     //{
     //}
     //
-
-    #endregion
 }

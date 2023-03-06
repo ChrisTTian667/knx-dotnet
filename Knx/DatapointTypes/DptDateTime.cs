@@ -8,8 +8,6 @@ namespace Knx.DatapointTypes;
 [DataLength(64)]
 public class DptDateTime : DatapointType
 {
-    #region ClockQuality enum
-
     public enum ClockQuality : byte
     {
         /// <summary>
@@ -23,8 +21,6 @@ public class DptDateTime : DatapointType
         /// </summary>
         WithExternalSyncSignal = 0x01
     }
-
-    #endregion
 
     private DptDateTime()
     {

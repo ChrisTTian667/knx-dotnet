@@ -10,26 +10,16 @@ namespace Knx.KnxNetIp;
 //[TypeConverter(typeof(KnxNetIpMessageConverter))]
 public abstract class KnxNetIpMessage
 {
-    #region Constants and Fields
-
     /// <summary>
     ///     The size of the header (in bytes)
     /// </summary>
     public static readonly byte HeaderLength = 6;
-
-    #endregion
-
-    #region Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
     /// </summary>
     /// <param name="bytes">The bytes to be deserialized.</param>
     protected abstract void Deserialize(byte[] bytes);
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     ///     Gets or sets the body.
@@ -42,10 +32,6 @@ public abstract class KnxNetIpMessage
     /// </summary>
     /// <value>The type of the message.</value>
     public KnxNetIpServiceType ServiceType { get; set; }
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Creates the specified message by type.
@@ -152,6 +138,4 @@ public abstract class KnxNetIpMessage
     /// </summary>
     /// <returns>a new <c>byte[]</c> representing it's message data</returns>
     public abstract byte[] ToByteArray();
-
-    #endregion
 }

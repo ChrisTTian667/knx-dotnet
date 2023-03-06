@@ -9,8 +9,6 @@ public class TunnelingAcknowledge : TunnelingMessageBody
         return string.Format("{0} Seq: {1,-3} Err: {2}", base.ToString(), SequenceCounter, State);
     }
 
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the length.
     /// </summary>
@@ -31,10 +29,6 @@ public class TunnelingAcknowledge : TunnelingMessageBody
     public ErrorCode State { get; set; }
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.TunnelingAcknowledge;
-
-    #endregion
-
-    #region Public Methods
 
     /// <summary>
     ///     Deserializes the specified bytes.
@@ -57,6 +51,4 @@ public class TunnelingAcknowledge : TunnelingMessageBody
     {
         byteArrayBuilder.AddByte(Length).AddByte(CommunicationChannel).AddByte(SequenceCounter).AddByte((byte)State);
     }
-
-    #endregion
 }

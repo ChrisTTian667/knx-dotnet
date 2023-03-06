@@ -5,8 +5,6 @@
 /// </summary>
 public abstract class TunnelingMessageBody : MessageBodyBase
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="TunnelingMessageBody" /> class.
     /// </summary>
@@ -15,17 +13,11 @@ public abstract class TunnelingMessageBody : MessageBodyBase
         CommunicationChannel = null;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the communiction channel.
     /// </summary>
     /// <value>The communiction channel.</value>
     public byte? CommunicationChannel { get; set; }
-
-    #endregion
 
     public override string ToString()
     {

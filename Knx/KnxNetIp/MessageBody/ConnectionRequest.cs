@@ -6,8 +6,6 @@ namespace Knx.KnxNetIp.MessageBody;
 [ResponseMessage(typeof(ConnectionResponse))]
 public class ConnectionRequest : TunnelingMessageBody
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="ConnectionRequest" /> class.
     /// </summary>
@@ -17,10 +15,6 @@ public class ConnectionRequest : TunnelingMessageBody
         DataEndpoint = new KnxHpai();
         Data = new ConnectRequestData();
     }
-
-    #endregion
-
-    #region Properties
 
     /// <summary>
     ///     Gets or sets the control endpoint.
@@ -39,10 +33,6 @@ public class ConnectionRequest : TunnelingMessageBody
     /// </summary>
     /// <value>The data endpoint.</value>
     public KnxHpai DataEndpoint { get; set; }
-
-    #endregion
-
-    #region Public Methods
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.ConnectionRequest;
 
@@ -66,6 +56,4 @@ public class ConnectionRequest : TunnelingMessageBody
             .Add(DataEndpoint.ToByteArray())
             .Add(Data.ToByteArray());
     }
-
-    #endregion
 }

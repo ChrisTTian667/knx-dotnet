@@ -8,8 +8,6 @@ namespace Knx.KnxNetIp;
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class SequenceCounterAttribute : Attribute
 {
-    #region Constructors and Destructors
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="SequenceCounterAttribute" /> class.
     /// </summary>
@@ -18,10 +16,6 @@ public sealed class SequenceCounterAttribute : Attribute
         IncrementOnSendMessage = false;
     }
 
-    #endregion
-
-    #region Properties
-
     /// <summary>
     ///     Gets or sets a value indicating whether the sequence counter must be [increment on sending the message].
     /// </summary>
@@ -29,6 +23,4 @@ public sealed class SequenceCounterAttribute : Attribute
     ///     <c>true</c> if [increment on send message]; otherwise, <c>false</c>.
     /// </value>
     public bool IncrementOnSendMessage { get; set; }
-
-    #endregion
 }

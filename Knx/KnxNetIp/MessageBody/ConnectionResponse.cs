@@ -5,8 +5,6 @@ namespace Knx.KnxNetIp.MessageBody;
 
 public class ConnectionResponse : TunnelingMessageBody
 {
-    #region Properties
-
     /// <summary>
     ///     Gets or sets the type of the connection.
     /// </summary>
@@ -24,10 +22,6 @@ public class ConnectionResponse : TunnelingMessageBody
     /// </summary>
     /// <value>The state.</value>
     public ErrorCode State { get; private set; }
-
-    #endregion
-
-    #region Public Methods
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.ConnectionResponse;
 
@@ -66,6 +60,4 @@ public class ConnectionResponse : TunnelingMessageBody
             .AddByte(2) // Length
             .AddByte((byte)ConnectionType);
     }
-
-    #endregion
 }

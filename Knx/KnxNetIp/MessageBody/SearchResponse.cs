@@ -10,8 +10,6 @@ public class SearchResponse : TunnelingMessageBody
     public KnxHpai Endpoint { get; set; }
 
 
-    #region Public Methods
-
     public override void Deserialize(byte[] bytes)
     {
         Endpoint = KnxHpai.Parse(bytes);
@@ -21,6 +19,4 @@ public class SearchResponse : TunnelingMessageBody
     {
         throw new NotImplementedException();
     }
-
-    #endregion
 }
