@@ -27,10 +27,8 @@ public class KnxDeviceAddress : KnxAddress
         }
     }
 
-    public override string ToString()
-    {
-        return Area + "." + Line + "." + Device;
-    }
+    public override string ToString() =>
+        $"{Area}.{Line}.{Device}";
 
     private byte _area;
     private byte _device;
