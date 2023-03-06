@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 5, Usage.FunctionBlock)]
+public class DptLightApplicationMode : Dpt8BitEnum<ApplicationMode>
 {
-    [DatapointType(20, 5, Usage.FunctionBlock)]
-    public class DptLightApplicationMode : Dpt8BitEnum<ApplicationMode>
+    private DptLightApplicationMode()
     {
-        private DptLightApplicationMode()
-        {
-        }
+    }
 
-        public DptLightApplicationMode(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptLightApplicationMode(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptLightApplicationMode(ApplicationMode value)
-            : base(value)
-        {
-        }
+    public DptLightApplicationMode(ApplicationMode value)
+        : base(value)
+    {
     }
 }

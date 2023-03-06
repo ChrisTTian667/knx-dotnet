@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 78, Unit.Weight, Usage.General, Description = "weight")]
+public class DptWeight : Dpt4ByteFloat
 {
-    [DatapointType(14, 78, Unit.Weight, Usage.General, Description = "weight")]
-    public class DptWeight : Dpt4ByteFloat
+    private DptWeight()
     {
-        private DptWeight()
-        {
-        }
+    }
 
-        public DptWeight(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptWeight(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptWeight(float value)
-            : base(value)
-        {
-        }
+    public DptWeight(float value)
+        : base(value)
+    {
     }
 }

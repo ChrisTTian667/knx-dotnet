@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 12, Usage.FunctionBlock)]
+public class DptErrorClassHVAC : Dpt8BitEnum<ErrorClassHVAC>
 {
-    [DatapointType(20, 12, Usage.FunctionBlock)]
-    public class DptErrorClassHVAC : Dpt8BitEnum<ErrorClassHVAC>
+    private DptErrorClassHVAC()
     {
-        private DptErrorClassHVAC()
-        {
-        }
+    }
 
-        public DptErrorClassHVAC(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptErrorClassHVAC(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptErrorClassHVAC(ErrorClassHVAC value)
-            : base(value)
-        {
-        }
+    public DptErrorClassHVAC(ErrorClassHVAC value)
+        : base(value)
+    {
     }
 }

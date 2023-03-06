@@ -1,21 +1,20 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 0, Unit.Accelaration, Usage.General, Description = "acceleration")]
+public class DptAcceleration : Dpt4ByteFloat
 {
-    [DatapointType(14,0, Unit.Accelaration, Usage.General, Description = "acceleration")]
-    public class DptAcceleration : Dpt4ByteFloat
+    private DptAcceleration()
     {
-        private DptAcceleration()
-        {
-        }
+    }
 
-        public DptAcceleration(byte[] twoBytes) : base(twoBytes)
-        {
-        }
+    public DptAcceleration(byte[] twoBytes) : base(twoBytes)
+    {
+    }
 
-        public DptAcceleration(float value) : base(value)
-        {
-        }
+    public DptAcceleration(float value) : base(value)
+    {
     }
 }

@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteSignedValue
-{
-    [DatapointType(13, 13, Unit.kWh, Usage.General)]
-    public class DptActiveEnergykWh : Dpt4ByteSignedValue
-    {
-        private DptActiveEnergykWh()
-        {
-        }
-        
-        public DptActiveEnergykWh(byte[] payload)
-            : base(payload)
-        {
-        }
+namespace Knx.DatapointTypes.Dpt4ByteSignedValue;
 
-        public DptActiveEnergykWh(int value)
-            : base(value)
-        {
-        }
+[DatapointType(13, 13, Unit.kWh, Usage.General)]
+public class DptActiveEnergykWh : Dpt4ByteSignedValue
+{
+    private DptActiveEnergykWh()
+    {
+    }
+
+    public DptActiveEnergykWh(byte[] payload)
+        : base(payload)
+    {
+    }
+
+    public DptActiveEnergykWh(int value)
+        : base(value)
+    {
     }
 }

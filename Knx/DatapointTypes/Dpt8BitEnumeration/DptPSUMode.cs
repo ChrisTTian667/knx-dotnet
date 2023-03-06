@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 8, Usage.System)]
+public class DptPSUMode : Dpt8BitEnum<PSUMode>
 {
-    [DatapointType(20, 8, Usage.System)]
-    public class DptPSUMode : Dpt8BitEnum<PSUMode>
+    private DptPSUMode()
     {
-        private DptPSUMode()
-        {
-        }
+    }
 
-        public DptPSUMode(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptPSUMode(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptPSUMode(PSUMode value)
-            : base(value)
-        {
-        }
+    public DptPSUMode(PSUMode value)
+        : base(value)
+    {
     }
 }

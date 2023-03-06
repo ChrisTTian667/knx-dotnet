@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 63, Unit.SolidAngle, Usage.General, Description = "solid angle")]
+public class DptSolidAngle : Dpt4ByteFloat
 {
-    [DatapointType(14, 63, Unit.SolidAngle, Usage.General, Description = "solid angle")]
-    public class DptSolidAngle : Dpt4ByteFloat
+    private DptSolidAngle()
     {
-        private DptSolidAngle()
-        {
-        }
+    }
 
-        public DptSolidAngle(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptSolidAngle(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptSolidAngle(float value)
-            : base(value)
-        {
-        }
+    public DptSolidAngle(float value)
+        : base(value)
+    {
     }
 }

@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
+namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue;
+
+[DatapointType(7, 12, Unit.mA, Usage.FunctionBlock)]
+public class DptUEICurrentmA : Dpt2ByteUnsignedValue
 {
-    [DatapointType(7, 12, Unit.mA, Usage.FunctionBlock)]
-    public class DptUEICurrentmA : Dpt2ByteUnsignedValue
+    private DptUEICurrentmA()
     {
-        private DptUEICurrentmA()
-        {
-        }
+    }
 
-        public DptUEICurrentmA(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptUEICurrentmA(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptUEICurrentmA(ushort value)
-            : base(value)
-        {
-        }
+    public DptUEICurrentmA(ushort value)
+        : base(value)
+    {
     }
 }

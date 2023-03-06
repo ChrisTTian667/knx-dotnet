@@ -1,22 +1,20 @@
-using System;
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
+namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue;
+
+[DatapointType(7, 1, Unit.Pulses, Usage.General)]
+public class DptValue2UCount : Dpt2ByteUnsignedValue
 {
-    [DatapointType(7,1,Unit.Pulses, Usage.General)]
-    public class DptValue2UCount : Dpt2ByteUnsignedValue
+    private DptValue2UCount()
     {
-        private DptValue2UCount()
-        {
-        }
+    }
 
-        public DptValue2UCount(byte[] payload) : base(payload)
-        {
-        }
+    public DptValue2UCount(byte[] payload) : base(payload)
+    {
+    }
 
-        public DptValue2UCount(UInt16 value) : base(value)
-        {
-        }
+    public DptValue2UCount(ushort value) : base(value)
+    {
     }
 }

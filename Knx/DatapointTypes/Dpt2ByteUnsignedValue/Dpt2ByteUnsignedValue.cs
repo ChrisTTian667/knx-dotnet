@@ -1,50 +1,46 @@
 ﻿using System;
 using System.Linq;
-using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
+namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue;
+
+[DataLength(16)]
+public abstract class Dpt2ByteUnsignedValue : DatapointType
 {
-    [DataLength(16)]
-    public abstract class Dpt2ByteUnsignedValue : DatapointType
+    protected Dpt2ByteUnsignedValue()
     {
-        protected Dpt2ByteUnsignedValue()
+    }
+
+    protected Dpt2ByteUnsignedValue(byte[] payload)
+        : base(payload)
+    {
+        Payload = Payload.Take(2).ToArray();
+    }
+
+    protected Dpt2ByteUnsignedValue(ushort value)
+    {
+        Value = value;
+    }
+
+    [DatapointProperty]
+    [Range(0, 65535, ErrorMessage = "Value must be within 0...65535.")]
+    public virtual ushort Value
+    {
+        get
         {
+            var payload = Payload.Take(2).ToArray();
+
+            return BitConverter.ToUInt16(payload, 0);
         }
-        
-        protected Dpt2ByteUnsignedValue(byte[] payload)
-            : base(payload)
+
+        set
         {
-            Payload = Payload.Take(2).ToArray();
-        }
+            if (value < 0 || value > 65535)
+                throw new ArgumentOutOfRangeException("value", "Value must be within 0 ... 65535.");
 
-        protected Dpt2ByteUnsignedValue(UInt16 value)
-        {
-            Value = value;
-        }
+            var bytes = BitConverter.GetBytes(value);
 
-        [DatapointProperty]
-        [Range(0, 65535, ErrorMessage = "Value must be within 0...65535.")]
-        public virtual UInt16 Value
-        {
-            get
-            {
-                byte[] payload = Payload.Take(2).ToArray();
-
-                return BitConverter.ToUInt16(payload, 0);
-            }
-
-            set
-            {
-                if (value < 0 || value > 65535)
-                {
-                    throw new ArgumentOutOfRangeException("value", "Value must be within 0 ... 65535.");
-                }
-
-                byte[] bytes = BitConverter.GetBytes(value);
-
-                Payload = bytes.Take(2).ToArray();
-            }
+            Payload = bytes.Take(2).ToArray();
         }
     }
 }

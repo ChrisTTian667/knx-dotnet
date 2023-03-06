@@ -1,31 +1,30 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt1Bit
+namespace Knx.DatapointTypes.Dpt1Bit;
+
+[DatapointType(1, 21, Unit.AndOr, Usage.FunctionBlock)]
+public class DptLogicalFunction : Dpt1Bit
 {
-    [DatapointType(1, 21, Unit.AndOr, Usage.FunctionBlock)]
-    public class DptLogicalFunction : Dpt1Bit
+    private DptLogicalFunction()
     {
-        private DptLogicalFunction()
-        {
-        }
+    }
 
-        public DptLogicalFunction(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptLogicalFunction(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptLogicalFunction(bool value)
-            : base(value)
-        {
-        }
+    public DptLogicalFunction(bool value)
+        : base(value)
+    {
+    }
 
-        [DatapointProperty]
-        [BooleanEncoding(UnitEncoding.Or, UnitEncoding.And)]
-        public override bool Value
-        {
-            get { return base.Value; }
-            set { base.Value = value; }
-        }
+    [DatapointProperty]
+    [BooleanEncoding(UnitEncoding.Or, UnitEncoding.And)]
+    public override bool Value
+    {
+        get => base.Value;
+        set => base.Value = value;
     }
 }

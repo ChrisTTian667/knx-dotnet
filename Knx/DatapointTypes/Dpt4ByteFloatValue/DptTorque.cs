@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 75, Unit.Torque, Usage.General, Description = "torque")]
+public class DptTorque : Dpt4ByteFloat
 {
-    [DatapointType(14, 75, Unit.Torque, Usage.General, Description = "torque")]
-    public class DptTorque : Dpt4ByteFloat
+    private DptTorque()
     {
-        private DptTorque()
-        {
-        }
+    }
 
-        public DptTorque(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptTorque(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptTorque(float value)
-            : base(value)
-        {
-        }
+    public DptTorque(float value)
+        : base(value)
+    {
     }
 }

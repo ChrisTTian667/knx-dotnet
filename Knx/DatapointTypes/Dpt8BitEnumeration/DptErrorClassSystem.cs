@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 11, Usage.FunctionBlock)]
+public class DptErrorClassSystem : Dpt8BitEnum<ErrorClassSystem>
 {
-    [DatapointType(20, 11, Usage.FunctionBlock)]
-    public class DptErrorClassSystem : Dpt8BitEnum<ErrorClassSystem>
+    private DptErrorClassSystem()
     {
-        private DptErrorClassSystem()
-        {
-        }
+    }
 
-        public DptErrorClassSystem(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptErrorClassSystem(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptErrorClassSystem(ErrorClassSystem value)
-            : base(value)
-        {
-        }
+    public DptErrorClassSystem(ErrorClassSystem value)
+        : base(value)
+    {
     }
 }

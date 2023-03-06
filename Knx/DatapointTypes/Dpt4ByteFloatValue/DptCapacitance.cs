@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 11, Unit.Capacitance, Usage.General, Description = "capacitance")]
+public class DptCapacitance : Dpt4ByteFloat
 {
-    [DatapointType(14, 11, Unit.Capacitance, Usage.General, Description = "capacitance")]
-    public class DptCapacitance : Dpt4ByteFloat
+    private DptCapacitance()
     {
-        private DptCapacitance()
-        {
-        }
+    }
 
-        public DptCapacitance(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptCapacitance(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptCapacitance(float value)
-            : base(value)
-        {
-        }
+    public DptCapacitance(float value)
+        : base(value)
+    {
     }
 }

@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 7, Usage.FunctionBlock)]
+public class DptAlarmClassType : Dpt8BitEnum<AlarmClassType>
 {
-    [DatapointType(20, 7, Usage.FunctionBlock)]
-    public class DptAlarmClassType : Dpt8BitEnum<AlarmClassType>
+    private DptAlarmClassType()
     {
-        private DptAlarmClassType()
-        {
-        }
+    }
 
-        public DptAlarmClassType(byte[] payload)
-            : base(payload)
-        {
-        }
+    public DptAlarmClassType(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        public DptAlarmClassType(AlarmClassType value)
-            : base(value)
-        {
-        }
+    public DptAlarmClassType(AlarmClassType value)
+        : base(value)
+    {
     }
 }

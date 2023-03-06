@@ -1,25 +1,25 @@
-﻿using System;
+using System;
 using System.Text;
 using Knx.Common;
 using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt8BitCharackter;
 
-[DatapointType(4, 1, Usage.General)]
+[DatapointType(4, 2, Usage.General)]
 [DataLength(8)]
-public class DptCharackterAscii : DatapointType
+public class DptCharacter_8859_1 : DatapointType
 {
-    private DptCharackterAscii()
+    private DptCharacter_8859_1()
     {
     }
 
-    public DptCharackterAscii(byte[] payload)
+    public DptCharacter_8859_1(byte[] payload)
         : base(payload)
     {
         Payload = payload;
     }
 
-    public DptCharackterAscii(char character)
+    public DptCharacter_8859_1(char character)
     {
         Value = character;
     }
@@ -33,20 +33,20 @@ public class DptCharackterAscii : DatapointType
 
     private byte[] ToBytes(char value)
     {
-        //var ascii = (byte) value;
-        //if (ascii <= 0x7F)
-        //{
-        //    ascii = (byte)'?';
-        //}
+        var encoding = Encoding.GetEncoding("iso-8859-1");
 
-        //return new byte[1] { ascii };
+        if (encoding == null) throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
 
-        return Encoding.UTF8.GetBytes(new[] { value }, 0, 1);
+        return encoding.GetBytes(new[] { value }, 0, 1);
     }
 
     private char ToValue(byte[] bytes)
     {
-        var byteString = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+        var encoding = Encoding.GetEncoding("iso-8859-1");
+
+        if (encoding == null) throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
+
+        var byteString = encoding.GetString(bytes, 0, bytes.Length);
 
         if (byteString.Length != 1)
             throw new Exception(

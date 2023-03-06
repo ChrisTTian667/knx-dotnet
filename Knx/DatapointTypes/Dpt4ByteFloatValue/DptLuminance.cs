@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 41, Unit.Luminance, Usage.General, Description = "luminance")]
+public class DptLuminance : Dpt4ByteFloat
 {
-    [DatapointType(14, 41, Unit.Luminance, Usage.General, Description = "luminance")]
-    public class DptLuminance : Dpt4ByteFloat
+    private DptLuminance()
     {
-        private DptLuminance()
-        {
-        }
+    }
 
-        public DptLuminance(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptLuminance(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptLuminance(float value)
-            : base(value)
-        {
-        }
+    public DptLuminance(float value)
+        : base(value)
+    {
     }
 }

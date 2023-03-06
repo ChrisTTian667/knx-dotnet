@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 33, Unit.Frequency, Usage.General, Description = "frequency")]
+public class DptFrequency : Dpt4ByteFloat
 {
-    [DatapointType(14, 33, Unit.Frequency, Usage.General, Description = "frequency")]
-    public class DptFrequency : Dpt4ByteFloat
+    private DptFrequency()
     {
-        private DptFrequency()
-        {
-        }
+    }
 
-        public DptFrequency(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptFrequency(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptFrequency(float value)
-            : base(value)
-        {
-        }
+    public DptFrequency(float value)
+        : base(value)
+    {
     }
 }

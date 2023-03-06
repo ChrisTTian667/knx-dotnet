@@ -1,21 +1,20 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+[DatapointType(20, 1, Usage.FunctionBlock)]
+public class DptSCLOMode : Dpt8BitEnum<SCLOMode>
 {
-    [DatapointType(20, 1, Usage.FunctionBlock)]
-    public class DptSCLOMode : Dpt8BitEnum<SCLOMode>
+    private DptSCLOMode()
     {
-        private DptSCLOMode()
-        {
-        }
+    }
 
-        public DptSCLOMode(byte[] payload) : base(payload)
-        {
-        }
+    public DptSCLOMode(byte[] payload) : base(payload)
+    {
+    }
 
-        public DptSCLOMode(SCLOMode value) : base(value)
-        {
-        }
+    public DptSCLOMode(SCLOMode value) : base(value)
+    {
     }
 }

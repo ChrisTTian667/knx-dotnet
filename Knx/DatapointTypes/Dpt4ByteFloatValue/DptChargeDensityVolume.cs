@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 13, Unit.ChargeDensityVolume, Usage.General, Description = "charge density (volume)")]
+public class DptChargeDensityVolume : Dpt4ByteFloat
 {
-    [DatapointType(14, 13, Unit.ChargeDensityVolume, Usage.General, Description = "charge density (volume)")]
-    public class DptChargeDensityVolume : Dpt4ByteFloat
+    private DptChargeDensityVolume()
     {
-        private DptChargeDensityVolume()
-        {
-        }
+    }
 
-        public DptChargeDensityVolume(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptChargeDensityVolume(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptChargeDensityVolume(float value)
-            : base(value)
-        {
-        }
+    public DptChargeDensityVolume(float value)
+        : base(value)
+    {
     }
 }

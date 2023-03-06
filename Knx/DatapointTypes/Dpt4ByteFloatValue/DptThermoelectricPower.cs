@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 73, Unit.ThermoelectricPower, Usage.General, Description = "thermoelectric power")]
+public class DptThermoelectricPower : Dpt4ByteFloat
 {
-    [DatapointType(14, 73, Unit.ThermoelectricPower, Usage.General, Description = "thermoelectric power")]
-    public class DptThermoelectricPower : Dpt4ByteFloat
+    private DptThermoelectricPower()
     {
-        private DptThermoelectricPower()
-        {
-        }
+    }
 
-        public DptThermoelectricPower(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptThermoelectricPower(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptThermoelectricPower(float value)
-            : base(value)
-        {
-        }
+    public DptThermoelectricPower(float value)
+        : base(value)
+    {
     }
 }

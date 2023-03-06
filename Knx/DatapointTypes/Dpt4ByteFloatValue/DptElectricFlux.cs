@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 24, Unit.ElectricFlux, Usage.General, Description = "electric flux")]
+public class DptElectricFlux : Dpt4ByteFloat
 {
-    [DatapointType(14, 24, Unit.ElectricFlux, Usage.General, Description = "electric flux")]
-    public class DptElectricFlux : Dpt4ByteFloat
+    private DptElectricFlux()
     {
-        private DptElectricFlux()
-        {
-        }
+    }
 
-        public DptElectricFlux(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptElectricFlux(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptElectricFlux(float value)
-            : base(value)
-        {
-        }
+    public DptElectricFlux(float value)
+        : base(value)
+    {
     }
 }

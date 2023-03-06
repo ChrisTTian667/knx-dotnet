@@ -1,23 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt4ByteFloatValue
+namespace Knx.DatapointTypes.Dpt4ByteFloatValue;
+
+[DatapointType(14, 36, Unit.HeatFlowRate, Usage.General, Description = "heat flow rate")]
+public class DptHeatFlowRate : Dpt4ByteFloat
 {
-    [DatapointType(14, 36, Unit.HeatFlowRate, Usage.General, Description = "heat flow rate")]
-    public class DptHeatFlowRate : Dpt4ByteFloat
+    private DptHeatFlowRate()
     {
-        private DptHeatFlowRate()
-        {
-        }
+    }
 
-        public DptHeatFlowRate(byte[] twoBytes)
-            : base(twoBytes)
-        {
-        }
+    public DptHeatFlowRate(byte[] twoBytes)
+        : base(twoBytes)
+    {
+    }
 
-        public DptHeatFlowRate(float value)
-            : base(value)
-        {
-        }
+    public DptHeatFlowRate(float value)
+        : base(value)
+    {
     }
 }
