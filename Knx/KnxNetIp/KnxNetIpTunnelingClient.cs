@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Knx.Exceptions;
 using Knx.KnxNetIp.MessageBody;
-using Timer = System.Timers.Timer;
 
 namespace Knx.KnxNetIp;
 
@@ -19,18 +18,15 @@ namespace Knx.KnxNetIp;
 public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 {
     private readonly object _communicationChannelLock = new();
+
     //private readonly Timer _keepAliveTimer;
     private readonly SemaphoreSlim _sendSemaphoreSlim = new(1, 1);
     private readonly AutoResetEvent _terminationEvent = new(false);
+
+    private readonly UdpClient UdpClient;
     private byte? _currentCommunicationChannel;
     private bool _logicalConnected;
     private byte _sequenceCounter;
-
-    private readonly UdpClient UdpClient;
-
-    public IPEndPoint RemoteEndPoint { get; }
-    public KnxNetIpConfiguration Configuration { get; }
-    public KnxDeviceAddress DeviceAddress { get; }
 
     public KnxNetIpTunnelingClient(
         IPEndPoint remoteEndPoint,
@@ -50,26 +46,7 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         // _keepAliveTimer.Elapsed += async (_, _) => await SendKeepAliveMessage();
     }
 
-    ~KnxNetIpTunnelingClient() =>
-        Dispose(false);
-
-    /// <summary>
-    ///     Invoked when a KnxMessage has been received
-    /// </summary>
-    /// <param name="knxMessage"></param>
-    private void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
-        KnxMessageReceived?.Invoke(this, knxMessage);
-
-    /// <summary>
-    ///     Occurs when [KNX message received].
-    /// </summary>
-    public event EventHandler<IKnxMessage> KnxMessageReceived;
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
+    public IPEndPoint RemoteEndPoint { get; }
 
     /// <summary>
     ///     Gets or sets the current communication channel.
@@ -135,6 +112,46 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         private set => throw new InvalidOperationException($"Don't set {nameof(IsConnected)}!");
     }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public KnxNetIpConfiguration Configuration { get; }
+    public KnxDeviceAddress DeviceAddress { get; }
+
+    /// <summary>
+    ///     Occurs when [KNX message received].
+    /// </summary>
+    public event EventHandler<IKnxMessage> KnxMessageReceived;
+
+    public async Task SendMessageAsync(IKnxMessage knxMessage)
+    {
+        var message = (KnxNetIpMessage<TunnelingRequest>)KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
+
+        message.Body.Cemi = knxMessage;
+
+        await SendAndReceiveReply<KnxNetIpMessage<TunnelingAcknowledge>>(
+            message,
+            ack => ack.Body.CommunicationChannel == message.Body.CommunicationChannel
+                   && ack.Body.SequenceCounter == message.Body.SequenceCounter);
+    }
+
+    ~KnxNetIpTunnelingClient()
+    {
+        Dispose(false);
+    }
+
+    /// <summary>
+    ///     Invoked when a KnxMessage has been received
+    /// </summary>
+    /// <param name="knxMessage"></param>
+    private void InvokeKnxMessageReceived(IKnxMessage knxMessage)
+    {
+        KnxMessageReceived?.Invoke(this, knxMessage);
+    }
+
     private event EventHandler<KnxNetIpMessage> KnxNetIpMessageReceived;
 
     private Task<EndPoint?> BaseConnect()
@@ -147,8 +164,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 
         return Task.FromResult(localEndPoint);
     }
-
-
 
 
     private async void ReceiveData(UdpClient client)
@@ -231,24 +246,13 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         catch (KnxException exception)
         {
             Debug.WriteLine($"Unable to disconnect from KNX gateway ('{RemoteEndPoint}'): {exception.Message}");
+
             throw;
         }
         finally
         {
             _logicalConnected = false;
         }
-    }
-
-    public async Task SendMessageAsync(IKnxMessage knxMessage)
-    {
-        var message = (KnxNetIpMessage<TunnelingRequest>)KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
-
-        message.Body.Cemi = knxMessage;
-
-        await SendAndReceiveReply<KnxNetIpMessage<TunnelingAcknowledge>>(
-            message,
-            ack => ack.Body.CommunicationChannel == message.Body.CommunicationChannel
-                   && ack.Body.SequenceCounter == message.Body.SequenceCounter);
     }
 
     private void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
@@ -323,8 +327,10 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
     }
 
     private async Task<TResponse> SendAndReceiveReply<TResponse>(KnxNetIpMessage message)
-        where TResponse : KnxNetIpMessage =>
-        await SendAndReceiveReply<TResponse>(message, ack => !ack.Equals(default(KnxNetIpMessage)));
+        where TResponse : KnxNetIpMessage
+    {
+        return await SendAndReceiveReply<TResponse>(message, ack => !ack.Equals(default(KnxNetIpMessage)));
+    }
 
     /// <summary>
     ///     Checks, if the messageBody requires the sequence counter to be incremented.
@@ -423,15 +429,19 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
             var sendMessageTask = Task.Run(() => Send(message));
 
             if (!sendMessageTask.Wait(Configuration.SendMessageTimeout))
+            {
                 throw new NotAcknowledgedException(
                     $"Message could not be send within specified timeout of {Configuration.SendMessageTimeout}. Message: {message}");
+            }
 
             // receive the response
             var receiveMessageTask = Task.Run(async () => await responseCompletionSource.Task);
 
             if (!receiveMessageTask.Wait(Configuration.ReadTimeout))
+            {
                 throw new NotAcknowledgedException(
                     $"Expected response was not retrieved during specified timeout of {Configuration.SendMessageTimeout}. Message: {message}");
+            }
 
             return await responseCompletionSource.Task;
         }
@@ -480,6 +490,8 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         }
     }
 
-    private void InvokeKnxNetIpMessageReceived(KnxNetIpMessage message) =>
+    private void InvokeKnxNetIpMessageReceived(KnxNetIpMessage message)
+    {
         KnxNetIpMessageReceived?.Invoke(this, message);
+    }
 }

@@ -14,18 +14,13 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
 {
-    private readonly UdpClient UdpClient;
-
-    public IPEndPoint RemoteEndPoint { get; }
-    public KnxNetIpConfiguration Configuration { get; }
-    public KnxDeviceAddress DeviceAddress { get; }
+    private readonly UdpClient _udpClient;
 
     public KnxNetIpRoutingClient(KnxNetIpConfiguration configuration = null) : this(
         new IPEndPoint(IPAddress.Parse("224.0.23.12"), 3671),
         new KnxDeviceAddress(0, 0, 0),
         configuration)
     {
-
     }
 
     public KnxNetIpRoutingClient(
@@ -37,23 +32,10 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException(nameof(remoteEndPoint));
         DeviceAddress = deviceAddress;
 
-        UdpClient = new UdpClient();
+        _udpClient = new UdpClient();
     }
 
-    ~KnxNetIpRoutingClient() =>
-        Dispose(false);
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-//        if (disposing)
-//            UdpClient.Dispose();
-    }
+    public IPEndPoint RemoteEndPoint { get; }
 
     /// <summary>
     ///     Gets a value indicating whether the client is connected.
@@ -63,6 +45,44 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     /// </value>
     public bool IsConnected { get; protected set; }
 
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    public KnxNetIpConfiguration Configuration { get; }
+    public KnxDeviceAddress DeviceAddress { get; }
+
+
+    /// <summary>
+    ///     Occurs when [KNX message received].
+    /// </summary>
+    public event EventHandler<IKnxMessage> KnxMessageReceived;
+
+    /// <summary>
+    ///     Sends a KnxMessage.
+    /// </summary>
+    /// <param name="knxMessage">The KNX message.</param>
+    public async Task SendMessageAsync(IKnxMessage knxMessage)
+    {
+        var knxNetIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
+        ((RoutingIndication)knxNetIpMessage.Body).Cemi = knxMessage;
+
+        await SendMessageAsync(knxNetIpMessage);
+    }
+
+    ~KnxNetIpRoutingClient()
+    {
+        Dispose(false);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+//        if (disposing)
+//            UdpClient.Dispose();
+    }
+
     /// <summary>
     ///     Called when knx device has been discovered.
     /// </summary>
@@ -70,11 +90,11 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
 
     public Task<EndPoint> BaseConnect()
     {
-        UdpClient.Connect(RemoteEndPoint);
+        _udpClient.Connect(RemoteEndPoint);
 
-        var localEndPoint = UdpClient.Client.LocalEndPoint;
+        var localEndPoint = _udpClient.Client.LocalEndPoint;
 
-        ReceiveData(UdpClient);
+        ReceiveData(_udpClient);
 
         return Task.FromResult(localEndPoint);
     }
@@ -119,9 +139,9 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     {
         try
         {
-            UdpClient.MulticastLoopback = false;
+            _udpClient.MulticastLoopback = false;
             var localEndpoint = (IPEndPoint)await BaseConnect();
-            UdpClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
+            _udpClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
 
             var multiClient = new UdpClient(123, AddressFamily.InterNetwork);
 
@@ -161,22 +181,20 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         }
     }
 
-
-    /// <summary>
-    ///     Occurs when [KNX message received].
-    /// </summary>
-    public event EventHandler<IKnxMessage> KnxMessageReceived;
-
     /// <summary>
     ///     Invoked when a KnxMessage has been received
     /// </summary>
     /// <param name="knxMessage"></param>
-    protected void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
+    protected void InvokeKnxMessageReceived(IKnxMessage knxMessage)
+    {
         KnxMessageReceived?.Invoke(this, knxMessage);
+    }
 
 
-    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo) =>
+    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo)
+    {
         KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
+    }
 
     private static DeviceInfo CreateDeviceInfoFromKnxHpai(KnxHpai endpoint, string friendlyName)
     {
@@ -199,18 +217,6 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     }
 
     /// <summary>
-    ///     Sends a KnxMessage.
-    /// </summary>
-    /// <param name="knxMessage">The KNX message.</param>
-    public async Task SendMessageAsync(IKnxMessage knxMessage)
-    {
-        var knxNetIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
-        ((RoutingIndication)knxNetIpMessage.Body).Cemi = knxMessage;
-
-        await SendMessageAsync(knxNetIpMessage);
-    }
-
-    /// <summary>
     ///     Sends a KnxNetIpMessage
     /// </summary>
     /// <param name="message"></param>
@@ -219,6 +225,6 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {message}");
 
         var bytes = message.ToByteArray();
-        await UdpClient.SendAsync(bytes, bytes.Length);
+        await _udpClient.SendAsync(bytes, bytes.Length);
     }
 }

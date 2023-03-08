@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using Knx.DatapointTypes;
-using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
 using TimeoutException = Knx.Exceptions.TimeoutException;
