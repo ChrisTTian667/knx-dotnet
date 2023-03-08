@@ -95,13 +95,17 @@ public class KnxNetIpTunnelingClientTests
             KnxAddress.Device(1, 1, 2));
 
         await target.Connect();
+
+        target.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
+
+
     }
 
     [Test]
     public async Task SendKnxMessage()
     {
         var target = new KnxNetIpTunnelingClient(
-            new IPEndPoint(IPAddress.Parse("10.10.10.11"), 3671),
+            new IPEndPoint(IPAddress.Parse("10.0.2.5"), 3671),
             KnxAddress.Device(1, 1, 2));
 
         try

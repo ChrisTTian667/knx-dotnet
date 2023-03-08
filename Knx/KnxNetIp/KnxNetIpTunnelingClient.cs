@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,25 +16,59 @@ namespace Knx.KnxNetIp;
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpTunneling protocol.
 /// </summary>
-public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
+public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 {
     private readonly object _communicationChannelLock = new();
-    private readonly Timer _keepAliveTimer;
+    //private readonly Timer _keepAliveTimer;
     private readonly SemaphoreSlim _sendSemaphoreSlim = new(1, 1);
     private readonly AutoResetEvent _terminationEvent = new(false);
     private byte? _currentCommunicationChannel;
     private bool _logicalConnected;
     private byte _sequenceCounter;
 
+    private readonly UdpClient UdpClient;
+
+    public IPEndPoint RemoteEndPoint { get; }
+    public KnxNetIpConfiguration Configuration { get; }
+    public KnxDeviceAddress DeviceAddress { get; }
+
     public KnxNetIpTunnelingClient(
         IPEndPoint remoteEndPoint,
         KnxDeviceAddress deviceAddress,
-        KnxNetIpConfiguration configuration = null) : base(remoteEndPoint, deviceAddress, configuration)
+        KnxNetIpConfiguration configuration = null)
     {
         ConnectionStateTimeStamp = DateTime.MinValue;
 
-        _keepAliveTimer = new Timer(59000) { Enabled = false, AutoReset = true };
-        _keepAliveTimer.Elapsed += async (_, _) => await SendKeepAliveMessage();
+        Configuration = configuration ?? new KnxNetIpConfiguration();
+        RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException(nameof(remoteEndPoint));
+        DeviceAddress = deviceAddress;
+
+        UdpClient = new UdpClient();
+
+
+        // _keepAliveTimer = new Timer(59000) { Enabled = false, AutoReset = true };
+        // _keepAliveTimer.Elapsed += async (_, _) => await SendKeepAliveMessage();
+    }
+
+    ~KnxNetIpTunnelingClient() =>
+        Dispose(false);
+
+    /// <summary>
+    ///     Invoked when a KnxMessage has been received
+    /// </summary>
+    /// <param name="knxMessage"></param>
+    private void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
+        KnxMessageReceived?.Invoke(this, knxMessage);
+
+    /// <summary>
+    ///     Occurs when [KNX message received].
+    /// </summary>
+    public event EventHandler<IKnxMessage> KnxMessageReceived;
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -93,17 +129,65 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         }
     }
 
-    public override bool IsConnected
+    public bool IsConnected
     {
         get => _logicalConnected && IsTimedOut == false && ConnectionState == ErrorCode.NoError;
-        protected set => throw new InvalidOperationException($"Don't set {nameof(IsConnected)}!");
+        private set => throw new InvalidOperationException($"Don't set {nameof(IsConnected)}!");
     }
 
     private event EventHandler<KnxNetIpMessage> KnxNetIpMessageReceived;
 
-    public override async Task<EndPoint> Connect()
+    private Task<EndPoint?> BaseConnect()
     {
-        var localEndpoint = await base.Connect();
+        UdpClient.Connect(RemoteEndPoint);
+
+        var localEndPoint = UdpClient.Client.LocalEndPoint;
+
+        ReceiveData(UdpClient);
+
+        return Task.FromResult(localEndPoint);
+    }
+
+
+
+
+    private async void ReceiveData(UdpClient client)
+    {
+        KnxNetIpMessage lastMessage = null;
+
+        var receivedBuffer = new List<byte>();
+        while (true)
+        {
+            var receivedResult = await client.ReceiveAsync();
+            var receivedData = receivedResult.Buffer.ToArray();
+            receivedBuffer.AddRange(receivedData);
+
+            if (!receivedBuffer.Any())
+                continue;
+
+            var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
+
+            if (msg == null)
+                continue;
+
+            receivedBuffer.Clear();
+
+            // verify that the message differ from last one.
+            if (lastMessage != null && lastMessage.ServiceType == msg.ServiceType)
+            {
+                if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
+                    continue;
+            }
+
+            OnKnxNetIpMessageReceived(msg);
+            lastMessage = msg;
+        }
+    }
+
+    public async Task<EndPoint> Connect()
+    {
+        // TODO: Refactor this
+        var localEndpoint = await BaseConnect();
 
         try
         {
@@ -129,11 +213,11 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         return localEndpoint;
     }
 
-    public override async Task Disconnect()
+    public async Task Disconnect()
     {
         try
         {
-            _keepAliveTimer.Enabled = false;
+            //_keepAliveTimer.Enabled = false;
 
             if (CommunicationChannel != null)
             {
@@ -155,7 +239,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         }
     }
 
-    public override async Task SendMessageAsync(IKnxMessage knxMessage)
+    public async Task SendMessageAsync(IKnxMessage knxMessage)
     {
         var message = (KnxNetIpMessage<TunnelingRequest>)KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
 
@@ -167,7 +251,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
                    && ack.Body.SequenceCounter == message.Body.SequenceCounter);
     }
 
-    protected override void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
+    private void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
     {
         Debug.WriteLine("{0} RECV <= {1}", DateTime.Now.ToLongTimeString(), message);
 
@@ -197,17 +281,17 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
         InvokeKnxNetIpMessageReceived(message);
     }
 
-    protected override void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!disposing)
             return;
 
+        //            UdpClient.Dispose();
+
         _terminationEvent.Set();
-        _keepAliveTimer.Dispose();
+        //_keepAliveTimer.Dispose();
         Disconnect().Wait();
         _terminationEvent?.Dispose();
-
-        base.Dispose(true);
     }
 
     /// <summary>
@@ -283,7 +367,7 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
             return;
 
         CommunicationChannel = knxNetIpMessage.Body.CommunicationChannel;
-        _keepAliveTimer.Enabled = true;
+        //_keepAliveTimer.Enabled = true;
     }
 
     private void HandleConnectionStateResponse(KnxNetIpMessage<ConnectionStateResponse> knxNetIpMessage)
@@ -294,8 +378,8 @@ public sealed class KnxNetIpTunnelingClient : KnxNetIpClient
 
     private void HandleDisconnectResponse(KnxNetIpMessage<DisconnectResponse> knxNetIpMessage)
     {
-        if (knxNetIpMessage != null)
-            _keepAliveTimer.Enabled = false;
+        // if (knxNetIpMessage != null)
+        //     _keepAliveTimer.Enabled = false;
     }
 
     private async void HandleTunnelingRequest(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)

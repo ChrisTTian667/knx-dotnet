@@ -12,7 +12,7 @@ namespace Knx;
 public static class KnxClientExtensions
 {
     public static void Write(
-        this KnxNetIpClient client,
+        this IKnxNetIpClient client,
         KnxLogicalAddress destination,
         DatapointType data,
         MessagePriority priority = MessagePriority.Auto)
@@ -31,7 +31,7 @@ public static class KnxClientExtensions
     }
 
     public static void Reply(
-        this KnxNetIpClient client,
+        this IKnxNetIpClient client,
         IKnxMessage replyTo,
         DatapointType data,
         MessagePriority priority = MessagePriority.Auto)
@@ -51,7 +51,7 @@ public static class KnxClientExtensions
     }
 
     public static T Read<T>(
-        this KnxNetIpClient client,
+        this IKnxNetIpClient client,
         KnxLogicalAddress destination,
         MessagePriority priority = MessagePriority.Auto,
         TimeSpan timeOut = default) where T : DatapointType
@@ -60,15 +60,15 @@ public static class KnxClientExtensions
     }
 
     public static DatapointType Read(
-        this KnxNetIpClient client,
+        this IKnxNetIpClient client,
         Type datapointTypeResultType,
         KnxLogicalAddress destination,
         MessagePriority priority = MessagePriority.Auto,
         TimeSpan timeOut = default)
     {
         var replyEvent = new AutoResetEvent(false);
-        var indicationPayload = new byte[] { };
-        var confirmationPayload = new byte[] { };
+        var indicationPayload = Array.Empty<byte>();
+        var confirmationPayload = Array.Empty<byte>();
         var indicationMessage = default(IKnxMessage);
         var confirmationMessage = default(IKnxMessage);
 

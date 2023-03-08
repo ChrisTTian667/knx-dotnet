@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
@@ -10,20 +12,47 @@ namespace Knx.KnxNetIp;
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpRouting protocol.
 /// </summary>
-public class KnxNetIpRoutingClient : KnxNetIpClient
+public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
 {
+    private readonly UdpClient UdpClient;
+
+    public IPEndPoint RemoteEndPoint { get; }
+    public KnxNetIpConfiguration Configuration { get; }
+    public KnxDeviceAddress DeviceAddress { get; }
+
     public KnxNetIpRoutingClient(KnxNetIpConfiguration configuration = null) : this(
         new IPEndPoint(IPAddress.Parse("224.0.23.12"), 3671),
         new KnxDeviceAddress(0, 0, 0),
         configuration)
     {
+
     }
 
     public KnxNetIpRoutingClient(
         IPEndPoint remoteEndPoint,
         KnxDeviceAddress deviceAddress,
-        KnxNetIpConfiguration configuration = null) : base(remoteEndPoint, deviceAddress, configuration)
+        KnxNetIpConfiguration configuration = null)
     {
+        Configuration = configuration ?? new KnxNetIpConfiguration();
+        RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException(nameof(remoteEndPoint));
+        DeviceAddress = deviceAddress;
+
+        UdpClient = new UdpClient();
+    }
+
+    ~KnxNetIpRoutingClient() =>
+        Dispose(false);
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+//        if (disposing)
+//            UdpClient.Dispose();
     }
 
     /// <summary>
@@ -32,26 +61,74 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
     /// <value>
     ///     <c>true</c> if client is connected; otherwise, <c>false</c>.
     /// </value>
-    public override bool IsConnected { get; protected set; }
+    public bool IsConnected { get; protected set; }
 
     /// <summary>
     ///     Called when knx device has been discovered.
     /// </summary>
     public event EventHandler<DeviceInfo> KnxDeviceDiscovered;
 
+    public Task<EndPoint> BaseConnect()
+    {
+        UdpClient.Connect(RemoteEndPoint);
+
+        var localEndPoint = UdpClient.Client.LocalEndPoint;
+
+        ReceiveData(UdpClient);
+
+        return Task.FromResult(localEndPoint);
+    }
+
+    private async void ReceiveData(UdpClient client)
+    {
+        KnxNetIpMessage lastMessage = null;
+
+        var receivedBuffer = new List<byte>();
+        while (true)
+        {
+            var receivedResult = await client.ReceiveAsync();
+            var receivedData = receivedResult.Buffer.ToArray();
+            receivedBuffer.AddRange(receivedData);
+
+            if (!receivedBuffer.Any())
+                continue;
+
+            var msg = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
+
+            if (msg == null)
+                continue;
+
+            receivedBuffer.Clear();
+
+            // verify that the message differ from last one.
+            if (lastMessage != null && lastMessage.ServiceType == msg.ServiceType)
+            {
+                if (lastMessage.ToByteArray().SequenceEqual(msg.ToByteArray()))
+                    continue;
+            }
+
+            OnKnxNetIpMessageReceived(msg);
+            lastMessage = msg;
+        }
+    }
+
     /// <summary>
     ///     Connects this instance.
     /// </summary>
-    public override async Task<EndPoint> Connect()
+    public async Task<EndPoint> Connect()
     {
         try
         {
             UdpClient.MulticastLoopback = false;
-            var localEndpoint = (IPEndPoint)await base.Connect();
+            var localEndpoint = (IPEndPoint)await BaseConnect();
             UdpClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
 
             var multiClient = new UdpClient(123, AddressFamily.InterNetwork);
-            multiClient.JoinMulticastGroup(RemoteEndPoint.Address, localEndpoint.Address);
+
+            multiClient.JoinMulticastGroup(
+                RemoteEndPoint.Address,
+                localEndpoint.Address);
+
             var something = await multiClient.ReceiveAsync();
 
 
@@ -63,9 +140,10 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
         }
     }
 
-    protected override void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
+    protected void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
     {
-        base.OnKnxNetIpMessageReceived(message);
+        if (message != null)
+            Debug.WriteLine("{0} RECV <= {1} (HANDLED)", DateTime.Now.ToLongTimeString(), message);
 
         switch (message.Body)
         {
@@ -83,6 +161,20 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
         }
     }
 
+
+    /// <summary>
+    ///     Occurs when [KNX message received].
+    /// </summary>
+    public event EventHandler<IKnxMessage> KnxMessageReceived;
+
+    /// <summary>
+    ///     Invoked when a KnxMessage has been received
+    /// </summary>
+    /// <param name="knxMessage"></param>
+    protected void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
+        KnxMessageReceived?.Invoke(this, knxMessage);
+
+
     private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo) =>
         KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
 
@@ -99,7 +191,7 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
         return new DeviceInfo(friendlyName, connection.ToString());
     }
 
-    public override Task Disconnect()
+    public Task Disconnect()
     {
         IsConnected = false;
 
@@ -110,7 +202,7 @@ public class KnxNetIpRoutingClient : KnxNetIpClient
     ///     Sends a KnxMessage.
     /// </summary>
     /// <param name="knxMessage">The KNX message.</param>
-    public override async Task SendMessageAsync(IKnxMessage knxMessage)
+    public async Task SendMessageAsync(IKnxMessage knxMessage)
     {
         var knxNetIpMessage = KnxNetIpMessage.Create(KnxNetIpServiceType.RoutingIndication);
         ((RoutingIndication)knxNetIpMessage.Body).Cemi = knxMessage;
