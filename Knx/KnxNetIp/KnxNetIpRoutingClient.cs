@@ -162,8 +162,7 @@ public class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
 
     protected void OnKnxNetIpMessageReceived(KnxNetIpMessage message)
     {
-        if (message != null)
-            Debug.WriteLine("{0} RECV <= {1} (HANDLED)", DateTime.Now.ToLongTimeString(), message);
+        Debug.WriteLine("{0} RECV <= {1} (HANDLED)", DateTime.Now.ToLongTimeString(), message);
 
         switch (message.Body)
         {

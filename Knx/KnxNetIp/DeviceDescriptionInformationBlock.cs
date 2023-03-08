@@ -24,6 +24,7 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
             var name = new DptString_8859_1(Information.ExtractBytes(22)).Value;
             if (name.Contains('\0'))
                 name = name.Substring(0, name.IndexOf('\0'));
+
             FriendlyName = name;
         }
     }

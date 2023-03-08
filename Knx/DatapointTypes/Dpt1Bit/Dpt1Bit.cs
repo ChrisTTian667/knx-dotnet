@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Knx.Common.Attribute;
 
 namespace Knx.DatapointTypes.Dpt1Bit;
@@ -27,13 +28,9 @@ public abstract class Dpt1Bit : DatapointType
         set => Payload = ToBytes(value);
     }
 
-    private static byte[] ToBytes(bool value)
-    {
-        return new byte[1] { Convert.ToByte(value) };
-    }
+    private static byte[] ToBytes(bool value) =>
+        new byte[1] { Convert.ToByte(value) };
 
-    private static bool ToValue(byte[] bytes)
-    {
-        return Convert.ToBoolean(bytes[0]);
-    }
+    private static bool ToValue(IReadOnlyList<byte> bytes) =>
+        Convert.ToBoolean(bytes[0]);
 }

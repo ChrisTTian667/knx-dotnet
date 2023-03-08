@@ -18,7 +18,7 @@ public class KnxMessage : IKnxMessage
     public KnxMessage()
     {
         MessageCode = MessageCode.Indication;
-        IsPositivConfirmation = false;
+        IsPositiveConfirmation = false;
         AdditionalInfo = new byte[] { 0 };
     }
 
@@ -116,7 +116,7 @@ public class KnxMessage : IKnxMessage
     /// <value>
     ///     <c>true</c> if this message is a positiv confirmation; otherwise, <c>false</c>.
     /// </value>
-    public bool IsPositivConfirmation
+    public bool IsPositiveConfirmation
     {
         get => _controlByte1.IsPositivConfirmation;
         set => _controlByte1.IsPositivConfirmation = value;

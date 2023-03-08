@@ -29,9 +29,9 @@ public interface IKnxMessage
     ///     Gets or sets a value indicating whether this message is a positiv confirmation.
     /// </summary>
     /// <value>
-    ///     <c>true</c> if this message is a positiv confirmation; otherwise, <c>false</c>.
+    ///     <c>true</c> if this message is a positive confirmation; otherwise, <c>false</c>.
     /// </value>
-    bool IsPositivConfirmation { get; set; }
+    bool IsPositiveConfirmation { get; set; }
 
     /// <summary>
     ///     Gets or sets the additional info.
