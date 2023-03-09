@@ -3,21 +3,23 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <PackOnBuild>true</PackOnBuild>
-        <PackageId>KNX</PackageId>
+        <PackageId>knx-dotnet</PackageId>
         <Authors>Christian Daniel</Authors>
         <Copyright>Christian Daniel</Copyright>
         <Owners>Christian Daniel</Owners>
-        <PackageProjectUrl>http://github.com/ChrisTTian667/KNX</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/ChrisTTian667/knx-dotnet</PackageProjectUrl>
         <Summary>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Summary>
-        <Title>KNX</Title>
-        <Description>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Description>
-        <PackageVersion>1.2.4-alpha</PackageVersion>
+        <Title>knx-dotnet</Title>
+        <Description>knx-dotnet is a .NET Core library that allows to communicate with KNXnet/IP routers and gateways using either the routing or the tunneling protocol. It provides a simple and easy-to-use interface for sending and receiving KNX telegrams over IP as well as device discovery.</Description>
+        <PackageVersion>0.3-alpha</PackageVersion>
         <ReleaseVersion>1.2.4-alpha</ReleaseVersion>
         <SynchReleaseVersion>false</SynchReleaseVersion>
         <AssemblyOriginatorKeyFile>knxKey.snk</AssemblyOriginatorKeyFile>
-        <RepositoryUrl>https://github.com/ChrisTTian667/KNX</RepositoryUrl>
+        <RepositoryUrl>https://github.com/ChrisTTian667/knx-dotnet</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -25,10 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NuGet.Build.Packaging" Version="0.2.5-pr175.14">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
 </Project>
