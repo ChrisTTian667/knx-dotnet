@@ -49,7 +49,7 @@ public class KnxLogicalAddress : KnxAddress
         {
             throw new ArgumentException(
                 @"LogicalAddress bytes array length did not match the length of 2 bytes.",
-                "data");
+                nameof(data));
         }
 
         _group = (byte)((data[0] & 0x78) >> 3); // bit 1-4 of byte 0;
