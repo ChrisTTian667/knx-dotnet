@@ -17,6 +17,7 @@
         <AssemblyOriginatorKeyFile>knxKey.snk</AssemblyOriginatorKeyFile>
         <RepositoryUrl>https://github.com/ChrisTTian667/KNX</RepositoryUrl>
         <RepositoryType>GitHub</RepositoryType>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <PropertyGroup>

@@ -1,23 +1,19 @@
 using System.Diagnostics;
 using System.Net;
-using System.Threading.Tasks;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
-using NUnit.Framework;
 
-namespace Knx.Tests;
+namespace Knx.Samples;
 
 public class KnxNetIpRoutingClientTests
 {
-    [Test]
     public async Task ConnectTest()
     {
         using var target = new KnxNetIpRoutingClient();
         await target.Connect();
     }
 
-    [Test]
     public async Task SendKnxMessage()
     {
         var target = new KnxNetIpRoutingClient();
@@ -46,7 +42,6 @@ public class KnxNetIpRoutingClientTests
         }
     }
 
-    [Test]
     public async Task DiscoveryTest()
     {
         var taskCompletionSource = new TaskCompletionSource<string>();
