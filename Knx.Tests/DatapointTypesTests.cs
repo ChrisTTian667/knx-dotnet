@@ -37,7 +37,7 @@ public class DatapointTypesTests
     {
         var dpt = DatapointTypeFactory.Create("1.001", new byte[] { 1 });
         var serializedObject = JsonConvert.SerializeObject(dpt);
-        var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject);
+        var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject)!;
 
         Assert.IsNotNull(dpt);
         Assert.AreEqual(dpt.Payload, deserializeObject.Payload);
@@ -48,7 +48,7 @@ public class DatapointTypesTests
     {
         var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[] { 1 });
         var serializedObject = JsonConvert.SerializeObject(dpt);
-        var deserializeObject = JsonConvert.DeserializeObject<DptAlarmControl>(serializedObject);
+        var deserializeObject = JsonConvert.DeserializeObject<DptAlarmControl>(serializedObject)!;
 
         Assert.IsNotNull(dpt);
         Assert.AreEqual(dpt.Payload, deserializeObject.Payload);
@@ -63,7 +63,7 @@ public class DatapointTypesTests
         var deserializeBase = JsonConvert.DeserializeObject<DatapointType>(serializedSpecific);
         var serializedBase = JsonConvert.SerializeObject(deserializeBase);
 
-        var deserializeSpecific = JsonConvert.DeserializeObject<DptAlarmControl>(serializedBase);
+        var deserializeSpecific = JsonConvert.DeserializeObject<DptAlarmControl>(serializedBase)!;
 
         Assert.IsNotNull(dpt);
         Assert.AreEqual(dpt.Payload, deserializeSpecific.Payload);
@@ -81,7 +81,7 @@ public class DatapointTypesTests
             {
                 var dpt = DatapointTypeFactory.Create(type);
                 var serializeDpt = JsonConvert.SerializeObject(dpt);
-                var deserializeDpt = (DatapointType)JsonConvert.DeserializeObject(serializeDpt, type);
+                var deserializeDpt = (DatapointType)JsonConvert.DeserializeObject(serializeDpt, type)!;
 
                 Assert.IsNotNull(deserializeDpt);
                 Assert.IsNotEmpty(deserializeDpt.DatapointTypeId);

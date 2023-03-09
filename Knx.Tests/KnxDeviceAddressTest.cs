@@ -11,7 +11,7 @@ public class KnxDeviceAddressTest
     {
         var target = new KnxDeviceAddress(3, 2, 1);
         var serializedAddress = JsonConvert.SerializeObject(target);
-        var result = JsonConvert.DeserializeObject<KnxDeviceAddress>(serializedAddress);
+        var result = JsonConvert.DeserializeObject<KnxDeviceAddress>(serializedAddress)!;
 
         Assert.AreEqual(target.Area, result.Area);
     }
