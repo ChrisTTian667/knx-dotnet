@@ -16,30 +16,23 @@ public class KnxNetIpRoutingClientTests
 
     public async Task SendKnxMessage()
     {
-        var target = new KnxNetIpRoutingClient();
+        using var routingClient = new KnxNetIpRoutingClient();
 
-        try
+        await routingClient.Connect();
+
+        var message = new KnxMessage
         {
-            await target.Connect();
+            MessageType = MessageType.Write,
+            MessageCode = MessageCode.Request,
+            Priority = MessagePriority.Auto,
+            SourceAddress = new KnxDeviceAddress(1, 1, 2),
+            DestinationAddress = new KnxLogicalAddress(1, 1, 28),
+            TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
+            DataPacketCount = 0,
+            Payload = new DptBoolean(false).Payload
+        };
 
-            var message = new KnxMessage
-            {
-                MessageType = MessageType.Write,
-                MessageCode = MessageCode.Request,
-                Priority = MessagePriority.Auto,
-                SourceAddress = new KnxDeviceAddress(1, 1, 2),
-                DestinationAddress = new KnxLogicalAddress(1, 1, 28),
-                TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
-                DataPacketCount = 0,
-                Payload = new DptBoolean(false).Payload
-            };
-
-            await target.SendMessageAsync(message);
-        }
-        finally
-        {
-            target.Dispose();
-        }
+        await routingClient.SendMessageAsync(message);
     }
 
     public async Task DiscoveryTest()

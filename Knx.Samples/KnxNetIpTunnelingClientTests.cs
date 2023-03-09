@@ -86,13 +86,13 @@ public class KnxNetIpTunnelingClientTests
 
     public async Task ConnectTest()
     {
-        using var target = new KnxNetIpTunnelingClient(
+        using var tunnelingClient = new KnxNetIpTunnelingClient(
             new IPEndPoint(IPAddress.Parse("10.0.2.5"), 3671),
             KnxAddress.Device(1, 1, 2));
 
-        await target.Connect();
+        await tunnelingClient.Connect();
 
-        target.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
+        tunnelingClient.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
 
 
     }
