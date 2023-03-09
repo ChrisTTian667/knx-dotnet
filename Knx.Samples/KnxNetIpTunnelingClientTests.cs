@@ -1,14 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Knx.DatapointTypes;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.DatapointTypes.Dpt2ByteFloat;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
-using NUnit.Framework;
 
-namespace Knx.Tests;
+namespace Knx.Samples;
 
 public class KnxNetIpTunnelingClientTests
 {
@@ -87,7 +84,6 @@ public class KnxNetIpTunnelingClientTests
         };
     }
 
-    [Test]
     public async Task ConnectTest()
     {
         using var target = new KnxNetIpTunnelingClient(
@@ -101,7 +97,6 @@ public class KnxNetIpTunnelingClientTests
 
     }
 
-    [Test]
     public async Task SendKnxMessage()
     {
         var target = new KnxNetIpTunnelingClient(
