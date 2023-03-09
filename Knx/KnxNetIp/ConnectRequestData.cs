@@ -8,23 +8,13 @@ namespace Knx.KnxNetIp;
 public class ConnectRequestData
 {
     /// <summary>
-    ///     Initializes a new instance of the <see cref="ConnectRequestData" /> class.
-    /// </summary>
-    public ConnectRequestData()
-    {
-        SetDefaultValues();
-    }
-
-    /// <summary>
     ///     Toes the byte array.
     /// </summary>
     /// <returns>a <c>byte[]</c> representing this instance</returns>
     public byte[] ToByteArray()
     {
-        ByteArrayToken lengthToken;
-
         var arrayBuilder =
-            new ByteArrayBuilder().AddToken(1, out lengthToken)
+            new ByteArrayBuilder().AddToken(1, out var lengthToken)
                 .AddByte((byte)ConnectionType)
                 .AddByte(
                     (byte)NetIpLayer)
@@ -36,23 +26,14 @@ public class ConnectRequestData
     }
 
     /// <summary>
-    ///     Sets the default values.
-    /// </summary>
-    private void SetDefaultValues()
-    {
-        ConnectionType = ConnectionType.TunnelingConnection;
-        NetIpLayer = KnxNetIpLayer.Link;
-    }
-
-    /// <summary>
     ///     Gets or sets the type of the connection.
     /// </summary>
     /// <value>The type of the connection.</value>
-    public ConnectionType ConnectionType { get; set; }
+    public ConnectionType ConnectionType { get; set; } = ConnectionType.TunnelingConnection;
 
     /// <summary>
     ///     Gets or sets the KNX layer.
     /// </summary>
     /// <value>The KNX layer.</value>
-    public KnxNetIpLayer NetIpLayer { get; set; }
+    public KnxNetIpLayer NetIpLayer { get; set; } = KnxNetIpLayer.Link;
 }

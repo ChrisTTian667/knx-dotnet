@@ -35,13 +35,12 @@ public static class KnxClientExtensions
         DatapointType data,
         MessagePriority priority = MessagePriority.Auto)
     {
-        var request = replyTo;
         var message = new KnxMessage
         {
             MessageCode = MessageCode.Confirmation,
             MessageType = replyTo.MessageType,
             SourceAddress = client.DeviceAddress,
-            DestinationAddress = request.SourceAddress,
+            DestinationAddress = replyTo.SourceAddress,
             Payload = data.Payload,
             Priority = priority
         };
@@ -130,10 +129,7 @@ public static class KnxClientExtensions
                         return (DatapointType)Activator.CreateInstance(datapointTypeResultType, confirmationPayload);
 
                     throw new TimeoutException(
-                        string.Format(
-                            "Did not retrieve an answer within configured timeout of {0} seconds: {1}",
-                            timeOut.TotalSeconds,
-                            message));
+                        $"Did not retrieve an answer within configured timeout of {timeOut.TotalSeconds} seconds: {message}");
                 }
             }
             finally
