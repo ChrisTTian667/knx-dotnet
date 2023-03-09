@@ -3,52 +3,50 @@ using System.Text;
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.DptVariableString
+namespace Knx.DatapointTypes.DptVariableString;
+
+[DatapointType(28, 1, Usage.General)]
+[DataLength(1, -1)]
+public class DptVariableString_UTF8 : DptVariableString
 {
-    [DatapointType(28, 1, Usage.General)]
-    [DataLength(1, -1)]
-    public class DptVariableString_UTF8 : DptVariableString
+    private DptVariableString_UTF8()
     {
-        public DptVariableString_UTF8(byte[] payload)
-            : base(payload)
+    }
+
+    public DptVariableString_UTF8(byte[] payload)
+        : base(payload)
+    {
+    }
+
+    public DptVariableString_UTF8(string character)
+        : base(character)
+    {
+    }
+
+    private Encoding Encoding
+    {
+        get
         {
+            var encoding = Encoding.UTF8;
+
+            if (encoding == null) throw new Exception("Unable to retrieve encoding 'UTF-8'");
+
+            return encoding;
         }
+    }
 
-        public DptVariableString_UTF8(string character)
-            : base(character)
-        {
-        }
+    protected override byte[] ToBytes(string value)
+    {
+        var byteArray = new byte[value.Length];
+        var encodedBytes = Encoding.GetBytes(value);
 
-        private Encoding Encoding
-        {
-            get
-            {
-                var encoding = Encoding.UTF8;
-                if (encoding == null)
-                {
-                    throw new Exception("Unable to retrieve encoding 'UTF-8'");
-                }
+        for (var i = 0; i < encodedBytes.Length; i++) byteArray[i] = encodedBytes[i];
 
-                return encoding;
-            }
-        }
+        return byteArray;
+    }
 
-        protected override byte[] ToBytes(string value)
-        {
-            var byteArray = new byte[value.Length];
-            var encodedBytes = Encoding.GetBytes(value);
-
-            for (var i = 0; i < encodedBytes.Length; i++)
-            {
-                byteArray[i] = encodedBytes[i];
-            }
-
-            return byteArray;
-        }
-
-        protected override string ToValue(byte[] bytes)
-        {
-            return Encoding.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
-        }
+    protected override string ToValue(byte[] bytes)
+    {
+        return Encoding.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
     }
 }

@@ -1,72 +1,39 @@
 ﻿using Knx.Common;
 
-namespace Knx.KnxNetIp
+namespace Knx.KnxNetIp;
+
+/// <summary>
+///     Data for ConnectRequest
+/// </summary>
+public class ConnectRequestData
 {
     /// <summary>
-    /// Data for ConnectRequest
+    ///     Toes the byte array.
     /// </summary>
-    public class ConnectRequestData
+    /// <returns>a <c>byte[]</c> representing this instance</returns>
+    public byte[] ToByteArray()
     {
-        #region Constructors and Destructors
+        var arrayBuilder =
+            new ByteArrayBuilder().AddToken(1, out var lengthToken)
+                .AddByte((byte)ConnectionType)
+                .AddByte(
+                    (byte)NetIpLayer)
+                .AddByte(0x00);
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConnectRequestData"/> class.
-        /// </summary>
-        public ConnectRequestData()
-        {
-            this.SetDefaultValues();
-        }
+        arrayBuilder.ReplaceToken(lengthToken, arrayBuilder.Length);
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the type of the connection.
-        /// </summary>
-        /// <value>The type of the connection.</value>
-        public ConnectionType ConnectionType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the KNX layer.
-        /// </summary>
-        /// <value>The KNX layer.</value>
-        public KnxNetIpLayer NetIpLayer { get; set; }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Toes the byte array.
-        /// </summary>
-        /// <returns>a <c>byte[]</c> representing this instance</returns>
-        public byte[] ToByteArray()
-        {
-            ByteArrayToken lengthToken;
-
-            var arrayBuilder =
-                new ByteArrayBuilder().AddToken(1, out lengthToken).AddByte((byte)this.ConnectionType).AddByte(
-                    (byte)this.NetIpLayer).AddByte(0x00);
-
-            arrayBuilder.ReplaceToken(lengthToken, arrayBuilder.Length);
-
-            return arrayBuilder.ToByteArray();
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Sets the default values.
-        /// </summary>
-        private void SetDefaultValues()
-        {
-            this.ConnectionType = ConnectionType.TunnelingConnection;
-            this.NetIpLayer = KnxNetIpLayer.Link;
-        }
-
-        #endregion
+        return arrayBuilder.ToByteArray();
     }
+
+    /// <summary>
+    ///     Gets or sets the type of the connection.
+    /// </summary>
+    /// <value>The type of the connection.</value>
+    public ConnectionType ConnectionType { get; set; } = ConnectionType.TunnelingConnection;
+
+    /// <summary>
+    ///     Gets or sets the KNX layer.
+    /// </summary>
+    /// <value>The KNX layer.</value>
+    public KnxNetIpLayer NetIpLayer { get; set; } = KnxNetIpLayer.Link;
 }

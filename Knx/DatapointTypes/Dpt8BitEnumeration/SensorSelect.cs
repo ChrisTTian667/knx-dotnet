@@ -1,11 +1,10 @@
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+public enum SensorSelect : byte
 {
-    public enum SensorSelect : byte
-    {
-        Inactive = 0,
-        DigitalInput = 1,
-        InvertedDigitalInput = 2,
-        AnalogInput = 3,
-        TemperaturSensorInput = 4
-    }
+    Inactive = 0,
+    DigitalInput = 1,
+    InvertedDigitalInput = 2,
+    AnalogInput = 3,
+    TemperaturSensorInput = 4
 }

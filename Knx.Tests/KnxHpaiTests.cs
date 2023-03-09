@@ -2,40 +2,38 @@
 using Knx.KnxNetIp;
 using NUnit.Framework;
 
-namespace Knx.Tests
+namespace Knx.Tests;
+
+public class KnxHpaiTests
 {
-    
-    public class KnxHpaiTests
+    [Test]
+    public void CreateKnxHpai()
     {
-        [Test]
-        public void CreateKnxHpai()
+        var hpai = new KnxHpai
         {
-            var hpai = new KnxHpai
-            {
-                HostProtocolCode = HostProtocolCode.IPV4_UDP,
-                IpAddress = IPAddress.Parse("192.168.2.1"),
-                Port = 3060
-            };
+            HostProtocolCode = HostProtocolCode.IPV4_UDP,
+            IpAddress = IPAddress.Parse("192.168.2.1"),
+            Port = 3060
+        };
 
-            Assert.IsNotNull(hpai);
-        }
+        Assert.IsNotNull(hpai);
+    }
 
-        [Test]
-        public void SerializeDeserializeKnxHpai()
+    [Test]
+    public void SerializeDeserializeKnxHpai()
+    {
+        var hpai = new KnxHpai
         {
-            var hpai = new KnxHpai
-            {
-                HostProtocolCode = HostProtocolCode.IPV4_UDP,
-                IpAddress = IPAddress.Parse("192.168.2.1"),
-                Port = 3060
-            };
+            HostProtocolCode = HostProtocolCode.IPV4_UDP,
+            IpAddress = IPAddress.Parse("192.168.2.1"),
+            Port = 3060
+        };
 
-            var array = hpai.ToByteArray();
-            var deserializedHpai = KnxHpai.Parse(array);
+        var array = hpai.ToByteArray();
+        var deserializedHpai = KnxHpai.Parse(array);
 
-            Assert.AreEqual(hpai.HostProtocolCode, deserializedHpai.HostProtocolCode);
-            Assert.AreEqual(hpai.IpAddress, deserializedHpai.IpAddress);
-            Assert.AreEqual(hpai.Port, deserializedHpai.Port);
-        }
+        Assert.AreEqual(hpai.HostProtocolCode, deserializedHpai.HostProtocolCode);
+        Assert.AreEqual(hpai.IpAddress, deserializedHpai.IpAddress);
+        Assert.AreEqual(hpai.Port, deserializedHpai.Port);
     }
 }

@@ -1,6 +1,5 @@
-﻿namespace Knx.KnxNetIp
+﻿namespace Knx.KnxNetIp;
+
+public class ConnectResponseData
 {
-    public class ConnectResponseData
-    {
-    }
 }

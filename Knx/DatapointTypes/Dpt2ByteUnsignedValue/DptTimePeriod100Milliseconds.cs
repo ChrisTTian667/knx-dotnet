@@ -2,36 +2,37 @@ using System;
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue
+namespace Knx.DatapointTypes.Dpt2ByteUnsignedValue;
+
+[DatapointType(7, 4, Unit.Milliseconds, Usage.General)]
+public class DptTimePeriod100Milliseconds : DptTimePeriod
 {
-    [DatapointType(7, 4, Unit.Milliseconds, Usage.General)]
-    public class DptTimePeriod100Milliseconds : DptTimePeriod
+    private DptTimePeriod100Milliseconds()
     {
-        public DptTimePeriod100Milliseconds(byte[] payload)
-            : base(payload)
-        {
-        }
+    }
 
-        public DptTimePeriod100Milliseconds(TimeSpan timeSpan)
-            : base(timeSpan)
-        {
-        }
+    public DptTimePeriod100Milliseconds(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        protected override TimeSpan TimeSpanFromUInt16(ushort value)
-        {
-            return TimeSpan.FromSeconds(value / 10.0);
-        }
+    public DptTimePeriod100Milliseconds(TimeSpan timeSpan)
+        : base(timeSpan)
+    {
+    }
 
-        protected override ushort UInt16FromTimeSpan(TimeSpan timeSpan)
-        {
-            var value = timeSpan.TotalSeconds * 10.0;
+    protected override TimeSpan TimeSpanFromUInt16(ushort value)
+    {
+        return TimeSpan.FromSeconds(value / 10.0);
+    }
 
-            if (value < 0 || value > 65535)
-            {
-                throw new ArgumentOutOfRangeException("timeSpan", "Timespan must be within 0 ... 6553.5 seconds.");
-            }
+    protected override ushort UInt16FromTimeSpan(TimeSpan timeSpan)
+    {
+        var value = timeSpan.TotalSeconds * 10.0;
 
-            return (UInt16)value;
-        }
+        if (value < 0 || value > 65535)
+            throw new ArgumentOutOfRangeException("timeSpan", "Timespan must be within 0 ... 6553.5 seconds.");
+
+        return (ushort)value;
     }
 }

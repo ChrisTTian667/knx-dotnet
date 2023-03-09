@@ -1,11 +1,10 @@
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
+
+public enum BuildingMode : byte
 {
-    public enum BuildingMode : byte
-    {
-        InUse = 0x00,
+    InUse = 0x00,
 
-        NotUsed = 0x01,
+    NotUsed = 0x01,
 
-        Protection = 0x02,
-    }
+    Protection = 0x02
 }

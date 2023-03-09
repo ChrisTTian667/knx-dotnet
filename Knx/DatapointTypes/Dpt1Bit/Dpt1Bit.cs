@@ -1,45 +1,36 @@
 ﻿using System;
-using Knx.Common;
+using System.Collections.Generic;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt1Bit
+namespace Knx.DatapointTypes.Dpt1Bit;
+
+[DataLength(1)]
+public abstract class Dpt1Bit : DatapointType
 {
-    [DataLength(1)]
-    public abstract class Dpt1Bit : DatapointType
+    protected Dpt1Bit()
     {
-        protected Dpt1Bit(Byte[] payload)
-            : base(payload)
-        {
-        }
-
-        protected Dpt1Bit(Boolean value)
-        {
-            Value = value;
-        }
-
-        [DatapointProperty]
-        public virtual Boolean Value
-        {
-            get
-            {
-                return ToValue(Payload);
-            }
-
-            set
-            {
-                Payload = ToBytes(value);
-                RaisePropertyChanged(() => Value);
-            }
-        }
-
-        private static byte[] ToBytes(bool value)
-        {
-            return new byte[1] { Convert.ToByte(value) };
-        }
-
-        private static bool ToValue(byte[] bytes)
-        {
-            return Convert.ToBoolean(bytes[0]);
-        }
     }
+
+    protected Dpt1Bit(byte[] payload)
+        : base(payload)
+    {
+    }
+
+    protected Dpt1Bit(bool value)
+    {
+        Value = value;
+    }
+
+    [DatapointProperty]
+    public virtual bool Value
+    {
+        get => ToValue(Payload);
+        set => Payload = ToBytes(value);
+    }
+
+    private static byte[] ToBytes(bool value) =>
+        new byte[1] { Convert.ToByte(value) };
+
+    private static bool ToValue(IReadOnlyList<byte> bytes) =>
+        Convert.ToBoolean(bytes[0]);
 }

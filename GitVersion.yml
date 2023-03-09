@@ -1,0 +1,23 @@
+mode: ContinuousDelivery
+# Version will not increment when next-version is set. Use tags to force
+# a specific version
+branches:
+  feature:
+    tag: feature-{BranchName}
+    increment: Patch
+    regex: ^feature[/-]
+    source-branches:
+    - main
+    - feature
+    - bugfix
+  bugfix:
+    tag: fix-{BranchName}
+    increment: Patch
+    regex: ^(bug)?fix[/-]
+    source-branches:
+    - main
+    - feature
+    - bugfix
+ignore:
+  sha: []
+merge-message-formats: {}

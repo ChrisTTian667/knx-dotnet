@@ -1,10 +1,9 @@
-namespace Knx.DatapointTypes.Dpt2BitEnumeration
+namespace Knx.DatapointTypes.Dpt2BitEnumeration;
+
+public enum AlarmReaction : byte
 {
-    public enum AlarmReaction : byte
-    {
-        NoAlarmIsUsed = 0,
-        AlarmPositionUp = 1,
-        AlarmPositionDown = 3,
-        Reserved = 4,
-    }
+    NoAlarmIsUsed = 0,
+    AlarmPositionUp = 1,
+    AlarmPositionDown = 3,
+    Reserved = 4
 }
