@@ -1,7 +1,9 @@
-mode: Mainline
+mode: ContinuousDelivery
 # Version will not increment when next-version is set. Use tags to force
 # a specific version
 branches:
+  main:
+    is-release-branch: true
   feature:
     tag: feature-{BranchName}
     increment: Patch
