@@ -2,63 +2,54 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Knx.Common
+namespace Knx.Common;
+
+public sealed class BitArrayBuilder
 {
-    public sealed class BitArrayBuilder
+    private readonly List<BitArray> _bitArrayList = new();
+
+    public BitArrayBuilder Add(bool bit)
     {
-        #region Constants and Fields
+        _bitArrayList.Add(new BitArray(new[] { bit }));
 
-        private readonly List<BitArray> _bitArrayList = new List<BitArray>();
+        return this;
+    }
 
-        #endregion
+    public BitArrayBuilder Add(int intValue, byte length)
+    {
+        _bitArrayList.Add(new BitArray(intValue.ConvertToBits(length).ToArray()));
 
-        #region Public Methods
+        return this;
+    }
 
-        public BitArrayBuilder Add(bool bit)
+    public BitArrayBuilder Add(byte byteValue, byte length)
+    {
+        _bitArrayList.Add(new BitArray(byteValue.ConvertToBits(length).ToArray()));
+
+        return this;
+    }
+
+    public BitArrayBuilder Add(BitArray value)
+    {
+        _bitArrayList.Add(value);
+
+        return this;
+    }
+
+    public BitArray ToBitArray()
+    {
+        var length = _bitArrayList.Sum(bitArray => bitArray.Length);
+
+        var resultArray = new BitArray(length);
+
+        var currentIdx = 0;
+
+        foreach (var bit in _bitArrayList.SelectMany(bitArray => bitArray.Cast<bool>()))
         {
-            _bitArrayList.Add(new BitArray(new[] {bit}));
-
-            return this;
+            resultArray.Set(currentIdx, bit);
+            currentIdx++;
         }
 
-        public BitArrayBuilder Add(int intValue, byte length)
-        {
-            _bitArrayList.Add(new BitArray(intValue.ConvertToBits(length).ToArray()));
-
-            return this;
-        }
-
-        public BitArrayBuilder Add(byte byteValue, byte length)
-        {
-            _bitArrayList.Add(new BitArray(byteValue.ConvertToBits(length).ToArray()));
-
-            return this;
-        }
-
-        public BitArrayBuilder Add(BitArray value)
-        {
-            _bitArrayList.Add(value);
-
-            return this;
-        }
-
-        public BitArray ToBitArray()
-        {
-            var length = _bitArrayList.Sum(bitArray => bitArray.Length);
-
-            var resultArray = new BitArray(length);
-
-            var currentIdx = 0;
-
-            foreach (var bit in _bitArrayList.SelectMany(bitArray => bitArray.Cast<bool>()))
-            {
-                resultArray.Set(currentIdx, bit);
-                currentIdx++;
-            }
-
-            return resultArray;
-        }
-
-        #endregion
+        return resultArray;
     }
 }

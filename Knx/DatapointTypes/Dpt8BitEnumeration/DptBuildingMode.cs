@@ -1,19 +1,22 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitEnumeration
-{
-    [DatapointType(20, 2, Usage.General)]
-    public class DptBuildingMode : Dpt8BitEnum<BuildingMode>
-    {
-        public DptBuildingMode(byte[] payload)
-            : base(payload)
-        {
-        }
+namespace Knx.DatapointTypes.Dpt8BitEnumeration;
 
-        public DptBuildingMode(BuildingMode value)
-            : base(value)
-        {
-        }
+[DatapointType(20, 2, Usage.General)]
+public class DptBuildingMode : Dpt8BitEnum<BuildingMode>
+{
+    private DptBuildingMode()
+    {
+    }
+
+    public DptBuildingMode(byte[] payload)
+        : base(payload)
+    {
+    }
+
+    public DptBuildingMode(BuildingMode value)
+        : base(value)
+    {
     }
 }

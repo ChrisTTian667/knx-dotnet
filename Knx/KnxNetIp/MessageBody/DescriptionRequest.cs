@@ -1,28 +1,20 @@
 ﻿using System;
 using Knx.Common;
 
-namespace Knx.KnxNetIp.MessageBody
+namespace Knx.KnxNetIp.MessageBody;
+
+[ResponseMessage(typeof(DescriptionResponse))]
+public class DescriptionRequest : TunnelingMessageBody
 {
-    [ResponseMessage(typeof(DescriptionResponse))]
-    public class DescriptionRequest : TunnelingMessageBody
+    public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.DescriptionRequest;
+
+    public override void Deserialize(byte[] bytes)
     {
-        public override KnxNetIpServiceType ServiceType
-        {
-            get { return KnxNetIpServiceType.DescriptionRequest; }
-        }
+        throw new NotImplementedException();
+    }
 
-        #region Public Methods
-
-        public override void Deserialize(byte[] bytes)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
+    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    {
+        throw new NotImplementedException();
     }
 }

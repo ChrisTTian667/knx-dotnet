@@ -1,33 +1,30 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2Bit
+namespace Knx.DatapointTypes.Dpt2Bit;
+
+[DatapointType(2, 4, Unit.RampNoRamp, Usage.FunctionBlock)]
+public class DptRampControl : Dpt2Bit
 {
-    [DatapointType(2, 4, Unit.RampNoRamp, Usage.FunctionBlock)]
-    public class DptRampControl : Dpt2Bit
+    private DptRampControl()
     {
-        public DptRampControl(byte[] payload)
-            : base(payload)
-        {
-        }
+    }
 
-        public DptRampControl(bool value, bool control)
-            : base(value, control)
-        {
-        }
+    public DptRampControl(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        [DatapointProperty]
-        [BooleanEncoding(UnitEncoding.NoRamp, UnitEncoding.Ramp)]
-        public override bool Value
-        {
-            get
-            {
-                return base.Value;
-            }
-            set
-            {
-                base.Value = value;
-            }
-        }
+    public DptRampControl(bool value, bool control)
+        : base(value, control)
+    {
+    }
+
+    [DatapointProperty]
+    [BooleanEncoding(UnitEncoding.NoRamp, UnitEncoding.Ramp)]
+    public override bool Value
+    {
+        get => base.Value;
+        set => base.Value = value;
     }
 }

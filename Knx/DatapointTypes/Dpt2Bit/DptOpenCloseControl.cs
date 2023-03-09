@@ -1,33 +1,30 @@
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt2Bit
+namespace Knx.DatapointTypes.Dpt2Bit;
+
+[DatapointType(2, 9, Unit.OpenClose, Usage.FunctionBlock)]
+public class DptOpenCloseControl : Dpt2Bit
 {
-    [DatapointType(2, 9, Unit.OpenClose, Usage.FunctionBlock)]
-    public class DptOpenCloseControl : Dpt2Bit
+    private DptOpenCloseControl()
     {
-        public DptOpenCloseControl(byte[] payload)
-            : base(payload)
-        {
-        }
+    }
 
-        public DptOpenCloseControl(bool value, bool control)
-            : base(value, control)
-        {
-        }
+    public DptOpenCloseControl(byte[] payload)
+        : base(payload)
+    {
+    }
 
-        [DatapointProperty]
-        [BooleanEncoding(UnitEncoding.Close, UnitEncoding.Open)]
-        public override bool Value
-        {
-            get
-            {
-                return base.Value;
-            }
-            set
-            {
-                base.Value = value;
-            }
-        }
+    public DptOpenCloseControl(bool value, bool control)
+        : base(value, control)
+    {
+    }
+
+    [DatapointProperty]
+    [BooleanEncoding(UnitEncoding.Close, UnitEncoding.Open)]
+    public override bool Value
+    {
+        get => base.Value;
+        set => base.Value = value;
     }
 }

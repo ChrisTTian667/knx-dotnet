@@ -2,131 +2,149 @@
 using System.Diagnostics;
 using System.Threading;
 using Knx.DatapointTypes;
-using Knx.Exceptions;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
+using TimeoutException = Knx.Exceptions.TimeoutException;
 
-namespace Knx
+namespace Knx;
+
+public static class KnxClientExtensions
 {
-    public static class KnxClientExtensions
+    public static void Write(
+        this IKnxNetIpClient client,
+        KnxLogicalAddress destination,
+        DatapointType data,
+        MessagePriority priority = MessagePriority.Auto)
     {
-        public static void Write(this KnxNetIpClient client, KnxLogicalAddress destination, DatapointType data, MessagePriority priority = MessagePriority.Auto)
+        var message = new KnxMessage
         {
-            var message = new KnxMessage
-                              {
-                                  MessageCode = MessageCode.Request,
-                                  MessageType = MessageType.Write,
-                                  SourceAddress = client.DeviceAddress,
-                                  DestinationAddress = destination,
-                                  Payload = data.Payload,
-                                  Priority = priority,
-                              };
+            MessageCode = MessageCode.Request,
+            MessageType = MessageType.Write,
+            SourceAddress = client.DeviceAddress,
+            DestinationAddress = destination,
+            Payload = data.Payload,
+            Priority = priority
+        };
 
-            client.SendMessage(message);
-        }
+        client.SendMessageAsync(message);
+    }
 
-        public static void Reply(this KnxNetIpClient client, IKnxMessage replyTo, DatapointType data, MessagePriority priority = MessagePriority.Auto)
+    public static void Reply(
+        this IKnxNetIpClient client,
+        IKnxMessage replyTo,
+        DatapointType data,
+        MessagePriority priority = MessagePriority.Auto)
+    {
+        var request = replyTo;
+        var message = new KnxMessage
         {
-            var request = replyTo;
-            var message = new KnxMessage
-                              {
-                                  MessageCode = MessageCode.Confirmation,
-                                  MessageType = replyTo.MessageType,
-                                  SourceAddress = client.DeviceAddress,
-                                  DestinationAddress = request.SourceAddress,
-                                  Payload = data.Payload,
-                                  Priority = priority,
-                              };
+            MessageCode = MessageCode.Confirmation,
+            MessageType = replyTo.MessageType,
+            SourceAddress = client.DeviceAddress,
+            DestinationAddress = request.SourceAddress,
+            Payload = data.Payload,
+            Priority = priority
+        };
 
-            client.SendMessage(message);
-        }
+        client.SendMessageAsync(message);
+    }
 
-        public static T Read<T>(this KnxNetIpClient client, KnxLogicalAddress destination, MessagePriority priority = MessagePriority.Auto, TimeSpan timeOut = default) where T : DatapointType
+    public static T Read<T>(
+        this IKnxNetIpClient client,
+        KnxLogicalAddress destination,
+        MessagePriority priority = MessagePriority.Auto,
+        TimeSpan timeOut = default) where T : DatapointType
+    {
+        return Read(client, typeof(T), destination, priority, timeOut) as T;
+    }
+
+    public static DatapointType Read(
+        this IKnxNetIpClient client,
+        Type datapointTypeResultType,
+        KnxLogicalAddress destination,
+        MessagePriority priority = MessagePriority.Auto,
+        TimeSpan timeOut = default)
+    {
+        var replyEvent = new AutoResetEvent(false);
+        var indicationPayload = Array.Empty<byte>();
+        var confirmationPayload = Array.Empty<byte>();
+        var indicationMessage = default(IKnxMessage);
+        var confirmationMessage = default(IKnxMessage);
+
+        if (timeOut.TotalMilliseconds <= 0)
+            timeOut = client.Configuration.ReadTimeout;
+
+        try
         {
-            return Read(client, typeof(T), destination, priority, timeOut) as T;
-        }
+            // specify the reply condition
+            void KnxMessageReceived(object sender, IKnxMessage knxMessage)
+            {
+                if (knxMessage.DestinationAddress.ToString() != destination.ToString())
+                    return;
 
-        public static DatapointType Read(this KnxNetIpClient client, Type datapointTypeResultType, KnxLogicalAddress destination, MessagePriority priority = MessagePriority.Auto, TimeSpan timeOut = default)
-        {
-            var replyEvent = new AutoResetEvent(false);
-            var indicationPayload = new byte[] { };
-            var confirmationPayload = new byte[] { };
-            var indicationMessage = default(IKnxMessage);
-            var confirmationMessage = default(IKnxMessage);
-            
-            if (timeOut.TotalMilliseconds <= 0)
-                timeOut = client.Configuration.ReadTimeout;
+                var indicationCondition = knxMessage.MessageCode == MessageCode.Indication &&
+                                          knxMessage.MessageType == MessageType.Reply;
+                var confirmationCondition = knxMessage.MessageCode == MessageCode.Confirmation;
 
+
+                // If we receive a confirmation, we cannot be sure that the payload correspond to the current actor value
+                if (confirmationCondition)
+                {
+                    confirmationMessage = knxMessage;
+                    confirmationPayload = new byte[knxMessage.PayloadLength];
+                    knxMessage.Payload.CopyTo(confirmationPayload, 0);
+                }
+
+                // but, if we receive an indication, we can be sure, that the payload is the current actor value
+                if (indicationCondition)
+                {
+                    indicationMessage = knxMessage;
+                    indicationPayload = new byte[knxMessage.PayloadLength];
+                    knxMessage.Payload.CopyTo(indicationPayload, 0);
+                    replyEvent.Set();
+                }
+            }
+
+            client.KnxMessageReceived += KnxMessageReceived;
             try
             {
-                // specify the reply condition
-                void KnxMessageReceived(object sender, IKnxMessage knxMessage)
+                // create and send the read request
+                var message = new KnxMessage
                 {
-                    if (knxMessage.DestinationAddress.ToString() != destination.ToString())
-                        return;
+                    MessageCode = MessageCode.Request,
+                    MessageType = MessageType.Read,
+                    SourceAddress = client.DeviceAddress,
+                    DestinationAddress = destination,
+                    Priority = priority
+                };
 
-                    var indicationCondition = (knxMessage.MessageCode == MessageCode.Indication) && (knxMessage.MessageType == MessageType.Reply);
-                    var confirmationCondition = knxMessage.MessageCode == MessageCode.Confirmation;
+                Debug.WriteLine("{0} START READING from {1}", DateTime.Now.ToLongTimeString(), destination);
+                client.SendMessageAsync(message);
 
-
-                    // If we receive a confirmation, we cannot be sure that the payload correspond to the current actor value 
-                    if (confirmationCondition)
-                    {
-                        confirmationMessage = knxMessage;
-                        confirmationPayload = new byte[knxMessage.PayloadLength];
-                        knxMessage.Payload.CopyTo(confirmationPayload, 0);
-                    }
-
-                    // but, if we receive an indication, we can be sure, that the payload is the current actor value
-                    if (indicationCondition)
-                    {
-                        indicationMessage = knxMessage;
-                        indicationPayload = new byte[knxMessage.PayloadLength];
-                        knxMessage.Payload.CopyTo(indicationPayload, 0);
-                        replyEvent.Set();
-                    }
-                }
-
-                client.KnxMessageReceived += KnxMessageReceived;
-                try
+                if (replyEvent.WaitOne(timeOut) && indicationMessage != null)
+                    return (DatapointType)Activator.CreateInstance(datapointTypeResultType, indicationPayload);
+                else
                 {
-                    // create and send the read request
-                    var message = new KnxMessage
-                    {
-                        MessageCode = MessageCode.Request,
-                        MessageType = MessageType.Read,
-                        SourceAddress = client.DeviceAddress,
-                        DestinationAddress = destination,
-                        Priority = priority
-                    };
+                    // Fallback, if we retrieved a confirmation, but no indication.
+                    if (confirmationMessage != null)
+                        return (DatapointType)Activator.CreateInstance(datapointTypeResultType, confirmationPayload);
 
-                    Debug.WriteLine("{0} START READING from {1}", DateTime.Now.ToLongTimeString(), destination);
-                    client.SendMessage(message);
-
-                    if (replyEvent.WaitOne(timeOut) && indicationMessage != null)
-                    {
-                        return (DatapointType)Activator.CreateInstance(datapointTypeResultType, indicationPayload);
-                    }
-                    else
-                    {
-                        // Fallback, if we retrieved a confirmation, but no indication.
-                        if (confirmationMessage != null)
-                            return (DatapointType)Activator.CreateInstance(datapointTypeResultType, confirmationPayload);
-
-                        throw new KnxTimeoutException(string.Format("Did not retrieve an answer within configured timeout of {0} seconds: {1}", timeOut.TotalSeconds, message));
-                    }
-                }
-                finally
-                {
-                    client.KnxMessageReceived -= KnxMessageReceived;
-                    Debug.WriteLine("{0} STOPPED READING of {1}", DateTime.Now.ToLongTimeString(), destination);
+                    throw new TimeoutException(
+                        string.Format(
+                            "Did not retrieve an answer within configured timeout of {0} seconds: {1}",
+                            timeOut.TotalSeconds,
+                            message));
                 }
             }
             finally
             {
-                replyEvent.Dispose();
+                client.KnxMessageReceived -= KnxMessageReceived;
+                Debug.WriteLine("{0} STOPPED READING of {1}", DateTime.Now.ToLongTimeString(), destination);
             }
         }
-        
+        finally
+        {
+            replyEvent.Dispose();
+        }
     }
 }

@@ -1,10 +1,9 @@
-namespace Knx.DatapointTypes.Dpt2BitEnumeration
+namespace Knx.DatapointTypes.Dpt2BitEnumeration;
+
+public enum OnOffAction : byte
 {
-    public enum OnOffAction : byte
-    {
-        Off = 0x00,
-        On = 0x01,
-        OffOn = 0x03,
-        OnOff = 0x04
-    }
+    Off = 0x00,
+    On = 0x01,
+    OffOn = 0x03,
+    OnOff = 0x04
 }

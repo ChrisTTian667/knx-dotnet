@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <PackOnBuild>true</PackOnBuild>
         <PackageId>KNX</PackageId>
         <Authors>Christian Daniel</Authors>
@@ -11,9 +11,12 @@
         <Summary>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Summary>
         <Title>KNX</Title>
         <Description>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Description>
-        <PackageVersion>1.1</PackageVersion>
-        <ReleaseVersion>1.1</ReleaseVersion>
+        <PackageVersion>1.2.4-alpha</PackageVersion>
+        <ReleaseVersion>1.2.4-alpha</ReleaseVersion>
         <SynchReleaseVersion>false</SynchReleaseVersion>
+        <AssemblyOriginatorKeyFile>knxKey.snk</AssemblyOriginatorKeyFile>
+        <RepositoryUrl>https://github.com/ChrisTTian667/KNX</RepositoryUrl>
+        <RepositoryType>GitHub</RepositoryType>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -21,11 +24,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="PortableDI" Version="1.3.1" />
-      <PackageReference Include="NuGet.Build.Packaging" Version="0.2.5-dev.8">
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        <PrivateAssets>all</PrivateAssets>
-      </PackageReference>
+        <PackageReference Include="NuGet.Build.Packaging" Version="0.2.5-dev.8">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
     </ItemGroup>
 
 </Project>

@@ -1,40 +1,38 @@
-﻿using System;
-using Knx.Common;
-using Knx.Common.Attribute;
+﻿using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.Dpt8BitSignedValue
+namespace Knx.DatapointTypes.Dpt8BitSignedValue;
+
+[DataLength(8)]
+public abstract class Dpt8BitSignedValue : DatapointType
 {
-    [DataLength(8)]
-    public abstract class Dpt8BitSignedValue : DatapointType
+    protected Dpt8BitSignedValue()
     {
-        protected Dpt8BitSignedValue(Byte[] payload)
-            : base(payload)
+    }
+
+    protected Dpt8BitSignedValue(byte[] payload)
+        : base(payload)
+    {
+    }
+
+    protected Dpt8BitSignedValue(sbyte value)
+    {
+        Value = value;
+    }
+
+    [DatapointProperty]
+    public virtual sbyte Value
+    {
+        get
         {
+            var sb = unchecked((sbyte)Payload[0]);
+
+            return sb;
         }
 
-        protected Dpt8BitSignedValue(sbyte value)
+        set
         {
-            Value = value;
-        }
-
-        [DatapointProperty]
-        public virtual sbyte Value
-        {
-            get
-            {
-                var sb = unchecked((sbyte)Payload[0]);
-
-                return sb;
-            }
-
-            set
-            {
-                var payload = (byte)value;
-
-                Payload = new[] { payload };
-
-                RaisePropertyChanged(() => Value);
-            }
+            var payload = (byte)value;
+            Payload = new[] { payload };
         }
     }
 }

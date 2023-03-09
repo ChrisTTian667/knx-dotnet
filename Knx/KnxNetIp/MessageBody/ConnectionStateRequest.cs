@@ -1,64 +1,50 @@
 ﻿using System;
 using Knx.Common;
 
-namespace Knx.KnxNetIp.MessageBody
+namespace Knx.KnxNetIp.MessageBody;
+
+[ResponseMessage(typeof(ConnectionStateResponse))]
+public class ConnectionStateRequest : TunnelingMessageBody
 {
-    [ResponseMessage(typeof(ConnectionStateResponse))]
-    public class ConnectionStateRequest : TunnelingMessageBody
+    /// <summary>
+    ///     Initializes a new instance of the <see cref="ConnectionStateRequest" /> class.
+    /// </summary>
+    public ConnectionStateRequest()
     {
-        #region Constructors and Destructors
+        HostProtocolAddressInfo = new KnxHpai();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConnectionStateRequest"/> class.
-        /// </summary>
-        public ConnectionStateRequest()
-        {
-            this.HostProtocolAddressInfo = new KnxHpai();
-        }
+    /// <summary>
+    ///     Gets or sets the host protocol address info.
+    /// </summary>
+    /// <value>The host protocol address info.</value>
+    public KnxHpai HostProtocolAddressInfo { get; private set; }
 
-        #endregion
+    public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.ConnectionStateRequest;
 
-        #region Properties
+    /// <summary>
+    ///     Deserializes the specified bytes.
+    /// </summary>
+    /// <param name="bytes">The bytes.</param>
+    public override void Deserialize(byte[] bytes)
+    {
+        var hpaiLength = (int)bytes[2]; // get the length for the "HostProtocolAddressInformation //
+        var hpaiBytes = new byte[hpaiLength]; // extract the hpai bytes
+        Array.Copy(bytes, 2, hpaiBytes, 0, hpaiLength); // parse the host protocol address information
 
-        /// <summary>
-        /// Gets or sets the host protocol address info.
-        /// </summary>
-        /// <value>The host protocol address info.</value>
-        public KnxHpai HostProtocolAddressInfo { get; private set; }
+        CommunicationChannel = bytes[0];
+        HostProtocolAddressInfo = KnxHpai.Parse(hpaiBytes);
+    }
 
-        public override KnxNetIpServiceType ServiceType
-        {
-            get { return KnxNetIpServiceType.ConnectionStateRequest; }
-        }
-
-        #endregion
-
-        #region Public Methods
-
-        /// <summary>
-        /// Deserializes the specified bytes.
-        /// </summary>
-        /// <param name="bytes">The bytes.</param>
-        public override void Deserialize(byte[] bytes)
-        {
-            var hpaiLength = (int)bytes[2]; // get the length for the "HostProtocolAddressInformation //
-            var hpaiBytes = new byte[hpaiLength]; // extract the hpai bytes
-            Array.Copy(bytes, 2, hpaiBytes, 0, hpaiLength); // parse the host protocol address information
-
-            this.CommunicationChannel = bytes[0];
-            this.HostProtocolAddressInfo = KnxHpai.Parse(hpaiBytes);
-        }
-
-        /// <summary>
-        /// Serialize to ByteArray.
-        /// </summary>
-        /// <param name="byteArrayBuilder">The byte array builder.</param>
-        public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
-        {
-            byteArrayBuilder.AddByte(this.CommunicationChannel).AddByte((byte)ErrorCode.NoError).Add(
-                this.HostProtocolAddressInfo.ToByteArray());
-        }
-
-        #endregion
+    /// <summary>
+    ///     Serialize to ByteArray.
+    /// </summary>
+    /// <param name="byteArrayBuilder">The byte array builder.</param>
+    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    {
+        byteArrayBuilder.AddByte(CommunicationChannel)
+            .AddByte((byte)ErrorCode.NoError)
+            .Add(
+                HostProtocolAddressInfo.ToByteArray());
     }
 }

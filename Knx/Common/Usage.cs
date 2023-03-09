@@ -1,10 +1,9 @@
-﻿namespace Knx.Common
+﻿namespace Knx.Common;
+
+public enum Usage : byte
 {
-    public enum Usage : byte
-    {
-        General,
-        FunctionBlock,
-        System,
-        Other
-    }
+    General,
+    FunctionBlock,
+    System,
+    Other
 }

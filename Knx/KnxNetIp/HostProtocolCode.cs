@@ -1,7 +1,6 @@
-﻿namespace Knx.KnxNetIp
+﻿namespace Knx.KnxNetIp;
+
+public enum HostProtocolCode
 {
-    public enum HostProtocolCode
-    {
-        IPV4_UDP = 0x01,
-    }
+    IPV4_UDP = 0x01
 }

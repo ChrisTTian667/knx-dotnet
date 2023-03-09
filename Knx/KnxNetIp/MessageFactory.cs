@@ -2,83 +2,83 @@
 using System.Net;
 using Knx.KnxNetIp.MessageBody;
 
-namespace Knx.KnxNetIp
+namespace Knx.KnxNetIp;
+
+public static class MessageFactory
 {
-    public static class MessageFactory
+    public static KnxNetIpMessage CreateTunnelingRequestMessage()
     {
-        public static KnxNetIpMessage CreateTunnelingRequestMessage()
+        return KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
+    }
+
+    public static KnxNetIpMessage GetTunnelingRequest()
+    {
+        return KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
+    }
+
+    internal static KnxNetIpMessage GetConnectRequest(IPEndPoint localEndPoint)
+    {
+        if (localEndPoint == null)
+            throw new ArgumentNullException(nameof(localEndPoint));
+
+        var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionRequest);
+        if (msg.Body is ConnectionRequest body)
         {
-            var message = KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
-            return null;
+            InitializeHostProtocolAddressInformation(body.ControlEndpoint, localEndPoint);
+            InitializeHostProtocolAddressInformation(body.DataEndpoint, localEndPoint);
+            body.Data.ConnectionType = ConnectionType.TunnelingConnection;
         }
 
-        public static KnxNetIpMessage GetTunnelingRequest()
-        {
-            return KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
-        }
+        return msg;
+    }
 
-        internal static KnxNetIpMessage GetConnectRequest(IPEndPoint localEndPoint)
-        {
-            if (localEndPoint == null)
-                throw new ArgumentNullException(nameof(localEndPoint));
+    public static KnxNetIpMessage GetSearchRequest(IPEndPoint localEndPoint)
+    {
+        if (localEndPoint == null)
+            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
 
-            var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionRequest);
-            if (msg.Body is ConnectionRequest body)
-            {
-                InitializeHostProtocolAddressInformation(body.ControlEndpoint, localEndPoint);
-                InitializeHostProtocolAddressInformation(body.DataEndpoint, localEndPoint);
-                body.Data.ConnectionType = ConnectionType.TunnelingConnection;
-            }
+        var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.SearchRequest);
+        if (msg.Body is SearchRequest body)
+            InitializeHostProtocolAddressInformation(body.Endpoint, localEndPoint);
 
-            return msg;
-        }
+        return msg;
+    }
 
-        public static KnxNetIpMessage GetSearchRequest(IPEndPoint localEndPoint)
-        {
-            if (localEndPoint == null)
-                throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
+    internal static KnxNetIpMessage GetConnectionStateRequest(IPEndPoint localEndPoint)
+    {
+        if (localEndPoint == null)
+            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
 
-            var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.SearchRequest);
-            if (msg.Body is SearchRequest body)
-                InitializeHostProtocolAddressInformation(body.Endpoint, localEndPoint);
+        var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionStateRequest);
+        if (msg.Body is ConnectionStateRequest body)
+            InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
 
-            return msg;
-        }
+        return msg;
+    }
 
-        internal static KnxNetIpMessage GetConnectionStateRequest(IPEndPoint localEndPoint)
-        {
-            if (localEndPoint == null)
-                throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
+    internal static KnxNetIpMessage GetDisconnectRequest(IPEndPoint localEndPoint, byte communicationChannel)
+    {
+        if (localEndPoint == null)
+            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
 
-            var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionStateRequest);
-            if (msg.Body is ConnectionStateRequest body)
-                InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
+        var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.DisconnectRequest);
+        if (msg.Body is DisconnectRequest body)
+            InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
 
-            return msg;
-        }
+        return msg;
+    }
 
-        internal static KnxNetIpMessage GetDisconnectRequest(IPEndPoint localEndPoint, byte communicationChannel)
-        {
-            if (localEndPoint == null)
-                throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
+    private static void InitializeHostProtocolAddressInformation(
+        KnxHpai hostProtocolAddressInfo,
+        IPEndPoint localEndPoint)
+    {
+        if (hostProtocolAddressInfo == null)
+            throw new ArgumentNullException(nameof(hostProtocolAddressInfo), "KnxHpai cannot be null");
+        if (localEndPoint == null)
+            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
 
-            var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.DisconnectRequest);
-            if (msg.Body is DisconnectRequest body)
-                InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
-
-            return msg;
-        }
-
-        private static void InitializeHostProtocolAddressInformation(KnxHpai hostProtocolAddressInfo, IPEndPoint localEndPoint)
-        {
-            if(hostProtocolAddressInfo == null)
-                throw new ArgumentNullException(nameof(hostProtocolAddressInfo), "KnxHpai cannot be null");
-            if (localEndPoint == null)
-                throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
-
-            hostProtocolAddressInfo.HostProtocolCode = HostProtocolCode.IPV4_UDP;
-            hostProtocolAddressInfo.IpAddress = localEndPoint.Address;
-            hostProtocolAddressInfo.Port = localEndPoint.Port;
-        }
+        hostProtocolAddressInfo.HostProtocolCode = HostProtocolCode.IPV4_UDP;
+        hostProtocolAddressInfo.IpAddress = localEndPoint.Address;
+        hostProtocolAddressInfo.Port = localEndPoint.Port;
     }
 }

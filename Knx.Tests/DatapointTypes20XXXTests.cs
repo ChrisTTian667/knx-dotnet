@@ -1,28 +1,26 @@
 ﻿using Knx.DatapointTypes.Dpt8BitEnumeration;
 using NUnit.Framework;
 
-namespace Knx.Tests
+namespace Knx.Tests;
+
+public class DatapointTypes20XXXTests
 {
-    
-    public class DatapointTypes20XXXTests
+    [Test]
+    public void DptSCLOModeTest()
     {
-        [Test]
-        public void DptSCLOModeTest()
-        {
-            var dpt1 = new DptSCLOMode(SCLOMode.Master);
-            var dpt2 = new DptSCLOMode(dpt1.Payload);
+        var dpt1 = new DptSCLOMode(SCLOMode.Master);
+        var dpt2 = new DptSCLOMode(dpt1.Payload);
 
-            Assert.AreEqual(SCLOMode.Master, dpt2.Value);
-        }
+        Assert.AreEqual(SCLOMode.Master, dpt2.Value);
+    }
 
-        [Test]
-        public void Dpt8BitEnumValidationTest()
-        {
-            var dpt1 = new DptSCLOMode(new [] { byte.MaxValue });
-            var dpt2 = new DptSCLOMode(new byte[] { 0 });
+    [Test]
+    public void Dpt8BitEnumValidationTest()
+    {
+        var dpt1 = new DptSCLOMode(new[] { byte.MaxValue });
+        var dpt2 = new DptSCLOMode(new byte[] { 0 });
 
-            Assert.IsFalse(dpt1.IsValueValid);
-            Assert.IsTrue(dpt2.IsValueValid);
-        }
+        Assert.IsFalse(dpt1.IsValueValid);
+        Assert.IsTrue(dpt2.IsValueValid);
     }
 }

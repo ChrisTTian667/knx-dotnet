@@ -1,1299 +1,1304 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
+    <!--
+      Microsoft ResX Schema
 
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+      Version 2.0
+
+      The primary goals of this format is to allow a simple XML format
+      that is mostly human readable. The generation and parsing of the
+      various data types are done through the TypeConverter classes
+      associated with the data types.
+
+      Example:
+
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+
+      There are any number of "resheader" rows that contain simple
+      name/value pairs.
+
+      Each data row contains a name, and value. The row also contains a
+      type or mimetype. Type corresponds to a .NET class that support
+      text/value conversion through the TypeConverter architecture.
+      Classes that don't support this are serialized and stored with the
+      mimetype set.
+
+      The mimetype is used for serialized objects, and tells the
+      ResXResourceReader how to depersist the object. This is currently not
+      extensible. For a given mimetype the value must be set accordingly:
+
+      Note - application/x-microsoft.net.object.binary.base64 is the format
+      that the ResXResourceWriter will generate, however the reader can
+      read any of the formats listed below.
+
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Enum.AlarmReaction.AlarmPositionDown" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Enum.AlarmReaction.AlarmPositionDown" xml:space="preserve">
     <value>Alarm position down</value>
   </data>
-  <data name="Enum.AlarmReaction.AlarmPositionUp" xml:space="preserve">
+    <data name="Enum.AlarmReaction.AlarmPositionUp" xml:space="preserve">
     <value>Alarm position up</value>
   </data>
-  <data name="Enum.AlarmReaction.NoAlarmIsUsed" xml:space="preserve">
+    <data name="Enum.AlarmReaction.NoAlarmIsUsed" xml:space="preserve">
     <value>No alarm is used</value>
   </data>
-  <data name="Enum.AlarmReaction.Reserved" xml:space="preserve">
+    <data name="Enum.AlarmReaction.Reserved" xml:space="preserve">
     <value>Reserved</value>
   </data>
-  <data name="Enum.OnOffAction.Off" xml:space="preserve">
+    <data name="Enum.OnOffAction.Off" xml:space="preserve">
     <value>Off</value>
   </data>
-  <data name="Enum.OnOffAction.OffOn" xml:space="preserve">
+    <data name="Enum.OnOffAction.OffOn" xml:space="preserve">
     <value>Off / On</value>
   </data>
-  <data name="Enum.OnOffAction.On" xml:space="preserve">
+    <data name="Enum.OnOffAction.On" xml:space="preserve">
     <value>On</value>
   </data>
-  <data name="Enum.OnOffAction.OnOff" xml:space="preserve">
+    <data name="Enum.OnOffAction.OnOff" xml:space="preserve">
     <value>On / Off</value>
   </data>
-  <data name="Enum.UpDownAction.Down" xml:space="preserve">
+    <data name="Enum.UpDownAction.Down" xml:space="preserve">
     <value>Down</value>
   </data>
-  <data name="Enum.UpDownAction.DownUp" xml:space="preserve">
+    <data name="Enum.UpDownAction.DownUp" xml:space="preserve">
     <value>Down / Up</value>
   </data>
-  <data name="Enum.UpDownAction.Up" xml:space="preserve">
+    <data name="Enum.UpDownAction.Up" xml:space="preserve">
     <value>Up</value>
   </data>
-  <data name="Enum.UpDownAction.UpDown" xml:space="preserve">
+    <data name="Enum.UpDownAction.UpDown" xml:space="preserve">
     <value>Up / Down</value>
   </data>
-  <data name="No" xml:space="preserve">
+    <data name="No" xml:space="preserve">
     <value>no</value>
   </data>
-  <data name="Unit.Acknowledge" xml:space="preserve">
+    <data name="Unit.Acknowledge" xml:space="preserve">
     <value>Acknowledge</value>
   </data>
-  <data name="Unit.ActiveInactive" xml:space="preserve">
+    <data name="Unit.ActiveInactive" xml:space="preserve">
     <value>Active / Inactive</value>
   </data>
-  <data name="Unit.AlarmNoAlarm" xml:space="preserve">
+    <data name="Unit.AlarmNoAlarm" xml:space="preserve">
     <value>Alarm / No alarm</value>
   </data>
-  <data name="Unit.AndOr" xml:space="preserve">
+    <data name="Unit.AndOr" xml:space="preserve">
     <value>And / Or</value>
   </data>
-  <data name="Unit.Angle" xml:space="preserve">
+    <data name="Unit.Angle" xml:space="preserve">
     <value>°</value>
   </data>
-  <data name="Unit.BlindsMode" xml:space="preserve">
+    <data name="Unit.BlindsMode" xml:space="preserve">
     <value>Blinds mode</value>
   </data>
-  <data name="Unit.CalculatedFixed" xml:space="preserve">
+    <data name="Unit.CalculatedFixed" xml:space="preserve">
     <value>Calculated / Fixed</value>
   </data>
-  <data name="Unit.CyclicallyOrStartStop" xml:space="preserve">
+    <data name="Unit.CyclicallyOrStartStop" xml:space="preserve">
     <value>Cyclically / Start Stop</value>
   </data>
-  <data name="Unit.EnableDisable" xml:space="preserve">
+    <data name="Unit.EnableDisable" xml:space="preserve">
     <value>Enable / Disable</value>
   </data>
-  <data name="Unit.HighLow" xml:space="preserve">
+    <data name="Unit.HighLow" xml:space="preserve">
     <value>High / Low</value>
   </data>
-  <data name="Unit.Hours" xml:space="preserve">
+    <data name="Unit.Hours" xml:space="preserve">
     <value>h</value>
   </data>
-  <data name="Unit.IncreaseDecrease" xml:space="preserve">
+    <data name="Unit.IncreaseDecrease" xml:space="preserve">
     <value>Increase / Decrease</value>
   </data>
-  <data name="Unit.InvertedNotInverted" xml:space="preserve">
+    <data name="Unit.InvertedNotInverted" xml:space="preserve">
     <value>Inverted / Not Inverted</value>
   </data>
-  <data name="Unit.KelvinPerPercent" xml:space="preserve">
+    <data name="Unit.KelvinPerPercent" xml:space="preserve">
     <value>K/%</value>
   </data>
-  <data name="Unit.Lux" xml:space="preserve">
+    <data name="Unit.Lux" xml:space="preserve">
     <value>Lux</value>
   </data>
-  <data name="Unit.mA" xml:space="preserve">
+    <data name="Unit.mA" xml:space="preserve">
     <value>mA</value>
   </data>
-  <data name="Unit.Milliseconds" xml:space="preserve">
+    <data name="Unit.Milliseconds" xml:space="preserve">
     <value>ms</value>
   </data>
-  <data name="Unit.Minutes" xml:space="preserve">
+    <data name="Unit.Minutes" xml:space="preserve">
     <value>min</value>
   </data>
-  <data name="Unit.None" xml:space="preserve">
-    <value />
+    <data name="Unit.None" xml:space="preserve">
+    <value/>
   </data>
-  <data name="Unit.Occupancy" xml:space="preserve">
+    <data name="Unit.Occupancy" xml:space="preserve">
     <value>Occupancy</value>
   </data>
-  <data name="Unit.OnOff" xml:space="preserve">
+    <data name="Unit.OnOff" xml:space="preserve">
     <value>On / Off</value>
   </data>
-  <data name="Unit.OpenClose" xml:space="preserve">
+    <data name="Unit.OpenClose" xml:space="preserve">
     <value>Open / Close</value>
   </data>
-  <data name="Unit.Pa" xml:space="preserve">
+    <data name="Unit.Pa" xml:space="preserve">
     <value>Pa</value>
   </data>
-  <data name="Unit.Percentage" xml:space="preserve">
+    <data name="Unit.Percentage" xml:space="preserve">
     <value>%</value>
   </data>
-  <data name="Unit.Power" xml:space="preserve">
+    <data name="Unit.Power" xml:space="preserve">
     <value>kW</value>
   </data>
-  <data name="Unit.PowerDensity" xml:space="preserve">
+    <data name="Unit.PowerDensity" xml:space="preserve">
     <value>W/m²</value>
   </data>
-  <data name="Unit.Ppm" xml:space="preserve">
+    <data name="Unit.Ppm" xml:space="preserve">
     <value>ppm</value>
   </data>
-  <data name="Unit.Pulses" xml:space="preserve">
+    <data name="Unit.Pulses" xml:space="preserve">
     <value>pulses</value>
   </data>
-  <data name="Unit.RainAmount" xml:space="preserve">
+    <data name="Unit.RainAmount" xml:space="preserve">
     <value>mL</value>
   </data>
-  <data name="Unit.RampNoRamp" xml:space="preserve">
+    <data name="Unit.RampNoRamp" xml:space="preserve">
     <value>Ramp / No Ramp</value>
   </data>
-  <data name="Unit.Reset" xml:space="preserve">
+    <data name="Unit.Reset" xml:space="preserve">
     <value>Reset command</value>
   </data>
-  <data name="Unit.SceneAB" xml:space="preserve">
+    <data name="Unit.SceneAB" xml:space="preserve">
     <value>Scene A / Scene B</value>
   </data>
-  <data name="Unit.Seconds" xml:space="preserve">
+    <data name="Unit.Seconds" xml:space="preserve">
     <value>s</value>
   </data>
-  <data name="Unit.StartStop" xml:space="preserve">
+    <data name="Unit.StartStop" xml:space="preserve">
     <value>Start / Stop</value>
   </data>
-  <data name="Unit.Temperature" xml:space="preserve">
+    <data name="Unit.Temperature" xml:space="preserve">
     <value>°C</value>
   </data>
-  <data name="Unit.TemperatureDifference" xml:space="preserve">
+    <data name="Unit.TemperatureDifference" xml:space="preserve">
     <value>K</value>
   </data>
-  <data name="Unit.TemperatureF" xml:space="preserve">
+    <data name="Unit.TemperatureF" xml:space="preserve">
     <value>°F</value>
   </data>
-  <data name="Unit.TemperatureGradient" xml:space="preserve">
+    <data name="Unit.TemperatureGradient" xml:space="preserve">
     <value>K/h</value>
   </data>
-  <data name="Unit.TimeDifferenceMS" xml:space="preserve">
+    <data name="Unit.TimeDifferenceMS" xml:space="preserve">
     <value>ms</value>
   </data>
-  <data name="Unit.TimeDifferenceS" xml:space="preserve">
+    <data name="Unit.TimeDifferenceS" xml:space="preserve">
     <value>s</value>
   </data>
-  <data name="Unit.Trigger" xml:space="preserve">
+    <data name="Unit.Trigger" xml:space="preserve">
     <value>Trigger</value>
   </data>
-  <data name="Unit.TrueFalse" xml:space="preserve">
+    <data name="Unit.TrueFalse" xml:space="preserve">
     <value>True / False</value>
   </data>
-  <data name="Unit.UpDown" xml:space="preserve">
+    <data name="Unit.UpDown" xml:space="preserve">
     <value>Up / Down</value>
   </data>
-  <data name="Unit.Voltage" xml:space="preserve">
+    <data name="Unit.Voltage" xml:space="preserve">
     <value>mV</value>
   </data>
-  <data name="Unit.VolumeFlow" xml:space="preserve">
+    <data name="Unit.VolumeFlow" xml:space="preserve">
     <value>l/h</value>
   </data>
-  <data name="Unit.WindowDoor" xml:space="preserve">
+    <data name="Unit.WindowDoor" xml:space="preserve">
     <value>Window /Door</value>
   </data>
-  <data name="Unit.WindSpeed" xml:space="preserve">
+    <data name="Unit.WindSpeed" xml:space="preserve">
     <value>m/s</value>
   </data>
-  <data name="Unit.WindSpeedKmh" xml:space="preserve">
+    <data name="Unit.WindSpeedKmh" xml:space="preserve">
     <value>km/h</value>
   </data>
-  <data name="UnitEncoding.Acknowledge" xml:space="preserve">
+    <data name="UnitEncoding.Acknowledge" xml:space="preserve">
     <value>Acknowledge</value>
   </data>
-  <data name="UnitEncoding.Active" xml:space="preserve">
+    <data name="UnitEncoding.Active" xml:space="preserve">
     <value>Active</value>
   </data>
-  <data name="UnitEncoding.Alarm" xml:space="preserve">
+    <data name="UnitEncoding.Alarm" xml:space="preserve">
     <value>Alarm</value>
   </data>
-  <data name="UnitEncoding.And" xml:space="preserve">
+    <data name="UnitEncoding.And" xml:space="preserve">
     <value>logical And</value>
   </data>
-  <data name="UnitEncoding.Calculated" xml:space="preserve">
+    <data name="UnitEncoding.Calculated" xml:space="preserve">
     <value>Calculated</value>
   </data>
-  <data name="UnitEncoding.Close" xml:space="preserve">
+    <data name="UnitEncoding.Close" xml:space="preserve">
     <value>Close</value>
   </data>
-  <data name="UnitEncoding.Cyclically" xml:space="preserve">
+    <data name="UnitEncoding.Cyclically" xml:space="preserve">
     <value>Cyclically</value>
   </data>
-  <data name="UnitEncoding.Disable" xml:space="preserve">
+    <data name="UnitEncoding.Disable" xml:space="preserve">
     <value>Disable</value>
   </data>
-  <data name="UnitEncoding.Down" xml:space="preserve">
+    <data name="UnitEncoding.Down" xml:space="preserve">
     <value>Down</value>
   </data>
-  <data name="UnitEncoding.Enable" xml:space="preserve">
+    <data name="UnitEncoding.Enable" xml:space="preserve">
     <value>Enable</value>
   </data>
-  <data name="UnitEncoding.Fixed" xml:space="preserve">
+    <data name="UnitEncoding.Fixed" xml:space="preserve">
     <value>Fixed</value>
   </data>
-  <data name="UnitEncoding.High" xml:space="preserve">
+    <data name="UnitEncoding.High" xml:space="preserve">
     <value>High</value>
   </data>
-  <data name="UnitEncoding.Inactive" xml:space="preserve">
+    <data name="UnitEncoding.Inactive" xml:space="preserve">
     <value>Inactive</value>
   </data>
-  <data name="UnitEncoding.Increase" xml:space="preserve">
+    <data name="UnitEncoding.Increase" xml:space="preserve">
     <value>Increase</value>
   </data>
-  <data name="UnitEncoding.Inverted" xml:space="preserve">
+    <data name="UnitEncoding.Inverted" xml:space="preserve">
     <value>Inverted</value>
   </data>
-  <data name="UnitEncoding.Low" xml:space="preserve">
+    <data name="UnitEncoding.Low" xml:space="preserve">
     <value>Low</value>
   </data>
-  <data name="UnitEncoding.MoveUpDownAndStepMode" xml:space="preserve">
+    <data name="UnitEncoding.MoveUpDownAndStepMode" xml:space="preserve">
     <value>Move up/down and step stop mode (blind)</value>
   </data>
-  <data name="UnitEncoding.NoAction" xml:space="preserve">
+    <data name="UnitEncoding.NoAction" xml:space="preserve">
     <value>No action</value>
   </data>
-  <data name="UnitEncoding.NoAlarm" xml:space="preserve">
+    <data name="UnitEncoding.NoAlarm" xml:space="preserve">
     <value>No alarm</value>
   </data>
-  <data name="UnitEncoding.NoRamp" xml:space="preserve">
+    <data name="UnitEncoding.NoRamp" xml:space="preserve">
     <value>No ramp</value>
   </data>
-  <data name="UnitEncoding.NotInverted" xml:space="preserve">
+    <data name="UnitEncoding.NotInverted" xml:space="preserve">
     <value>Not inverted</value>
   </data>
-  <data name="UnitEncoding.NotOccupied" xml:space="preserve">
+    <data name="UnitEncoding.NotOccupied" xml:space="preserve">
     <value>Not occupied</value>
   </data>
-  <data name="UnitEncoding.Occupied" xml:space="preserve">
+    <data name="UnitEncoding.Occupied" xml:space="preserve">
     <value>Occupied</value>
   </data>
-  <data name="UnitEncoding.Off" xml:space="preserve">
+    <data name="UnitEncoding.Off" xml:space="preserve">
     <value>Off</value>
   </data>
-  <data name="UnitEncoding.On" xml:space="preserve">
+    <data name="UnitEncoding.On" xml:space="preserve">
     <value>On</value>
   </data>
-  <data name="UnitEncoding.OnlyMoveUpDown" xml:space="preserve">
+    <data name="UnitEncoding.OnlyMoveUpDown" xml:space="preserve">
     <value>Only move up/down</value>
   </data>
-  <data name="UnitEncoding.Open" xml:space="preserve">
+    <data name="UnitEncoding.Open" xml:space="preserve">
     <value>Open</value>
   </data>
-  <data name="UnitEncoding.Or" xml:space="preserve">
+    <data name="UnitEncoding.Or" xml:space="preserve">
     <value>logical Or</value>
   </data>
-  <data name="UnitEncoding.Ramp" xml:space="preserve">
+    <data name="UnitEncoding.Ramp" xml:space="preserve">
     <value>Ramp</value>
   </data>
-  <data name="UnitEncoding.Reset" xml:space="preserve">
+    <data name="UnitEncoding.Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
-  <data name="UnitEncoding.SceneA" xml:space="preserve">
+    <data name="UnitEncoding.SceneA" xml:space="preserve">
     <value>Scene A</value>
   </data>
-  <data name="UnitEncoding.SceneB" xml:space="preserve">
+    <data name="UnitEncoding.SceneB" xml:space="preserve">
     <value>Scene B</value>
   </data>
-  <data name="UnitEncoding.Start" xml:space="preserve">
+    <data name="UnitEncoding.Start" xml:space="preserve">
     <value>Start</value>
   </data>
-  <data name="UnitEncoding.StartStop" xml:space="preserve">
+    <data name="UnitEncoding.StartStop" xml:space="preserve">
     <value>Start Stop</value>
   </data>
-  <data name="UnitEncoding.Stop" xml:space="preserve">
+    <data name="UnitEncoding.Stop" xml:space="preserve">
     <value>Stop</value>
   </data>
-  <data name="UnitEncoding.Trigger" xml:space="preserve">
+    <data name="UnitEncoding.Trigger" xml:space="preserve">
     <value>Trigger</value>
   </data>
-  <data name="UnitEncoding.True" xml:space="preserve">
+    <data name="UnitEncoding.True" xml:space="preserve">
     <value>True</value>
   </data>
-  <data name="UnitEncoding.Up" xml:space="preserve">
+    <data name="UnitEncoding.Up" xml:space="preserve">
     <value>Up</value>
   </data>
-  <data name="UnitEncoding.WindowClosed" xml:space="preserve">
+    <data name="UnitEncoding.WindowClosed" xml:space="preserve">
     <value>closed</value>
   </data>
-  <data name="UnitEncoding.WindowOpen" xml:space="preserve">
+    <data name="UnitEncoding.WindowOpen" xml:space="preserve">
     <value>open</value>
   </data>
-  <data name="UnitEncoding.Decrease" xml:space="preserve">
+    <data name="UnitEncoding.Decrease" xml:space="preserve">
     <value>Decrease</value>
   </data>
-  <data name="UnitEncofing.False" xml:space="preserve">
+    <data name="UnitEncofing.False" xml:space="preserve">
     <value>False</value>
   </data>
-  <data name="UnknownDevice" xml:space="preserve">
+    <data name="UnknownDevice" xml:space="preserve">
     <value>Unknown KNX-Gateway</value>
   </data>
-  <data name="Yes" xml:space="preserve">
+    <data name="Yes" xml:space="preserve">
     <value>yes</value>
   </data>
-  <data name="Unit.Accelaration" xml:space="preserve">
+    <data name="Unit.Accelaration" xml:space="preserve">
     <value>ms-²</value>
   </data>
-  <data name="Unit.AccelarationAngular" xml:space="preserve">
+    <data name="Unit.AccelarationAngular" xml:space="preserve">
     <value>rad s-²</value>
   </data>
-  <data name="Unit.ActivationEnergy" xml:space="preserve">
+    <data name="Unit.ActivationEnergy" xml:space="preserve">
     <value>J mol^(-1)</value>
   </data>
-  <data name="Unit.Activity" xml:space="preserve">
+    <data name="Unit.Activity" xml:space="preserve">
     <value>s^(-1)</value>
   </data>
-  <data name="Unit.AngleRad" xml:space="preserve">
+    <data name="Unit.AngleRad" xml:space="preserve">
     <value>rad</value>
   </data>
-  <data name="Unit.AngularFrequency" xml:space="preserve">
+    <data name="Unit.AngularFrequency" xml:space="preserve">
     <value>rad s^-1</value>
   </data>
-  <data name="Unit.AngularMomentum" xml:space="preserve">
+    <data name="Unit.AngularMomentum" xml:space="preserve">
     <value>J s</value>
   </data>
-  <data name="Unit.AngularVelocity" xml:space="preserve">
+    <data name="Unit.AngularVelocity" xml:space="preserve">
     <value>rad s^(-1)</value>
   </data>
-  <data name="Unit.Capacitance" xml:space="preserve">
+    <data name="Unit.Capacitance" xml:space="preserve">
     <value>F</value>
   </data>
-  <data name="Unit.ChargeDensitySurface" xml:space="preserve">
+    <data name="Unit.ChargeDensitySurface" xml:space="preserve">
     <value>C m^-2</value>
   </data>
-  <data name="Unit.ChargeDensityVolume" xml:space="preserve">
+    <data name="Unit.ChargeDensityVolume" xml:space="preserve">
     <value>C m^-3</value>
   </data>
-  <data name="Unit.Compressibillity" xml:space="preserve">
+    <data name="Unit.Compressibillity" xml:space="preserve">
     <value>m² N-1</value>
   </data>
-  <data name="Unit.Conductance" xml:space="preserve">
+    <data name="Unit.Conductance" xml:space="preserve">
     <value>S = Omega^-1</value>
   </data>
-  <data name="Unit.CounterPulses" xml:space="preserve">
+    <data name="Unit.CounterPulses" xml:space="preserve">
     <value>counter pulses</value>
   </data>
-  <data name="Unit.CubicMeter" xml:space="preserve">
+    <data name="Unit.CubicMeter" xml:space="preserve">
     <value>m³</value>
   </data>
-  <data name="Unit.Degrees" xml:space="preserve">
+    <data name="Unit.Degrees" xml:space="preserve">
     <value>°</value>
   </data>
-  <data name="Unit.Density" xml:space="preserve">
+    <data name="Unit.Density" xml:space="preserve">
     <value>kg m^-3</value>
   </data>
-  <data name="Unit.ElectricalCharge" xml:space="preserve">
+    <data name="Unit.ElectricalCharge" xml:space="preserve">
     <value>C</value>
   </data>
-  <data name="Unit.ElectricalConductivity" xml:space="preserve">
+    <data name="Unit.ElectricalConductivity" xml:space="preserve">
     <value>S m^-1</value>
   </data>
-  <data name="Unit.ElectricalCurrent" xml:space="preserve">
+    <data name="Unit.ElectricalCurrent" xml:space="preserve">
     <value>A</value>
   </data>
-  <data name="Unit.ElectricalCurrentDensity" xml:space="preserve">
+    <data name="Unit.ElectricalCurrentDensity" xml:space="preserve">
     <value>A m^-2</value>
   </data>
-  <data name="Unit.ElectricDipoleMoment" xml:space="preserve">
+    <data name="Unit.ElectricDipoleMoment" xml:space="preserve">
     <value>C m</value>
   </data>
-  <data name="Unit.ElectricFieldStrength" xml:space="preserve">
+    <data name="Unit.ElectricFieldStrength" xml:space="preserve">
     <value>V m^-1</value>
   </data>
-  <data name="Unit.ElectricFlux" xml:space="preserve">
+    <data name="Unit.ElectricFlux" xml:space="preserve">
     <value>c</value>
   </data>
-  <data name="Unit.ElectricFluxDensity" xml:space="preserve">
+    <data name="Unit.ElectricFluxDensity" xml:space="preserve">
     <value>C m^-2</value>
   </data>
-  <data name="Unit.ElectricPolarization" xml:space="preserve">
+    <data name="Unit.ElectricPolarization" xml:space="preserve">
     <value>C m^-2</value>
   </data>
-  <data name="Unit.ElectricPotential" xml:space="preserve">
+    <data name="Unit.ElectricPotential" xml:space="preserve">
     <value>V</value>
   </data>
-  <data name="Unit.ElectricPotentialDifference" xml:space="preserve">
+    <data name="Unit.ElectricPotentialDifference" xml:space="preserve">
     <value>V</value>
   </data>
-  <data name="Unit.ElectromagnetMoment" xml:space="preserve">
+    <data name="Unit.ElectromagnetMoment" xml:space="preserve">
     <value>A m²</value>
   </data>
-  <data name="Unit.ElectromotiveForce" xml:space="preserve">
+    <data name="Unit.ElectromotiveForce" xml:space="preserve">
     <value>V</value>
   </data>
-  <data name="Unit.Energy" xml:space="preserve">
+    <data name="Unit.Energy" xml:space="preserve">
     <value>J</value>
   </data>
-  <data name="Unit.Force" xml:space="preserve">
+    <data name="Unit.Force" xml:space="preserve">
     <value>N</value>
   </data>
-  <data name="Unit.Frequency" xml:space="preserve">
+    <data name="Unit.Frequency" xml:space="preserve">
     <value>Hz</value>
   </data>
-  <data name="Unit.HeatCapacity" xml:space="preserve">
+    <data name="Unit.HeatCapacity" xml:space="preserve">
     <value>J K^-1</value>
   </data>
-  <data name="Unit.HeatFlowRate" xml:space="preserve">
+    <data name="Unit.HeatFlowRate" xml:space="preserve">
     <value>W</value>
   </data>
-  <data name="Unit.HeatQuantity" xml:space="preserve">
+    <data name="Unit.HeatQuantity" xml:space="preserve">
     <value>J</value>
   </data>
-  <data name="Unit.Impendance" xml:space="preserve">
+    <data name="Unit.Impendance" xml:space="preserve">
     <value>Omega</value>
   </data>
-  <data name="Unit.Kelvin" xml:space="preserve">
+    <data name="Unit.Kelvin" xml:space="preserve">
     <value>K</value>
   </data>
-  <data name="Unit.Kilogram" xml:space="preserve">
+    <data name="Unit.Kilogram" xml:space="preserve">
     <value>kg</value>
   </data>
-  <data name="Unit.kVAh" xml:space="preserve">
+    <data name="Unit.kVAh" xml:space="preserve">
     <value>kVAh</value>
   </data>
-  <data name="Unit.kVARh" xml:space="preserve">
+    <data name="Unit.kVARh" xml:space="preserve">
     <value>kVARh</value>
   </data>
-  <data name="Unit.kWh" xml:space="preserve">
+    <data name="Unit.kWh" xml:space="preserve">
     <value>kWh</value>
   </data>
-  <data name="Unit.LightQuantity" xml:space="preserve">
+    <data name="Unit.LightQuantity" xml:space="preserve">
     <value>J or lm s</value>
   </data>
-  <data name="Unit.Luminance" xml:space="preserve">
+    <data name="Unit.Luminance" xml:space="preserve">
     <value>cd m^-2</value>
   </data>
-  <data name="Unit.LuminousFlux" xml:space="preserve">
+    <data name="Unit.LuminousFlux" xml:space="preserve">
     <value>lm</value>
   </data>
-  <data name="Unit.LuminousIntensity" xml:space="preserve">
+    <data name="Unit.LuminousIntensity" xml:space="preserve">
     <value>cd</value>
   </data>
-  <data name="Unit.MagneticFieldStrength" xml:space="preserve">
+    <data name="Unit.MagneticFieldStrength" xml:space="preserve">
     <value>A m^-1</value>
   </data>
-  <data name="Unit.MagneticFlux" xml:space="preserve">
+    <data name="Unit.MagneticFlux" xml:space="preserve">
     <value>Wb</value>
   </data>
-  <data name="Unit.MagneticFluxDensity" xml:space="preserve">
+    <data name="Unit.MagneticFluxDensity" xml:space="preserve">
     <value>T</value>
   </data>
-  <data name="Unit.MagneticMoment" xml:space="preserve">
+    <data name="Unit.MagneticMoment" xml:space="preserve">
     <value>A m²</value>
   </data>
-  <data name="Unit.MagneticPolarization" xml:space="preserve">
+    <data name="Unit.MagneticPolarization" xml:space="preserve">
     <value>T</value>
   </data>
-  <data name="Unit.Magnetization" xml:space="preserve">
+    <data name="Unit.Magnetization" xml:space="preserve">
     <value>A m^-1</value>
   </data>
-  <data name="Unit.MagnetomotiveForce" xml:space="preserve">
+    <data name="Unit.MagnetomotiveForce" xml:space="preserve">
     <value>A</value>
   </data>
-  <data name="Unit.MassFlux" xml:space="preserve">
+    <data name="Unit.MassFlux" xml:space="preserve">
     <value>kg s^-1</value>
   </data>
-  <data name="Unit.Meter" xml:space="preserve">
+    <data name="Unit.Meter" xml:space="preserve">
     <value>m</value>
   </data>
-  <data name="Unit.Mol" xml:space="preserve">
+    <data name="Unit.Mol" xml:space="preserve">
     <value>mol</value>
   </data>
-  <data name="Unit.Momentum" xml:space="preserve">
+    <data name="Unit.Momentum" xml:space="preserve">
     <value>N s^-1</value>
   </data>
-  <data name="Unit.PowerFactor" xml:space="preserve">
+    <data name="Unit.PowerFactor" xml:space="preserve">
     <value>cos</value>
   </data>
-  <data name="Unit.Reactance" xml:space="preserve">
+    <data name="Unit.Reactance" xml:space="preserve">
     <value>Omega</value>
   </data>
-  <data name="Unit.Resistance" xml:space="preserve">
+    <data name="Unit.Resistance" xml:space="preserve">
     <value>Omega</value>
   </data>
-  <data name="Unit.Resistivity" xml:space="preserve">
+    <data name="Unit.Resistivity" xml:space="preserve">
     <value>Omega m</value>
   </data>
-  <data name="Unit.Scene" xml:space="preserve">
+    <data name="Unit.Scene" xml:space="preserve">
     <value>Scene</value>
   </data>
-  <data name="Unit.SelfInductance" xml:space="preserve">
+    <data name="Unit.SelfInductance" xml:space="preserve">
     <value>H</value>
   </data>
-  <data name="Unit.SolidAngle" xml:space="preserve">
+    <data name="Unit.SolidAngle" xml:space="preserve">
     <value>sr</value>
   </data>
-  <data name="Unit.SoundIntensity" xml:space="preserve">
+    <data name="Unit.SoundIntensity" xml:space="preserve">
     <value>W m^-2</value>
   </data>
-  <data name="Unit.Speed" xml:space="preserve">
+    <data name="Unit.Speed" xml:space="preserve">
     <value>m s^-1</value>
   </data>
-  <data name="Unit.SquareMeter" xml:space="preserve">
+    <data name="Unit.SquareMeter" xml:space="preserve">
     <value>m²</value>
   </data>
-  <data name="Unit.Stress" xml:space="preserve">
+    <data name="Unit.Stress" xml:space="preserve">
     <value>Pa = N m^-2</value>
   </data>
-  <data name="Unit.SurfaceTension" xml:space="preserve">
+    <data name="Unit.SurfaceTension" xml:space="preserve">
     <value>Nm^-1</value>
   </data>
-  <data name="Unit.TermalCapacity" xml:space="preserve">
+    <data name="Unit.TermalCapacity" xml:space="preserve">
     <value>JK^-1</value>
   </data>
-  <data name="Unit.TermalConductivity" xml:space="preserve">
+    <data name="Unit.TermalConductivity" xml:space="preserve">
     <value>W m^-1 K^-1</value>
   </data>
-  <data name="Unit.ThermoelectricPower" xml:space="preserve">
+    <data name="Unit.ThermoelectricPower" xml:space="preserve">
     <value>V K^-1</value>
   </data>
-  <data name="Unit.Torque" xml:space="preserve">
+    <data name="Unit.Torque" xml:space="preserve">
     <value>Nm</value>
   </data>
-  <data name="Unit.VAh" xml:space="preserve">
+    <data name="Unit.VAh" xml:space="preserve">
     <value>VAh</value>
   </data>
-  <data name="Unit.VARh" xml:space="preserve">
+    <data name="Unit.VARh" xml:space="preserve">
     <value>VARh</value>
   </data>
-  <data name="Unit.VolumeFlux" xml:space="preserve">
+    <data name="Unit.VolumeFlux" xml:space="preserve">
     <value>m³s^-1</value>
   </data>
-  <data name="Unit.Watt" xml:space="preserve">
+    <data name="Unit.Watt" xml:space="preserve">
     <value>W</value>
   </data>
-  <data name="Unit.Weight" xml:space="preserve">
+    <data name="Unit.Weight" xml:space="preserve">
     <value>N</value>
   </data>
-  <data name="Unit.Wh" xml:space="preserve">
+    <data name="Unit.Wh" xml:space="preserve">
     <value>Wh</value>
   </data>
-  <data name="Unit.Work" xml:space="preserve">
+    <data name="Unit.Work" xml:space="preserve">
     <value>J</value>
   </data>
-  <data name="UnitEncoding.Hours" xml:space="preserve">
+    <data name="UnitEncoding.Hours" xml:space="preserve">
     <value>h</value>
   </data>
-  <data name="UnitEncoding.Minutes" xml:space="preserve">
+    <data name="UnitEncoding.Minutes" xml:space="preserve">
     <value>min</value>
   </data>
-  <data name="UnitEncoding.Seconds" xml:space="preserve">
+    <data name="UnitEncoding.Seconds" xml:space="preserve">
     <value>s</value>
   </data>
-  <data name="Dpt4ByteCombinedInfoOnOff" xml:space="preserve">
+    <data name="Dpt4ByteCombinedInfoOnOff" xml:space="preserve">
     <value>4ByteCombinedInfoOnOff</value>
   </data>
-  <data name="DptAbsoluteTemperature" xml:space="preserve">
+    <data name="DptAbsoluteTemperature" xml:space="preserve">
     <value>AbsoluteTemperature</value>
   </data>
-  <data name="DptAcceleration" xml:space="preserve">
+    <data name="DptAcceleration" xml:space="preserve">
     <value>Acceleration</value>
   </data>
-  <data name="DptAccelerationAngular" xml:space="preserve">
+    <data name="DptAccelerationAngular" xml:space="preserve">
     <value>AccelerationAngular</value>
   </data>
-  <data name="DptAcknowledge" xml:space="preserve">
+    <data name="DptAcknowledge" xml:space="preserve">
     <value>Acknowledge</value>
   </data>
-  <data name="DptActivationEnergy" xml:space="preserve">
+    <data name="DptActivationEnergy" xml:space="preserve">
     <value>ActivationEnergy</value>
   </data>
-  <data name="DptActiveEnergy" xml:space="preserve">
+    <data name="DptActiveEnergy" xml:space="preserve">
     <value>ActiveEnergy</value>
   </data>
-  <data name="DptActiveEnergy64" xml:space="preserve">
+    <data name="DptActiveEnergy64" xml:space="preserve">
     <value>ActiveEnergy64</value>
   </data>
-  <data name="DptActiveEnergykWh" xml:space="preserve">
+    <data name="DptActiveEnergykWh" xml:space="preserve">
     <value>ActiveEnergykWh</value>
   </data>
-  <data name="DptActivity" xml:space="preserve">
+    <data name="DptActivity" xml:space="preserve">
     <value>Activity</value>
   </data>
-  <data name="DptAirPressure" xml:space="preserve">
+    <data name="DptAirPressure" xml:space="preserve">
     <value>AirPressure</value>
   </data>
-  <data name="DptAirQuality" xml:space="preserve">
+    <data name="DptAirQuality" xml:space="preserve">
     <value>AirQuality</value>
   </data>
-  <data name="DptAlarm" xml:space="preserve">
+    <data name="DptAlarm" xml:space="preserve">
     <value>Alarm</value>
   </data>
-  <data name="DptAlarmClassType" xml:space="preserve">
+    <data name="DptAlarmClassType" xml:space="preserve">
     <value>AlarmClassType</value>
   </data>
-  <data name="DptAlarmControl" xml:space="preserve">
+    <data name="DptAlarmControl" xml:space="preserve">
     <value>AlarmControl</value>
   </data>
-  <data name="DptAlarmReaction" xml:space="preserve">
+    <data name="DptAlarmReaction" xml:space="preserve">
     <value>AlarmReaction</value>
   </data>
-  <data name="DptAmplitude" xml:space="preserve">
+    <data name="DptAmplitude" xml:space="preserve">
     <value>Amplitude</value>
   </data>
-  <data name="DptAngle" xml:space="preserve">
+    <data name="DptAngle" xml:space="preserve">
     <value>Angle</value>
   </data>
-  <data name="DptAngleDegree" xml:space="preserve">
+    <data name="DptAngleDegree" xml:space="preserve">
     <value>AngleDegree</value>
   </data>
-  <data name="DptAngleRad" xml:space="preserve">
+    <data name="DptAngleRad" xml:space="preserve">
     <value>AngleRad</value>
   </data>
-  <data name="DptAngularFrequency" xml:space="preserve">
+    <data name="DptAngularFrequency" xml:space="preserve">
     <value>AngularFrequency</value>
   </data>
-  <data name="DptAngularMomentum" xml:space="preserve">
+    <data name="DptAngularMomentum" xml:space="preserve">
     <value>AngularMomentum</value>
   </data>
-  <data name="DptAngularVelocity" xml:space="preserve">
+    <data name="DptAngularVelocity" xml:space="preserve">
     <value>AngularVelocity</value>
   </data>
-  <data name="DptApparantEnergy" xml:space="preserve">
+    <data name="DptApparantEnergy" xml:space="preserve">
     <value>ApparantEnergy</value>
   </data>
-  <data name="DptApparantEnergy64" xml:space="preserve">
+    <data name="DptApparantEnergy64" xml:space="preserve">
     <value>ApparantEnergy64</value>
   </data>
-  <data name="DptApparantEnergykVAh" xml:space="preserve">
+    <data name="DptApparantEnergykVAh" xml:space="preserve">
     <value>ApparantEnergykVAh</value>
   </data>
-  <data name="DptArea" xml:space="preserve">
+    <data name="DptArea" xml:space="preserve">
     <value>Area</value>
   </data>
-  <data name="DptBeafortWindForceScale" xml:space="preserve">
+    <data name="DptBeafortWindForceScale" xml:space="preserve">
     <value>BeafortWindForceScale</value>
   </data>
-  <data name="DptBinaryValue" xml:space="preserve">
+    <data name="DptBinaryValue" xml:space="preserve">
     <value>Binary Value</value>
   </data>
-  <data name="DptBinaryValueControl" xml:space="preserve">
+    <data name="DptBinaryValueControl" xml:space="preserve">
     <value>BinaryValueControl</value>
   </data>
-  <data name="DptBoolControl" xml:space="preserve">
+    <data name="DptBoolControl" xml:space="preserve">
     <value>BoolControl</value>
   </data>
-  <data name="DptBoolean" xml:space="preserve">
+    <data name="DptBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
-  <data name="DptBrightness" xml:space="preserve">
+    <data name="DptBrightness" xml:space="preserve">
     <value>Brightness</value>
   </data>
-  <data name="DptBuildingMode" xml:space="preserve">
+    <data name="DptBuildingMode" xml:space="preserve">
     <value>BuildingMode</value>
   </data>
-  <data name="DptCapacitance" xml:space="preserve">
+    <data name="DptCapacitance" xml:space="preserve">
     <value>Capacitance</value>
   </data>
-  <data name="DptCharackterAscii" xml:space="preserve">
+    <data name="DptCharackterAscii" xml:space="preserve">
     <value>CharackterAscii</value>
   </data>
-  <data name="DptCharackter_8859_1" xml:space="preserve">
+    <data name="DptCharackter_8859_1" xml:space="preserve">
     <value>Charackter_8859_1</value>
   </data>
-  <data name="DptChargeDensitySurface" xml:space="preserve">
+    <data name="DptChargeDensitySurface" xml:space="preserve">
     <value>ChargeDensitySurface</value>
   </data>
-  <data name="DptChargeDensityVolume" xml:space="preserve">
+    <data name="DptChargeDensityVolume" xml:space="preserve">
     <value>ChargeDensityVolume</value>
   </data>
-  <data name="DptCommonTemperature" xml:space="preserve">
+    <data name="DptCommonTemperature" xml:space="preserve">
     <value>CommonTemperature</value>
   </data>
-  <data name="DptCompressibillity" xml:space="preserve">
+    <data name="DptCompressibillity" xml:space="preserve">
     <value>Compressibillity</value>
   </data>
-  <data name="DptConductance" xml:space="preserve">
+    <data name="DptConductance" xml:space="preserve">
     <value>Conductance</value>
   </data>
-  <data name="DptControlBlinds" xml:space="preserve">
+    <data name="DptControlBlinds" xml:space="preserve">
     <value>ControlBlinds</value>
   </data>
-  <data name="DptControlDimming" xml:space="preserve">
+    <data name="DptControlDimming" xml:space="preserve">
     <value>ControlDimming</value>
   </data>
-  <data name="DptDate" xml:space="preserve">
+    <data name="DptDate" xml:space="preserve">
     <value>Date</value>
   </data>
-  <data name="DptDateTime" xml:space="preserve">
+    <data name="DptDateTime" xml:space="preserve">
     <value>DateTime</value>
   </data>
-  <data name="DptDecimalFactor" xml:space="preserve">
+    <data name="DptDecimalFactor" xml:space="preserve">
     <value>DecimalFactor</value>
   </data>
-  <data name="DptDeltaTimePeriod100Milliseconds" xml:space="preserve">
+    <data name="DptDeltaTimePeriod100Milliseconds" xml:space="preserve">
     <value>DeltaTimePeriod100Milliseconds</value>
   </data>
-  <data name="DptDeltaTimePeriod10Milliseconds" xml:space="preserve">
+    <data name="DptDeltaTimePeriod10Milliseconds" xml:space="preserve">
     <value>DeltaTimePeriod10Milliseconds</value>
   </data>
-  <data name="DptDeltaTimePeriodHours" xml:space="preserve">
+    <data name="DptDeltaTimePeriodHours" xml:space="preserve">
     <value>DeltaTimePeriodHours</value>
   </data>
-  <data name="DptDeltaTimePeriodMilliseconds" xml:space="preserve">
+    <data name="DptDeltaTimePeriodMilliseconds" xml:space="preserve">
     <value>DeltaTimePeriodMilliseconds</value>
   </data>
-  <data name="DptDeltaTimePeriodMinutes" xml:space="preserve">
+    <data name="DptDeltaTimePeriodMinutes" xml:space="preserve">
     <value>DeltaTimePeriodMinutes</value>
   </data>
-  <data name="DptDeltaTimePeriodSeconds" xml:space="preserve">
+    <data name="DptDeltaTimePeriodSeconds" xml:space="preserve">
     <value>DeltaTimePeriodSeconds</value>
   </data>
-  <data name="DptDensity" xml:space="preserve">
+    <data name="DptDensity" xml:space="preserve">
     <value>Density</value>
   </data>
-  <data name="DptDeviceControl" xml:space="preserve">
+    <data name="DptDeviceControl" xml:space="preserve">
     <value>DeviceControl</value>
   </data>
-  <data name="DptDimSendStyle" xml:space="preserve">
+    <data name="DptDimSendStyle" xml:space="preserve">
     <value>DimSendStyle</value>
   </data>
-  <data name="DptElectricalConductivity" xml:space="preserve">
+    <data name="DptElectricalConductivity" xml:space="preserve">
     <value>ElectricalConductivity</value>
   </data>
-  <data name="DptElectricalCurrent" xml:space="preserve">
+    <data name="DptElectricalCurrent" xml:space="preserve">
     <value>ElectricalCurrent</value>
   </data>
-  <data name="DptElectricCharge" xml:space="preserve">
+    <data name="DptElectricCharge" xml:space="preserve">
     <value>ElectricCharge</value>
   </data>
-  <data name="DptElectricCurrent" xml:space="preserve">
+    <data name="DptElectricCurrent" xml:space="preserve">
     <value>ElectricCurrent</value>
   </data>
-  <data name="DptElectricCurrentDensity" xml:space="preserve">
+    <data name="DptElectricCurrentDensity" xml:space="preserve">
     <value>ElectricCurrentDensity</value>
   </data>
-  <data name="DptElectricDipoleMoment" xml:space="preserve">
+    <data name="DptElectricDipoleMoment" xml:space="preserve">
     <value>ElectricDipoleMoment</value>
   </data>
-  <data name="DptElectricDisplacement" xml:space="preserve">
+    <data name="DptElectricDisplacement" xml:space="preserve">
     <value>ElectricDisplacement</value>
   </data>
-  <data name="DptElectricFieldStrength" xml:space="preserve">
+    <data name="DptElectricFieldStrength" xml:space="preserve">
     <value>ElectricFieldStrength</value>
   </data>
-  <data name="DptElectricFlux" xml:space="preserve">
+    <data name="DptElectricFlux" xml:space="preserve">
     <value>ElectricFlux</value>
   </data>
-  <data name="DptElectricFluxDensity" xml:space="preserve">
+    <data name="DptElectricFluxDensity" xml:space="preserve">
     <value>ElectricFluxDensity</value>
   </data>
-  <data name="DptElectricPolarization" xml:space="preserve">
+    <data name="DptElectricPolarization" xml:space="preserve">
     <value>ElectricPolarization</value>
   </data>
-  <data name="DptElectricPotential" xml:space="preserve">
+    <data name="DptElectricPotential" xml:space="preserve">
     <value>ElectricPotential</value>
   </data>
-  <data name="DptElectricPotentialDifference" xml:space="preserve">
+    <data name="DptElectricPotentialDifference" xml:space="preserve">
     <value>ElectricPotentialDifference</value>
   </data>
-  <data name="DptElectromagnetMoment" xml:space="preserve">
+    <data name="DptElectromagnetMoment" xml:space="preserve">
     <value>ElectromagnetMoment</value>
   </data>
-  <data name="DptElectromotiveForce" xml:space="preserve">
+    <data name="DptElectromotiveForce" xml:space="preserve">
     <value>ElectromotiveForce</value>
   </data>
-  <data name="DptEnable" xml:space="preserve">
+    <data name="DptEnable" xml:space="preserve">
     <value>Enable</value>
   </data>
-  <data name="DptEnableControl" xml:space="preserve">
+    <data name="DptEnableControl" xml:space="preserve">
     <value>EnableControl</value>
   </data>
-  <data name="DptEnergy" xml:space="preserve">
+    <data name="DptEnergy" xml:space="preserve">
     <value>Energy</value>
   </data>
-  <data name="DptErrorClassHVAC" xml:space="preserve">
+    <data name="DptErrorClassHVAC" xml:space="preserve">
     <value>ErrorClassHVAC</value>
   </data>
-  <data name="DptErrorClassSystem" xml:space="preserve">
+    <data name="DptErrorClassSystem" xml:space="preserve">
     <value>ErrorClassSystem</value>
   </data>
-  <data name="DptForce" xml:space="preserve">
+    <data name="DptForce" xml:space="preserve">
     <value>Force</value>
   </data>
-  <data name="DptFrequency" xml:space="preserve">
+    <data name="DptFrequency" xml:space="preserve">
     <value>Frequency</value>
   </data>
-  <data name="DptGeneralStatus" xml:space="preserve">
+    <data name="DptGeneralStatus" xml:space="preserve">
     <value>GeneralStatus</value>
   </data>
-  <data name="DptHeatCapacity" xml:space="preserve">
+    <data name="DptHeatCapacity" xml:space="preserve">
     <value>HeatCapacity</value>
   </data>
-  <data name="DptHeatFlowRate" xml:space="preserve">
+    <data name="DptHeatFlowRate" xml:space="preserve">
     <value>HeatFlowRate</value>
   </data>
-  <data name="DptHeatQuantity" xml:space="preserve">
+    <data name="DptHeatQuantity" xml:space="preserve">
     <value>HeatQuantity</value>
   </data>
-  <data name="DptHumidity" xml:space="preserve">
+    <data name="DptHumidity" xml:space="preserve">
     <value>Humidity</value>
   </data>
-  <data name="DptImpendance" xml:space="preserve">
+    <data name="DptImpendance" xml:space="preserve">
     <value>Impendance</value>
   </data>
-  <data name="DptInputSource" xml:space="preserve">
+    <data name="DptInputSource" xml:space="preserve">
     <value>InputSource</value>
   </data>
-  <data name="DptInvert" xml:space="preserve">
+    <data name="DptInvert" xml:space="preserve">
     <value>Invert</value>
   </data>
-  <data name="DptInvertedControl" xml:space="preserve">
+    <data name="DptInvertedControl" xml:space="preserve">
     <value>InvertedControl</value>
   </data>
-  <data name="DptKelvinPerPercent" xml:space="preserve">
+    <data name="DptKelvinPerPercent" xml:space="preserve">
     <value>KelvinPerPercent</value>
   </data>
-  <data name="DptLength" xml:space="preserve">
+    <data name="DptLength" xml:space="preserve">
     <value>Length</value>
   </data>
-  <data name="DptLengthInMillimeter" xml:space="preserve">
+    <data name="DptLengthInMillimeter" xml:space="preserve">
     <value>LengthInMillimeter</value>
   </data>
-  <data name="DptLightApplicationArea" xml:space="preserve">
+    <data name="DptLightApplicationArea" xml:space="preserve">
     <value>LightApplicationArea</value>
   </data>
-  <data name="DptLightApplicationMode" xml:space="preserve">
+    <data name="DptLightApplicationMode" xml:space="preserve">
     <value>LightApplicationMode</value>
   </data>
-  <data name="DptLightIntensity" xml:space="preserve">
+    <data name="DptLightIntensity" xml:space="preserve">
     <value>LightIntensity</value>
   </data>
-  <data name="DptLightQuantity" xml:space="preserve">
+    <data name="DptLightQuantity" xml:space="preserve">
     <value>LightQuantity</value>
   </data>
-  <data name="DptLogicalFunction" xml:space="preserve">
+    <data name="DptLogicalFunction" xml:space="preserve">
     <value>LogicalFunction</value>
   </data>
-  <data name="DptLongDeltaTimeSec" xml:space="preserve">
+    <data name="DptLongDeltaTimeSec" xml:space="preserve">
     <value>LongDeltaTimeSec</value>
   </data>
-  <data name="DptLuminance" xml:space="preserve">
+    <data name="DptLuminance" xml:space="preserve">
     <value>Luminance</value>
   </data>
-  <data name="DptLuminousFlux" xml:space="preserve">
+    <data name="DptLuminousFlux" xml:space="preserve">
     <value>LuminousFlux</value>
   </data>
-  <data name="DptLuminousIntensity" xml:space="preserve">
+    <data name="DptLuminousIntensity" xml:space="preserve">
     <value>LuminousIntensity</value>
   </data>
-  <data name="DptMagneticFieldStrength" xml:space="preserve">
+    <data name="DptMagneticFieldStrength" xml:space="preserve">
     <value>MagneticFieldStrength</value>
   </data>
-  <data name="DptMagneticFlux" xml:space="preserve">
+    <data name="DptMagneticFlux" xml:space="preserve">
     <value>MagneticFlux</value>
   </data>
-  <data name="DptMagneticFluxDensity" xml:space="preserve">
+    <data name="DptMagneticFluxDensity" xml:space="preserve">
     <value>MagneticFluxDensity</value>
   </data>
-  <data name="DptMagneticMoment" xml:space="preserve">
+    <data name="DptMagneticMoment" xml:space="preserve">
     <value>MagneticMoment</value>
   </data>
-  <data name="DptMagneticPolarization" xml:space="preserve">
+    <data name="DptMagneticPolarization" xml:space="preserve">
     <value>MagneticPolarization</value>
   </data>
-  <data name="DptMagnetization" xml:space="preserve">
+    <data name="DptMagnetization" xml:space="preserve">
     <value>Magnetization</value>
   </data>
-  <data name="DptMagnetomotiveForce" xml:space="preserve">
+    <data name="DptMagnetomotiveForce" xml:space="preserve">
     <value>MagnetomotiveForce</value>
   </data>
-  <data name="DptMass" xml:space="preserve">
+    <data name="DptMass" xml:space="preserve">
     <value>Mass</value>
   </data>
-  <data name="DptMassFlux" xml:space="preserve">
+    <data name="DptMassFlux" xml:space="preserve">
     <value>MassFlux</value>
   </data>
-  <data name="DptMol" xml:space="preserve">
+    <data name="DptMol" xml:space="preserve">
     <value>Mol</value>
   </data>
-  <data name="DptMomentum" xml:space="preserve">
+    <data name="DptMomentum" xml:space="preserve">
     <value>Momentum</value>
   </data>
-  <data name="DptOccMode" xml:space="preserve">
+    <data name="DptOccMode" xml:space="preserve">
     <value>OccMode</value>
   </data>
-  <data name="DptOccupancy" xml:space="preserve">
+    <data name="DptOccupancy" xml:space="preserve">
     <value>Occupancy</value>
   </data>
-  <data name="DptOnOffAction" xml:space="preserve">
+    <data name="DptOnOffAction" xml:space="preserve">
     <value>OnOffAction</value>
   </data>
-  <data name="DptOpenClose" xml:space="preserve">
+    <data name="DptOpenClose" xml:space="preserve">
     <value>OpenClose</value>
   </data>
-  <data name="DptOpenCloseControl" xml:space="preserve">
+    <data name="DptOpenCloseControl" xml:space="preserve">
     <value>OpenCloseControl</value>
   </data>
-  <data name="DptPercentU8" xml:space="preserve">
+    <data name="DptPercentU8" xml:space="preserve">
     <value>PercentU8</value>
   </data>
-  <data name="DptPercentV16" xml:space="preserve">
+    <data name="DptPercentV16" xml:space="preserve">
     <value>PercentV16</value>
   </data>
-  <data name="DptPercentV8" xml:space="preserve">
+    <data name="DptPercentV8" xml:space="preserve">
     <value>PercentV8</value>
   </data>
-  <data name="DptPhaseAngleDeg" xml:space="preserve">
+    <data name="DptPhaseAngleDeg" xml:space="preserve">
     <value>PhaseAngleDeg</value>
   </data>
-  <data name="DptPhaseAngleRad" xml:space="preserve">
+    <data name="DptPhaseAngleRad" xml:space="preserve">
     <value>PhaseAngleRad</value>
   </data>
-  <data name="DptPower" xml:space="preserve">
+    <data name="DptPower" xml:space="preserve">
     <value>Power</value>
   </data>
-  <data name="DptPower1" xml:space="preserve">
+    <data name="DptPower1" xml:space="preserve">
     <value>Power</value>
   </data>
-  <data name="DptPowerDensity" xml:space="preserve">
+    <data name="DptPowerDensity" xml:space="preserve">
     <value>PowerDensity</value>
   </data>
-  <data name="DptPowerFactor" xml:space="preserve">
+    <data name="DptPowerFactor" xml:space="preserve">
     <value>PowerFactor</value>
   </data>
-  <data name="DptPressure" xml:space="preserve">
+    <data name="DptPressure" xml:space="preserve">
     <value>Pressure</value>
   </data>
-  <data name="DptPriority" xml:space="preserve">
+    <data name="DptPriority" xml:space="preserve">
     <value>Priority</value>
   </data>
-  <data name="DptPropDataType" xml:space="preserve">
+    <data name="DptPropDataType" xml:space="preserve">
     <value>PropDataType</value>
   </data>
-  <data name="DptPSUMode" xml:space="preserve">
+    <data name="DptPSUMode" xml:space="preserve">
     <value>PSUMode</value>
   </data>
-  <data name="DptRainAmount" xml:space="preserve">
+    <data name="DptRainAmount" xml:space="preserve">
     <value>RainAmount</value>
   </data>
-  <data name="DptRamp" xml:space="preserve">
+    <data name="DptRamp" xml:space="preserve">
     <value>Ramp</value>
   </data>
-  <data name="DptRampControl" xml:space="preserve">
+    <data name="DptRampControl" xml:space="preserve">
     <value>RampControl</value>
   </data>
-  <data name="DptReactance" xml:space="preserve">
+    <data name="DptReactance" xml:space="preserve">
     <value>Reactance</value>
   </data>
-  <data name="DptReactiveEnergy" xml:space="preserve">
+    <data name="DptReactiveEnergy" xml:space="preserve">
     <value>ReactiveEnergy</value>
   </data>
-  <data name="DptReactiveEnergy64" xml:space="preserve">
+    <data name="DptReactiveEnergy64" xml:space="preserve">
     <value>ReactiveEnergy64</value>
   </data>
-  <data name="DptReactiveEnergykVARh" xml:space="preserve">
+    <data name="DptReactiveEnergykVARh" xml:space="preserve">
     <value>ReactiveEnergykVARh</value>
   </data>
-  <data name="DptReset" xml:space="preserve">
+    <data name="DptReset" xml:space="preserve">
     <value>Reset</value>
   </data>
-  <data name="DptResistance" xml:space="preserve">
+    <data name="DptResistance" xml:space="preserve">
     <value>Resistance</value>
   </data>
-  <data name="DptResistivity" xml:space="preserve">
+    <data name="DptResistivity" xml:space="preserve">
     <value>Resistivity</value>
   </data>
-  <data name="DptRotationAngle" xml:space="preserve">
+    <data name="DptRotationAngle" xml:space="preserve">
     <value>RotationAngle</value>
   </data>
-  <data name="DptScaling" xml:space="preserve">
+    <data name="DptScaling" xml:space="preserve">
     <value>Scaling</value>
   </data>
-  <data name="DptScene" xml:space="preserve">
+    <data name="DptScene" xml:space="preserve">
     <value>Scene</value>
   </data>
-  <data name="DptSceneAB" xml:space="preserve">
+    <data name="DptSceneAB" xml:space="preserve">
     <value>SceneAB</value>
   </data>
-  <data name="DptSceneControl" xml:space="preserve">
+    <data name="DptSceneControl" xml:space="preserve">
     <value>SceneControl</value>
   </data>
-  <data name="DptSCLOMode" xml:space="preserve">
+    <data name="DptSCLOMode" xml:space="preserve">
     <value>SCLOMode</value>
   </data>
-  <data name="DptSelfInductance" xml:space="preserve">
+    <data name="DptSelfInductance" xml:space="preserve">
     <value>SelfInductance</value>
   </data>
-  <data name="DptSensorSelect" xml:space="preserve">
+    <data name="DptSensorSelect" xml:space="preserve">
     <value>SensorSelect</value>
   </data>
-  <data name="DptShutterBlindsMode" xml:space="preserve">
+    <data name="DptShutterBlindsMode" xml:space="preserve">
     <value>ShutterBlindsMode</value>
   </data>
-  <data name="DptSolidAngle" xml:space="preserve">
+    <data name="DptSolidAngle" xml:space="preserve">
     <value>SolidAngle</value>
   </data>
-  <data name="DptSoundIntensity" xml:space="preserve">
+    <data name="DptSoundIntensity" xml:space="preserve">
     <value>SoundIntensity</value>
   </data>
-  <data name="DptSpeed" xml:space="preserve">
+    <data name="DptSpeed" xml:space="preserve">
     <value>Speed</value>
   </data>
-  <data name="DptStartStop" xml:space="preserve">
+    <data name="DptStartStop" xml:space="preserve">
     <value>StartStop</value>
   </data>
-  <data name="DptStartStopControl" xml:space="preserve">
+    <data name="DptStartStopControl" xml:space="preserve">
     <value>StartStopControl</value>
   </data>
-  <data name="DptState" xml:space="preserve">
+    <data name="DptState" xml:space="preserve">
     <value>State</value>
   </data>
-  <data name="DptStateControl" xml:space="preserve">
+    <data name="DptStateControl" xml:space="preserve">
     <value>StateControl</value>
   </data>
-  <data name="DptStatusWithMode3" xml:space="preserve">
+    <data name="DptStatusWithMode3" xml:space="preserve">
     <value>StatusWithMode3</value>
   </data>
-  <data name="DptStep" xml:space="preserve">
+    <data name="DptStep" xml:space="preserve">
     <value>Step</value>
   </data>
-  <data name="DptStepControl" xml:space="preserve">
+    <data name="DptStepControl" xml:space="preserve">
     <value>StepControl</value>
   </data>
-  <data name="DptStress" xml:space="preserve">
+    <data name="DptStress" xml:space="preserve">
     <value>Stress</value>
   </data>
-  <data name="DptStringAscii" xml:space="preserve">
+    <data name="DptStringAscii" xml:space="preserve">
     <value>StringAscii</value>
   </data>
-  <data name="DptString_8859_1" xml:space="preserve">
+    <data name="DptString_8859_1" xml:space="preserve">
     <value>String_8859_1</value>
   </data>
-  <data name="DptSurfaceTension" xml:space="preserve">
+    <data name="DptSurfaceTension" xml:space="preserve">
     <value>SurfaceTension</value>
   </data>
-  <data name="DptSwitch" xml:space="preserve">
+    <data name="DptSwitch" xml:space="preserve">
     <value>Switch</value>
   </data>
-  <data name="DptSwitchControl" xml:space="preserve">
+    <data name="DptSwitchControl" xml:space="preserve">
     <value>SwitchControl</value>
   </data>
-  <data name="DptTariff" xml:space="preserve">
+    <data name="DptTariff" xml:space="preserve">
     <value>Tariff</value>
   </data>
-  <data name="DptTemperature" xml:space="preserve">
+    <data name="DptTemperature" xml:space="preserve">
     <value>Temperature</value>
   </data>
-  <data name="DptTemperatureDifference" xml:space="preserve">
+    <data name="DptTemperatureDifference" xml:space="preserve">
     <value>TemperatureDifference</value>
   </data>
-  <data name="DptTemperatureDifference1" xml:space="preserve">
+    <data name="DptTemperatureDifference1" xml:space="preserve">
     <value>TemperatureDifference</value>
   </data>
-  <data name="DptTemperatureF" xml:space="preserve">
+    <data name="DptTemperatureF" xml:space="preserve">
     <value>TemperatureF</value>
   </data>
-  <data name="DptTemperatureGradient" xml:space="preserve">
+    <data name="DptTemperatureGradient" xml:space="preserve">
     <value>TemperatureGradient</value>
   </data>
-  <data name="DptTermalCapacity" xml:space="preserve">
+    <data name="DptTermalCapacity" xml:space="preserve">
     <value>TermalCapacity</value>
   </data>
-  <data name="DptTermalConductivity" xml:space="preserve">
+    <data name="DptTermalConductivity" xml:space="preserve">
     <value>TermalConductivity</value>
   </data>
-  <data name="DptThermoelectricPower" xml:space="preserve">
+    <data name="DptThermoelectricPower" xml:space="preserve">
     <value>ThermoelectricPower</value>
   </data>
-  <data name="DptTime" xml:space="preserve">
+    <data name="DptTime" xml:space="preserve">
     <value>Time</value>
   </data>
-  <data name="DptTimeDelay" xml:space="preserve">
+    <data name="DptTimeDelay" xml:space="preserve">
     <value>TimeDelay</value>
   </data>
-  <data name="DptTimeDifference" xml:space="preserve">
+    <data name="DptTimeDifference" xml:space="preserve">
     <value>TimeDifference</value>
   </data>
-  <data name="DptTimePeriod100Milliseconds" xml:space="preserve">
+    <data name="DptTimePeriod100Milliseconds" xml:space="preserve">
     <value>TimePeriod100Milliseconds</value>
   </data>
-  <data name="DptTimePeriod10Milliseconds" xml:space="preserve">
+    <data name="DptTimePeriod10Milliseconds" xml:space="preserve">
     <value>TimePeriod10Milliseconds</value>
   </data>
-  <data name="DptTimePeriodHours" xml:space="preserve">
+    <data name="DptTimePeriodHours" xml:space="preserve">
     <value>TimePeriodHours</value>
   </data>
-  <data name="DptTimePeriodMilliseconds" xml:space="preserve">
+    <data name="DptTimePeriodMilliseconds" xml:space="preserve">
     <value>TimePeriodMilliseconds</value>
   </data>
-  <data name="DptTimePeriodMinutes" xml:space="preserve">
+    <data name="DptTimePeriodMinutes" xml:space="preserve">
     <value>TimePeriodMinutes</value>
   </data>
-  <data name="DptTimePeriodSeconds" xml:space="preserve">
+    <data name="DptTimePeriodSeconds" xml:space="preserve">
     <value>TimePeriodSeconds</value>
   </data>
-  <data name="DptTorque" xml:space="preserve">
+    <data name="DptTorque" xml:space="preserve">
     <value>Torque</value>
   </data>
-  <data name="DptTrigger" xml:space="preserve">
+    <data name="DptTrigger" xml:space="preserve">
     <value>Trigger</value>
   </data>
-  <data name="DptUEICurrentmA" xml:space="preserve">
+    <data name="DptUEICurrentmA" xml:space="preserve">
     <value>UEICurrentmA</value>
   </data>
-  <data name="DptUpDown" xml:space="preserve">
+    <data name="DptUpDown" xml:space="preserve">
     <value>UpDown</value>
   </data>
-  <data name="DptUpDownAction" xml:space="preserve">
+    <data name="DptUpDownAction" xml:space="preserve">
     <value>UpDownAction</value>
   </data>
-  <data name="DptUpDownControl" xml:space="preserve">
+    <data name="DptUpDownControl" xml:space="preserve">
     <value>UpDownControl</value>
   </data>
-  <data name="DptValue1Count" xml:space="preserve">
+    <data name="DptValue1Count" xml:space="preserve">
     <value>Value1Count</value>
   </data>
-  <data name="DptValue1UCount" xml:space="preserve">
+    <data name="DptValue1UCount" xml:space="preserve">
     <value>Value1UCount</value>
   </data>
-  <data name="DptValue2Count" xml:space="preserve">
+    <data name="DptValue2Count" xml:space="preserve">
     <value>Value2Count</value>
   </data>
-  <data name="DptValue2UCount" xml:space="preserve">
+    <data name="DptValue2UCount" xml:space="preserve">
     <value>Value2UCount</value>
   </data>
-  <data name="DptValue4Count" xml:space="preserve">
+    <data name="DptValue4Count" xml:space="preserve">
     <value>Value4Count</value>
   </data>
-  <data name="DptValue4UCount" xml:space="preserve">
+    <data name="DptValue4UCount" xml:space="preserve">
     <value>Value4UCount</value>
   </data>
-  <data name="DptVariableString_8859_1" xml:space="preserve">
+    <data name="DptVariableString_8859_1" xml:space="preserve">
     <value>VariableString_8859_1</value>
   </data>
-  <data name="DptVariableString_UTF8" xml:space="preserve">
+    <data name="DptVariableString_UTF8" xml:space="preserve">
     <value>VariableString_UTF8</value>
   </data>
-  <data name="DptVoltage" xml:space="preserve">
+    <data name="DptVoltage" xml:space="preserve">
     <value>Voltage</value>
   </data>
-  <data name="DptVolume" xml:space="preserve">
+    <data name="DptVolume" xml:space="preserve">
     <value>Volume</value>
   </data>
-  <data name="DptVolumeFlow" xml:space="preserve">
+    <data name="DptVolumeFlow" xml:space="preserve">
     <value>VolumeFlow</value>
   </data>
-  <data name="DptVolumeFlux" xml:space="preserve">
+    <data name="DptVolumeFlux" xml:space="preserve">
     <value>VolumeFlux</value>
   </data>
-  <data name="DptWeight" xml:space="preserve">
+    <data name="DptWeight" xml:space="preserve">
     <value>Weight</value>
   </data>
-  <data name="DptWindowDoor" xml:space="preserve">
+    <data name="DptWindowDoor" xml:space="preserve">
     <value>WindowDoor</value>
   </data>
-  <data name="DptWindSpeed" xml:space="preserve">
+    <data name="DptWindSpeed" xml:space="preserve">
     <value>WindSpeed</value>
   </data>
-  <data name="DptWindSpeedKmh" xml:space="preserve">
+    <data name="DptWindSpeedKmh" xml:space="preserve">
     <value>WindSpeedKmh</value>
   </data>
-  <data name="DptWork" xml:space="preserve">
+    <data name="DptWork" xml:space="preserve">
     <value>Work</value>
   </data>
-  <data name="Enum_NothingSelected" xml:space="preserve">
+    <data name="Enum_NothingSelected" xml:space="preserve">
     <value>Nothing selected</value>
   </data>
- </root>
+</root>

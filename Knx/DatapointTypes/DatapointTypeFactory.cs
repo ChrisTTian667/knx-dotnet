@@ -2,63 +2,71 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes
+namespace Knx.DatapointTypes;
+
+public static class DatapointTypeFactory
 {
-    public static class DatapointTypeFactory
+    private static readonly object CreationLock = new();
+
+    public static T Create<T>() where T : DatapointType
     {
-        private static readonly object CreationLock = new object();
+        return (T)Create(typeof(T));
+    }
 
-        #region Public Methods
+    public static DatapointType Create(string id, byte[] payload = null)
+    {
+        return Create(GetTypeById(id), payload);
+    }
 
-        public static T Create<T>() where T : DatapointType
+    public static DatapointType Create(Type datapointTypeType, byte[] value = null)
+    {
+        lock (CreationLock)
         {
-            return (T)Create(typeof(T));
+            var dataLengthAttribute =
+                (DataLengthAttribute)datapointTypeType.GetCustomAttributes(typeof(DataLengthAttribute), true).First();
+            var dataLength = dataLengthAttribute.MinimumRequiredBytes;
+            if (dataLength < 0)
+                dataLength = 0;
+
+            var defaultPayload = new byte[dataLength];
+
+            if (!(Activator.CreateInstance(datapointTypeType, defaultPayload) is DatapointType instance))
+                throw new InvalidOperationException($"The type '{datapointTypeType}' is no {typeof(DatapointType)}");
+
+            if (value != null)
+                instance.Payload = value;
+
+            return instance;
         }
+    }
 
-        public static DatapointType Create(string id)
-        {
-            return Create(GetTypeById(id));
-        }
+    public static IEnumerable<string> GetSupportedDatapointTypeIds()
+    {
+        return GetDatapointTypes()
+            .Select(
+                dptType =>
+                    ((DatapointTypeAttribute)dptType.GetCustomAttributes(typeof(DatapointTypeAttribute), false).First())
+                    .ToString());
+    }
 
-        public static DatapointType Create(Type datapointTypeType)
-        {
-            lock (CreationLock)
-            {
-                var dataLengthAttribute = datapointTypeType.GetFirstCustomAttribute<DataLengthAttribute>(true);
-                var dataLength = dataLengthAttribute.MinimumRequiredBytes;
-                if (dataLength < 0)
-                    dataLength = 0;
-                
-                var defaultPayload = new byte[dataLength];
+    private static IEnumerable<Type> GetDatapointTypes()
+    {
+        return typeof(DatapointType).GetTypeInfo()
+            .Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
+            .Where(t => !t.IsAbstract)
+            .Select(ti => ti.AsType());
+    }
 
-                if (!(Activator.CreateInstance(datapointTypeType, defaultPayload) is DatapointType instance))
-                    throw new InvalidOperationException($"The type '{datapointTypeType}' is no {typeof(DatapointType)}");
+    private static Type GetTypeById(string id)
+    {
+        var type = GetDatapointTypes()
+            .FirstOrDefault(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), true).First().ToString() == id);
 
-                return instance;
-            }
-        }
+        if (type == null)
+            throw new Exception($"Unable to find DatapointType with id: '{id}'");
 
-        #endregion
-
-        #region Methods
-
-        private static IEnumerable<Type> GetDatapointTypes()
-        {
-            return typeof(DatapointType).GetTypeInfo().Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any()).Where(t => !t.IsAbstract).Select(ti => ti.AsType());
-        }
-
-        private static Type GetTypeById(string id)
-        {
-            var type = GetDatapointTypes().FirstOrDefault(t => t.GetFirstCustomAttribute<DatapointTypeAttribute>(true).ToString() == id);
-            if (type == null)
-                throw new Exception($"Unable to find DatapointType with id: '{id}'");
-
-            return type;
-        }
-
-        #endregion
+        return type;
     }
 }

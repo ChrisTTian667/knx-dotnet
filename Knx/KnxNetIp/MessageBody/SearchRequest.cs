@@ -1,34 +1,26 @@
 ﻿using Knx.Common;
 
-namespace Knx.KnxNetIp.MessageBody
+namespace Knx.KnxNetIp.MessageBody;
+
+[ResponseMessage(typeof(SearchResponse))]
+public class SearchRequest : TunnelingMessageBody
 {
-    [ResponseMessage(typeof(SearchResponse))]
-    public class SearchRequest : TunnelingMessageBody
+    public SearchRequest()
     {
-        public SearchRequest()
-        {
-            Endpoint = new KnxHpai();
-        }
+        Endpoint = new KnxHpai();
+    }
 
-        public override KnxNetIpServiceType ServiceType
-        {
-            get { return KnxNetIpServiceType.SearchRequest; }
-        }
+    public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.SearchRequest;
 
-        public KnxHpai Endpoint { get; set; }
+    public KnxHpai Endpoint { get; }
 
-        #region Public Methods
+    public override void Deserialize(byte[] bytes)
+    {
+        //throw new NotImplementedException();
+    }
 
-        public override void Deserialize(byte[] bytes)
-        {
-            //throw new NotImplementedException();
-        }
-
-        public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
-        {
-            byteArrayBuilder.Add(Endpoint.ToByteArray());
-        }
-
-        #endregion
+    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    {
+        byteArrayBuilder.Add(Endpoint.ToByteArray());
     }
 }

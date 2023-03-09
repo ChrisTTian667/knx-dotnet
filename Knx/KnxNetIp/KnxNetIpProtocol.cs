@@ -1,8 +1,7 @@
-﻿namespace Knx.KnxNetIp
+﻿namespace Knx.KnxNetIp;
+
+public enum KnxNetIpProtocol
 {
-    public enum KnxNetIpProtocol
-    {
-        Tunneling = 0x00,
-        Routing = 0x01,
-    }
+    Tunneling = 0x00,
+    Routing = 0x01
 }

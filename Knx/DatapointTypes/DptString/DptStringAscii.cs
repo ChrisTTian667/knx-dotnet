@@ -3,34 +3,37 @@ using System.Text;
 using Knx.Common;
 using Knx.Common.Attribute;
 
-namespace Knx.DatapointTypes.DptString
+namespace Knx.DatapointTypes.DptString;
+
+[DatapointType(16, 0, Usage.General)]
+[DataLength(1, 14)]
+public class DptStringAscii : DptString
 {
-    [DatapointType(16, 0, Usage.General)]
-    [DataLength(1, 14)]
-    public class DptStringAscii : DptString
+    private DptStringAscii()
     {
-        public DptStringAscii(byte[] payload) : base(payload)
-        {
-        }
+    }
 
-        public DptStringAscii(string character) : base(character)
-        {
-        }
+    public DptStringAscii(byte[] payload) : base(payload)
+    {
+    }
 
-        protected override byte[] ToBytes(string value)
-        {
-            var result = new byte[14];
-            var content = new ASCIIEncoding().GetBytes(value);
+    public DptStringAscii(string character) : base(character)
+    {
+    }
 
-            for (var i = 0; i < Math.Min(content.Length, 13); i++)
-                result[i] = content[i];
+    protected override byte[] ToBytes(string value)
+    {
+        var result = new byte[14];
+        var content = new ASCIIEncoding().GetBytes(value);
 
-            return result;
-        }
+        for (var i = 0; i < Math.Min(content.Length, 13); i++)
+            result[i] = content[i];
 
-        protected override string ToValue(byte[] bytes)
-        {
-            return Encoding.UTF8.GetString(bytes, 0 , bytes.Length).TrimEnd('\0');
-        }
+        return result;
+    }
+
+    protected override string ToValue(byte[] bytes)
+    {
+        return Encoding.UTF8.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
     }
 }

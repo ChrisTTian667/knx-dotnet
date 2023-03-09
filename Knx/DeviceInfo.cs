@@ -1,51 +1,18 @@
-namespace Knx
+namespace Knx;
+
+public struct DeviceInfo
 {
-    public struct DeviceInfo
+    internal DeviceInfo(string friendlyName, string connectionString)
     {
-        public DeviceInfo(string deviceDriverId, string connectionString)
-        {
-            DeviceDriverId = deviceDriverId;
-            ConnectionString = connectionString;
-        }
+        FriendlyName = friendlyName ?? string.Empty;
+        ConnectionString = connectionString ?? string.Empty;
+    }
 
-        public string DeviceDriverId; // { get; private set; }
+    public string FriendlyName { get; }
+    public string ConnectionString { get; }
 
-        public string ConnectionString; // { get; private set; }
-
-        #region operators and overloads
-
-        public static bool operator ==(DeviceInfo a, DeviceInfo b)
-        {
-            return a.DeviceDriverId == b.DeviceDriverId && a.ConnectionString == b.ConnectionString;
-        }
-
-        public static bool operator !=(DeviceInfo a, DeviceInfo b)
-        {
-            return a.DeviceDriverId != b.DeviceDriverId || a.ConnectionString != b.ConnectionString;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (null == obj)
-                return false;
-            var that = (DeviceInfo)obj;
-            if (null == that)
-                return false;
-
-            return this == that;
-        }
-
-        public override int GetHashCode()
-        {
-            return (13 * DeviceDriverId.GetHashCode())
-                   ^ (13 * ConnectionString.GetHashCode());
-        }
-
-        #endregion
-
-        public override string ToString()
-        {
-            return string.Format("{0} - {1}", DeviceDriverId, ConnectionString);
-        }
+    public override string ToString()
+    {
+        return $"{FriendlyName}: {ConnectionString}";
     }
 }

@@ -1,8 +1,7 @@
-namespace Knx.DatapointTypes
+namespace Knx.DatapointTypes;
+
+public enum SetClear : byte
 {
-    public enum SetClear : byte
-    {
-        Set = 0x00,
-        Clear = 0x01,
-    }
+    Set = 0x00,
+    Clear = 0x01
 }
