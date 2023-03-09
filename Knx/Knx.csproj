@@ -11,7 +11,7 @@
         <Summary>KNX provides a .NetStandard library to access the KNX Bus via KnxNetIP Protocol using both Tunneling or Routing connections; including advanced features like Gateway Discovery, ...</Summary>
         <Title>knx-dotnet</Title>
         <Description>knx-dotnet is a .NET Core library that allows to communicate with KNXnet/IP routers and gateways using either the routing or the tunneling protocol. It provides a simple and easy-to-use interface for sending and receiving KNX telegrams over IP as well as device discovery.</Description>
-        <PackageVersion>0.1-alpha</PackageVersion>
+        <PackageVersion>0.2-alpha</PackageVersion>
         <ReleaseVersion>1.2.4-alpha</ReleaseVersion>
         <SynchReleaseVersion>false</SynchReleaseVersion>
         <AssemblyOriginatorKeyFile>knxKey.snk</AssemblyOriginatorKeyFile>
