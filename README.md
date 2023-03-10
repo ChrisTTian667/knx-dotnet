@@ -63,12 +63,10 @@ tunnelingClient.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
 
 ```
 
-## Tested with following devices
+## Tested devices
  - Siemens N148/21 Gateway
  - Weinzierl KNX IP Router 750
-
-
-If you have tested the library positively or negative with other devices, please let me know.
+ - ...
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
