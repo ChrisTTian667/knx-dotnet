@@ -1,4 +1,4 @@
-mode: ContinuousDelivery
+mode: Mainline
 # Version will not increment when next-version is set. Use tags to force
 # a specific version
 branches:
