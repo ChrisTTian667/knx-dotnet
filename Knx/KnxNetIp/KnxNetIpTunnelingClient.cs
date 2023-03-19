@@ -37,7 +37,7 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 
         Configuration = configuration ?? new KnxNetIpConfiguration();
         RemoteEndPoint = remoteEndPoint ?? throw new ArgumentNullException(nameof(remoteEndPoint));
-        DeviceAddress = deviceAddress;
+        _deviceAddress = deviceAddress;
 
         UdpClient = new UdpClient();
 
@@ -119,16 +119,17 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
     }
 
     public KnxNetIpConfiguration Configuration { get; }
-    public KnxDeviceAddress DeviceAddress { get; }
+    public KnxDeviceAddress _deviceAddress { get; }
 
     /// <summary>
     ///     Occurs when [KNX message received].
     /// </summary>
     public event EventHandler<IKnxMessage> KnxMessageReceived;
 
-    public async Task SendMessageAsync(IKnxMessage knxMessage)
+    public async Task SendMessageAsync(IKnxMessage knxMessage, CancellationToken cancellationToken = default)
     {
-        var message = (KnxNetIpMessage<TunnelingRequest>)KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
+        var message = (KnxNetIpMessage<TunnelingRequest>)
+            KnxNetIpMessage.Create(KnxNetIpServiceType.TunnelingRequest);
 
         message.Body.Cemi = knxMessage;
 
@@ -154,19 +155,7 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 
     private event EventHandler<KnxNetIpMessage> KnxNetIpMessageReceived;
 
-    private Task<EndPoint?> BaseConnect()
-    {
-        UdpClient.Connect(RemoteEndPoint);
-
-        var localEndPoint = UdpClient.Client.LocalEndPoint;
-
-        ReceiveData(UdpClient);
-
-        return Task.FromResult(localEndPoint);
-    }
-
-
-    private async void ReceiveData(UdpClient client)
+    private async Task ReceiveData(UdpClient client)
     {
         KnxNetIpMessage lastMessage = null;
 
@@ -201,8 +190,13 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
 
     public async Task<EndPoint> Connect()
     {
-        // TODO: Refactor this
-        var localEndpoint = await BaseConnect();
+        UdpClient.Connect(RemoteEndPoint);
+
+        var localEndpoint = UdpClient.Client.LocalEndPoint;
+        if (localEndpoint == null)
+            throw new KnxNetIpException("Unable to retrieve local endpoint.");
+
+        _ = ReceiveData(UdpClient);
 
         try
         {
@@ -237,6 +231,7 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
             if (CommunicationChannel != null)
             {
                 var disconnectRequest = MessageFactory.GetDisconnectRequest(LocalEndPoint, (byte)CommunicationChannel);
+
                 await SendAndReceiveReply<KnxNetIpMessage<DisconnectResponse>>(
                     disconnectRequest,
                     ack => ack.Body.CommunicationChannel ==
@@ -246,7 +241,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         catch (KnxException exception)
         {
             Debug.WriteLine($"Unable to disconnect from KNX gateway ('{RemoteEndPoint}'): {exception.Message}");
-
             throw;
         }
         finally
@@ -262,23 +256,19 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable
         switch (message.ServiceType)
         {
             case KnxNetIpServiceType.ConnectionResponse:
-                HandleConnectionResponse(message as KnxNetIpMessage<ConnectionResponse>);
-
+                HandleConnectionResponse((KnxNetIpMessage<ConnectionResponse>)message);
                 break;
 
             case KnxNetIpServiceType.DisconnectResponse:
-                HandleDisconnectResponse(message as KnxNetIpMessage<DisconnectResponse>);
-
+                HandleDisconnectResponse((KnxNetIpMessage<DisconnectResponse>)message);
                 break;
 
             case KnxNetIpServiceType.ConnectionStateResponse:
-                HandleConnectionStateResponse(message as KnxNetIpMessage<ConnectionStateResponse>);
-
+                HandleConnectionStateResponse((KnxNetIpMessage<ConnectionStateResponse>)message);
                 break;
 
             case KnxNetIpServiceType.TunnelingRequest:
-                HandleTunnelingRequest(message as KnxNetIpMessage<TunnelingRequest>);
-
+                HandleTunnelingRequest((KnxNetIpMessage<TunnelingRequest>)message);
                 break;
         }
 

@@ -25,7 +25,7 @@ public abstract class KnxNetIpMessage
     ///     Gets or sets the body.
     /// </summary>
     /// <value>The body.</value>
-    public MessageBodyBase Body { get; internal set; }
+    public MessageBodyBase? Body { get; internal set; }
 
     /// <summary>
     ///     Gets or sets the type of the message.
@@ -65,7 +65,8 @@ public abstract class KnxNetIpMessage
     /// <returns>a new KnxMessageHeader</returns>
     public static KnxNetIpMessage Parse(byte[] bytes)
     {
-        if (bytes.Length < HeaderLength) throw new ArgumentException("Could not parse message header");
+        if (bytes.Length < HeaderLength)
+            throw new ArgumentException("Could not parse message header");
 
         var messageType = (KnxNetIpServiceType)((bytes[2] << 8) + bytes[3]);
         var message = Create(messageType);
@@ -83,7 +84,7 @@ public abstract class KnxNetIpMessage
     /// <param name="bytes">The bytes.</param>
     /// <param name="message">The message.</param>
     /// <returns><c>true</c>, if the parse was possible; otherwise <c>false</c></returns>
-    public static bool TryParse<T>(byte[] bytes, out KnxNetIpMessage<T> message) where T : TunnelingMessageBody, new()
+    public static bool TryParse<T>(byte[] bytes, out KnxNetIpMessage<T>? message) where T : TunnelingMessageBody, new()
     {
         message = null;
 
@@ -111,10 +112,9 @@ public abstract class KnxNetIpMessage
     /// <returns>
     ///     <c>true</c> if the specified bytes are message of specified service type; otherwise, <c>false</c>.
     /// </returns>
-    public static bool IsService(byte[] bytes, KnxNetIpServiceType service)
-    {
-        return bytes.Length >= HeaderLength && (KnxNetIpServiceType)((bytes[2] << 8) + bytes[3]) == service;
-    }
+    public static bool IsService(byte[] bytes, KnxNetIpServiceType service) =>
+        bytes.Length >= HeaderLength &&
+        (KnxNetIpServiceType)((bytes[2] << 8) + bytes[3]) == service;
 
     /// <summary>
     ///     Does the byte array.

@@ -2,7 +2,6 @@
 // using System.Threading;
 // using System.Threading.Tasks;
 // using Knx.KnxNetIp.MessageBody;
-// using PortableDI;
 //
 // namespace Knx.KnxNetIp.Discovery
 // {
@@ -188,4 +187,4 @@
 //         }
 //     }
 // }
-
+//

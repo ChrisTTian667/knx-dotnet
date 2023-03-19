@@ -34,9 +34,6 @@ public static class MessageFactory
 
     public static KnxNetIpMessage GetSearchRequest(IPEndPoint localEndPoint)
     {
-        if (localEndPoint == null)
-            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
-
         var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.SearchRequest);
         if (msg.Body is SearchRequest body)
             InitializeHostProtocolAddressInformation(body.Endpoint, localEndPoint);
@@ -46,9 +43,6 @@ public static class MessageFactory
 
     internal static KnxNetIpMessage GetConnectionStateRequest(IPEndPoint localEndPoint)
     {
-        if (localEndPoint == null)
-            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
-
         var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.ConnectionStateRequest);
         if (msg.Body is ConnectionStateRequest body)
             InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
@@ -58,9 +52,6 @@ public static class MessageFactory
 
     internal static KnxNetIpMessage GetDisconnectRequest(IPEndPoint localEndPoint, byte communicationChannel)
     {
-        if (localEndPoint == null)
-            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
-
         var msg = KnxNetIpMessage.Create(KnxNetIpServiceType.DisconnectRequest);
         if (msg.Body is DisconnectRequest body)
             InitializeHostProtocolAddressInformation(body.HostProtocolAddressInfo, localEndPoint);
@@ -72,11 +63,6 @@ public static class MessageFactory
         KnxHpai hostProtocolAddressInfo,
         IPEndPoint localEndPoint)
     {
-        if (hostProtocolAddressInfo == null)
-            throw new ArgumentNullException(nameof(hostProtocolAddressInfo), "KnxHpai cannot be null");
-        if (localEndPoint == null)
-            throw new ArgumentNullException(nameof(localEndPoint), "LocalEndpoint cannot be null");
-
         hostProtocolAddressInfo.HostProtocolCode = HostProtocolCode.IPV4_UDP;
         hostProtocolAddressInfo.IpAddress = localEndPoint.Address;
         hostProtocolAddressInfo.Port = localEndPoint.Port;

@@ -11,14 +11,14 @@ public class KnxNetIpRoutingClientTests
     public async Task ConnectTest()
     {
         using var target = new KnxNetIpRoutingClient();
-        await target.Connect();
+        await target.ConnectAsync();
     }
 
     public async Task SendKnxMessage()
     {
         using var routingClient = new KnxNetIpRoutingClient();
 
-        await routingClient.Connect();
+        await routingClient.ConnectAsync();
 
         var message = new KnxMessage
         {
@@ -39,10 +39,11 @@ public class KnxNetIpRoutingClientTests
     {
         var taskCompletionSource = new TaskCompletionSource<string>();
 
-        var target = new KnxNetIpRoutingClient();
-        var localEndpoint = (IPEndPoint)await target.Connect();
-
-        var searchRequest = MessageFactory.GetSearchRequest(localEndpoint);
+        var target = new KnxNetIpRoutingClient(
+            options =>
+            {
+                options.DeviceAddress = new KnxDeviceAddress(1, 1, 2);
+            });
 
         target.KnxDeviceDiscovered += (sender, info) =>
         {
@@ -50,7 +51,7 @@ public class KnxNetIpRoutingClientTests
             taskCompletionSource.TrySetResult(info.ToString());
         };
 
-        await target.SendMessageAsync(searchRequest);
+        await target.DiscoverAsync();
 
         await taskCompletionSource.Task;
     }

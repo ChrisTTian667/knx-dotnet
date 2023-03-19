@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Knx.Common;
+using static System.Byte;
 
 namespace Knx;
 
@@ -31,8 +33,8 @@ public class KnxDeviceAddress : KnxAddress
         $"{Area}.{Line}.{Device}";
 
     private byte _area;
-    private byte _device;
     private byte _line;
+    private byte _device;
 
     /// <summary>
     ///     Don't use a parameterless constructor; this is only for serialization
@@ -111,5 +113,21 @@ public class KnxDeviceAddress : KnxAddress
 
             InvokeChangeEvent();
         }
+    }
+
+    public static implicit operator KnxDeviceAddress(string input)
+    {
+        var parts = input.Split(new[] { '.', '/', '-' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (parts.Length != 3)
+            throw new ArgumentException("KnxDeviceAddress should be in Format Area/Line/Device", nameof(input));
+        if (!TryParse(parts[0], out var area)|| area > 15)
+            throw new ArgumentException("Area is not in a valid range. Should be between 0-15", nameof(input));
+        if (!TryParse(parts[1], out var line) || line > 15)
+            throw new ArgumentException("Line is not in a valid range. Should be between 0-15", nameof(input));
+        if (!TryParse(parts[1], out var device) || line > 255)
+            throw new ArgumentException("Device is not in a valid range. Should be between 0-255", nameof(input));
+
+        return new KnxDeviceAddress(area, line, device);
     }
 }

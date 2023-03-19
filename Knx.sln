@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "__Solution Items__", "__Sol
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Knx.Cli", "Knx.Cli\Knx.Cli.csproj", "{D02AF9E9-1937-4DA1-93EC-9070412FF127}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|iPhone = Ad-Hoc|iPhone
@@ -73,5 +75,23 @@ Global
 		{84358801-AD25-4AC9-9345-4890D0A85A37}.Release|iPhone.Build.0 = Release|Any CPU
 		{84358801-AD25-4AC9-9345-4890D0A85A37}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{84358801-AD25-4AC9-9345-4890D0A85A37}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.AppStore|iPhone.Build.0 = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|iPhone.Build.0 = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{D02AF9E9-1937-4DA1-93EC-9070412FF127}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal
