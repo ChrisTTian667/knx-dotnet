@@ -28,6 +28,7 @@ public class Send : AsyncCommand<Send.SendSettings>
 
         // TODO: here comes the "funny" part: how to get the DPT from the command line?
         // => we need to interpret based on PropertyAttributes, maybe in Json Format?!
+        // => we also need to print a list of available Properties and their potential values for CLI help
 
         var dpt = DatapointTypeFactory.Create("1.002");
 

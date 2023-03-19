@@ -33,7 +33,7 @@ public class TunnelingAcknowledge : TunnelingMessageBody
         Length = bytes[0];
         CommunicationChannel = bytes[1];
         SequenceCounter = bytes[2];
-        //this.State = (ErrorCode)Enum.Parse(typeof(ErrorCode), bytes[3].ToString());
+        //State = (ErrorCode)Enum.Parse(typeof(ErrorCode), bytes[3].ToString());
         State = (ErrorCode)bytes[3];
     }
 

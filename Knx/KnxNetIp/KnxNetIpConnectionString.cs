@@ -3,6 +3,7 @@ using Knx.Common.Attribute;
 
 namespace Knx.KnxNetIp;
 
+[Obsolete("Use KnxNetIpTunnelingClientOptions or KnxNetIpRoutingClientOptions instead.")]
 public sealed class KnxNetIpConnectionString
 {
     private TimeSpan _externalConnectionReleaseDelay;
