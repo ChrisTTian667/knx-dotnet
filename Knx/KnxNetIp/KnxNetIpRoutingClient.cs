@@ -85,7 +85,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         await SendMessageAsync(knxNetIpMessage, cancellationToken);
     }
 
-    private async Task ReceiveMessagesAsync(UdpClient client, CancellationToken cancellationToken)
+    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
         var receivedBuffer = new List<byte>();
 
@@ -93,7 +93,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         {
             try
             {
-                var udpReceiveResult = await client.ReceiveAsync(cancellationToken);
+                var udpReceiveResult = await _udpClient!.ReceiveAsync(cancellationToken);
                 var receivedData = udpReceiveResult.Buffer.ToArray();
                 receivedBuffer.AddRange(receivedData);
 
@@ -139,9 +139,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         _udpClient.Client.Bind(_localEndpoint);
         _udpClient.JoinMulticastGroup(_remoteEndPoint.Address);
 
-        _ = ReceiveMessagesAsync(
-            _udpClient,
-            _receivingMessagesCancellationTokenSource.Token);
+        _ = ReceiveMessagesAsync(_receivingMessagesCancellationTokenSource.Token);
 
         await Task.CompletedTask;
     }

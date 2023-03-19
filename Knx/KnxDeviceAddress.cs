@@ -72,12 +72,10 @@ public class KnxDeviceAddress : KnxAddress
     public byte Area
     {
         get => _area;
-        set
+        init
         {
             ValidateValue(value, 0, 15, "Area");
             _area = value;
-
-            InvokeChangeEvent();
         }
     }
 
@@ -88,12 +86,10 @@ public class KnxDeviceAddress : KnxAddress
     public byte Line
     {
         get => _line;
-        set
+        init
         {
             ValidateValue(value, 0, 15, "Line");
             _line = value;
-
-            InvokeChangeEvent();
         }
     }
 
@@ -104,12 +100,10 @@ public class KnxDeviceAddress : KnxAddress
     public new byte Device
     {
         get => _device;
-        set
+        init
         {
             ValidateValue(value, 0, 255, "Device");
             _device = value;
-
-            InvokeChangeEvent();
         }
     }
 

@@ -7,21 +7,11 @@ using Knx.Common;
 namespace Knx;
 
 /// <summary>
-///     EventHandler for address changed events.
-/// </summary>
-public delegate void TopologyItemChangedHandler( /*ref bool changeAllowed*/);
-
-/// <summary>
 ///     Base class for KNX addresses.
 /// </summary>
 public abstract class KnxAddress
 {
     private readonly BitArray _bitArray;
-
-    /// <summary>
-    ///     Occures, when the address changed.
-    /// </summary>
-    public TopologyItemChangedHandler? AddressChanged;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxAddress" /> class.
@@ -42,14 +32,6 @@ public abstract class KnxAddress
     {
         if (value < min || value > max)
             throw new ArgumentOutOfRangeException(parameter, $"Has to be between {min} and {max}");
-    }
-
-    /// <summary>
-    ///     Invokes the change event.
-    /// </summary>
-    protected void InvokeChangeEvent()
-    {
-        AddressChanged?.Invoke();
     }
 
     protected abstract void FillBitArray(BitArray bitArray);
@@ -111,7 +93,7 @@ public abstract class KnxAddress
 
         var addressParts = address.Split('\\', '/', '-', ',', '.', ' ', '|');
 
-        if (addressParts.Length < 2 || addressParts.Count() > 3)
+        if (addressParts.Length is < 2 or > 3)
             throw new FormatException(exMessageText);
 
         for (var i = 0; i < addressParts.Length - 1; i++)
@@ -132,15 +114,14 @@ public abstract class KnxAddress
         }
     }
 
-    public override bool Equals(object? obj)
-    {
-        return obj is KnxAddress other && _bitArray.ToByteArray().SequenceEqual(other._bitArray.ToByteArray());
-    }
+    public override bool Equals(object? obj) =>
+        obj is KnxAddress other &&
+        _bitArray
+            .ToByteArray()
+            .SequenceEqual(other._bitArray.ToByteArray());
 
-    public override int GetHashCode()
-    {
-        return ToString()!.GetHashCode();
-    }
+    public override int GetHashCode() =>
+        ToString()!.GetHashCode();
 
     /// <summary>
     ///     Converts to bits.

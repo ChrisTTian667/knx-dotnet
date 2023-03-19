@@ -83,12 +83,10 @@ public class KnxLogicalAddress : KnxAddress
     public byte Group
     {
         get => _group;
-        set
+        private set
         {
             ValidateValue(value, 0, 15, "Group");
             _group = value;
-
-            InvokeChangeEvent();
         }
     }
 
@@ -100,7 +98,7 @@ public class KnxLogicalAddress : KnxAddress
     public byte? MiddleGroup
     {
         get => _middleGroup;
-        set
+        private set
         {
             if (value != null)
                 ValidateValue((byte)value, 0, 7, "MiddleGroup");
@@ -108,8 +106,6 @@ public class KnxLogicalAddress : KnxAddress
 
             // revalidate the subgroup
             SubGroup = SubGroup;
-
-            InvokeChangeEvent();
         }
     }
 
@@ -121,7 +117,7 @@ public class KnxLogicalAddress : KnxAddress
     public ushort SubGroup
     {
         get => _subGroup;
-        set
+        private set
         {
             if (MiddleGroup == null)
                 ValidateValue(value, 0, 2047, "SubGroup");
@@ -129,8 +125,6 @@ public class KnxLogicalAddress : KnxAddress
                 ValidateValue(value, 0, 255, "SubGroup");
 
             _subGroup = value;
-
-            InvokeChangeEvent();
         }
     }
 
@@ -174,4 +168,7 @@ public class KnxLogicalAddress : KnxAddress
         MiddleGroup == null
             ? $"{Group}/{SubGroup}"
             : $"{Group}/{MiddleGroup}/{SubGroup}";
+
+    public static implicit operator KnxLogicalAddress(string input) =>
+        ParseLogical(input);
 }
