@@ -16,6 +16,24 @@ dotnet add package knx-dotnet --version 0.3.0-alpha
 
 ## Usage
 
+#### Discovering knx devices
+```csharp
+
+var routingClient = new KnxNetIpRoutingClient(
+    options =>
+    {
+        options.DeviceAddress = "1/1/2";
+    });
+
+routingClient.KnxDeviceDiscovered += (_, args) =>
+{
+    Console.WriteLine($"Discovered device: {args.FriendlyName} - ConnectionString: {args.ConnectionString}");
+};
+
+await routingClient.ConnectAsync();
+await routingClient.DiscoverAsync();
+```
+
 #### Sending a message using the routing protocol
 
 ```csharp
@@ -23,7 +41,7 @@ dotnet add package knx-dotnet --version 0.3.0-alpha
 using Knx.KnxNetIp;
 
 // create a Routing client
-using var routingClient = new KnxNetIpRoutingClient();
+var routingClient = new KnxNetIpRoutingClient();
 
 // connect to the KNXnet/IP gateway
 await routingClient.Connect();
