@@ -15,12 +15,12 @@ public static class DatapointTypeFactory
         return (T)Create(typeof(T));
     }
 
-    public static DatapointType Create(string id, byte[] payload = null)
+    public static DatapointType Create(string id, byte[]? payload = null)
     {
         return Create(GetTypeById(id), payload);
     }
 
-    public static DatapointType Create(Type datapointTypeType, byte[] value = null)
+    public static DatapointType Create(Type datapointTypeType, byte[]? value = null)
     {
         lock (CreationLock)
         {

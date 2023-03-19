@@ -193,7 +193,6 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
                     break;
                 case RoutingIndication routingIndication:
                     InvokeKnxMessageReceived(routingIndication.Cemi);
-
                     break;
             }
 
@@ -211,6 +210,12 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo) =>
         KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
 
+    /// <summary>
+    /// Host Protocol Address Information
+    /// </summary>
+    /// <param name="endpoint"></param>
+    /// <param name="friendlyName"></param>
+    /// <returns></returns>
     private static DeviceInfo CreateDeviceInfoFromKnxHpai(KnxHpai endpoint, string friendlyName)
     {
         var connection = new KnxNetIpConnectionString
