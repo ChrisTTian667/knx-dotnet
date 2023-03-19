@@ -31,8 +31,8 @@ public class KnxDeviceAddress : KnxAddress
         $"{Area}.{Line}.{Device}";
 
     private byte _area;
-    private byte _device;
     private byte _line;
+    private byte _device;
 
     /// <summary>
     ///     Don't use a parameterless constructor; this is only for serialization
@@ -112,4 +112,7 @@ public class KnxDeviceAddress : KnxAddress
             InvokeChangeEvent();
         }
     }
+
+    public static implicit operator KnxDeviceAddress(string input) =>
+        ParseDevice(input);
 }

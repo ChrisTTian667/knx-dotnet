@@ -43,7 +43,7 @@ public interface IKnxMessage
     ///     Gets or sets the source (device-) address.
     /// </summary>
     /// <value>The source address.</value>
-    KnxDeviceAddress SourceAddress { get; set; }
+    KnxDeviceAddress? SourceAddress { get; set; }
 
     /// <summary>
     ///     Gets or sets the destination address (device or individual/logical address).

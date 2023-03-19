@@ -42,7 +42,7 @@ public class KnxMessage : IKnxMessage
     /// <returns>ByteArray containing the Payload combined with the MessageType</returns>
     private byte[] GetMessageTypeAndPayload()
     {
-        // use the first 2 Bits for the Messagetype
+        // use the first 2 Bits for the MessageType
         // the next 6 Bits representing the first byte of the payload.
 
         var firstByte = (byte)((Payload.FirstOrDefault() & 0x3F) | (byte)MessageType);

@@ -1,13 +1,12 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Knx.KnxNetIp;
 
 public interface IKnxNetIpClient
 {
-    KnxNetIpConfiguration Configuration { get; }
-    KnxDeviceAddress DeviceAddress { get; }
-    Task SendMessageAsync(IKnxMessage knxMessage);
+    Task SendMessageAsync(IKnxMessage knxMessage, CancellationToken cancellationToken = default);
 
     event EventHandler<IKnxMessage> KnxMessageReceived;
 }

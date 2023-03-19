@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Knx.Common;
-using Knx.Exceptions;
 
 namespace Knx;
 
 /// <summary>
-///     Eventhandler for address changed events.
+///     EventHandler for address changed events.
 /// </summary>
 public delegate void TopologyItemChangedHandler( /*ref bool changeAllowed*/);
 
@@ -22,7 +21,7 @@ public abstract class KnxAddress
     /// <summary>
     ///     Occures, when the address changed.
     /// </summary>
-    public TopologyItemChangedHandler AddressChanged;
+    public TopologyItemChangedHandler? AddressChanged;
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxAddress" /> class.
@@ -133,7 +132,7 @@ public abstract class KnxAddress
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         return obj is KnxAddress other && _bitArray.ToByteArray().SequenceEqual(other._bitArray.ToByteArray());
     }

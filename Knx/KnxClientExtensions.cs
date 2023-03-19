@@ -20,7 +20,6 @@ public static class KnxClientExtensions
         {
             MessageCode = MessageCode.Request,
             MessageType = MessageType.Write,
-            SourceAddress = client.DeviceAddress,
             DestinationAddress = destination,
             Payload = data.Payload,
             Priority = priority
@@ -39,7 +38,6 @@ public static class KnxClientExtensions
         {
             MessageCode = MessageCode.Confirmation,
             MessageType = replyTo.MessageType,
-            SourceAddress = client.DeviceAddress,
             DestinationAddress = replyTo.SourceAddress,
             Payload = data.Payload,
             Priority = priority
@@ -71,7 +69,7 @@ public static class KnxClientExtensions
         var confirmationMessage = default(IKnxMessage);
 
         if (timeOut.TotalMilliseconds <= 0)
-            timeOut = client.Configuration.ReadTimeout;
+            timeOut = TimeSpan.FromSeconds(10);
 
         try
         {
@@ -112,7 +110,6 @@ public static class KnxClientExtensions
                 {
                     MessageCode = MessageCode.Request,
                     MessageType = MessageType.Read,
-                    SourceAddress = client.DeviceAddress,
                     DestinationAddress = destination,
                     Priority = priority
                 };
