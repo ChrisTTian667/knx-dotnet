@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,11 +8,15 @@ using Knx.KnxNetIp.MessageBody;
 
 namespace Knx.KnxNetIp;
 
+using Microsoft.Extensions.Logging;
+using System;
+
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpRouting protocol.
 /// </summary>
 public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
 {
+    private readonly ILogger<KnxNetIpRoutingClient> _logger;
     private UdpClient? _udpClient;
     private readonly IPEndPoint _remoteEndPoint;
     private readonly KnxDeviceAddress _deviceAddress;
@@ -25,8 +27,13 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     ///     Creates a new instance of the <see cref="KnxNetIpRoutingClient"/> class.
     /// </summary>
     /// <param name="configureOptions">Configuration builder</param>
-    public KnxNetIpRoutingClient(Action<KnxNetIpRoutingClientOptions>? configureOptions = null)
+    /// /// <param name="logger">Optional logger</param>
+    public KnxNetIpRoutingClient(
+        Action<KnxNetIpRoutingClientOptions>? configureOptions = null,
+        ILogger<KnxNetIpRoutingClient>? logger = null)
     {
+        _logger = logger ?? NullLogger<KnxNetIpRoutingClient>.Instance;
+
         var options = new KnxNetIpRoutingClientOptions();
         configureOptions?.Invoke(options);
 
@@ -102,10 +109,9 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
                 // UdpClient has been disposed or cancelled => stop listening
                 break;
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                // TODO: Handle parsing error! Just logging?!
-                Console.WriteLine(e);
+                _logger.LogError(exception, "Error while receiving message");
             }
             finally
             {
@@ -147,11 +153,18 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     {
         EnsureConnectionEstablished();
 
-        Debug.WriteLine($"{DateTime.Now.ToLongTimeString()} SEND => {message}");
+        try
+        {
+            var bytes = message.ToByteArray();
+            await _udpClient!.SendAsync(bytes, _remoteEndPoint, cancellationToken);
 
-        var bytes = message.ToByteArray();
-
-        await _udpClient!.SendAsync(bytes, _remoteEndPoint, cancellationToken);
+            _logger.LogInformation("Send: {Message}", message);
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Error sending message: {message}", message);
+            throw;
+        }
     }
 
     public async Task DiscoverAsync(CancellationToken cancellationToken = default) =>
@@ -184,7 +197,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
                     break;
             }
 
-            //Console.WriteLine("{0} RECV <= {1} (HANDLED)", DateTime.Now.ToLongTimeString(), message);
+            _logger.LogInformation("Received: {Message}", message);
         }
         catch (Exception e)
         {
