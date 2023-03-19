@@ -15,7 +15,7 @@ namespace Knx.KnxNetIp;
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpTunneling protocol.
 /// </summary>
-public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient, IDisposable, IAsyncDisposable
+public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
 {
     private readonly object _communicationChannelLock = new();
     private DateTime _connectionStateTimeStamp;

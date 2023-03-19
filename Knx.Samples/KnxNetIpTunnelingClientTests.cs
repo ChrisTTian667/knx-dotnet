@@ -86,7 +86,7 @@ public class KnxNetIpTunnelingClientTests
 
     public async Task ConnectTest()
     {
-        using var tunnelingClient = new KnxNetIpTunnelingClient(
+        await using var tunnelingClient = new KnxNetIpTunnelingClient(
             options =>
             {
                 options.RemoteAddress = IPAddress.Parse("10.0.7.60");
@@ -100,8 +100,7 @@ public class KnxNetIpTunnelingClientTests
 
     public async Task SendKnxMessage()
     {
-
-        using var tunnelingClient = new KnxNetIpTunnelingClient(
+        await using var tunnelingClient = new KnxNetIpTunnelingClient(
             options =>
             {
                 options.RemoteAddress = IPAddress.Parse("10.0.7.60");

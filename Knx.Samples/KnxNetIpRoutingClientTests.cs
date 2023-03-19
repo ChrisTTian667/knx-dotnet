@@ -9,13 +9,13 @@ public class KnxNetIpRoutingClientTests
 {
     public async Task ConnectTest()
     {
-        using var target = new KnxNetIpRoutingClient();
+        await using var target = new KnxNetIpRoutingClient();
         await target.ConnectAsync();
     }
 
     public async Task SendKnxMessage()
     {
-        using var routingClient = new KnxNetIpRoutingClient();
+        await using var routingClient = new KnxNetIpRoutingClient();
 
         await routingClient.ConnectAsync();
 
