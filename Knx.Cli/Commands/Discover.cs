@@ -20,13 +20,13 @@ public class Discover : AsyncCommand
 
                     routingClient.KnxDeviceDiscovered += (_, args) =>
                     {
-                        AnsiConsole.MarkupLine($"[green]Discovered device:[/] {args.FriendlyName}");
+                        AnsiConsole.MarkupLine($"[green]Discovered device:[/] {args.FriendlyName} - ConnectionString: {args.ConnectionString}");
                     };
 
                     await routingClient.ConnectAsync();
                     await routingClient.DiscoverAsync();
 
-                    await Task.Delay(60000);
+                    await Task.Delay(2000);
 
                     return 0;
                 });
