@@ -6,6 +6,11 @@ namespace Knx.DatapointTypes.Dpt1Bit;
 [DatapointType(1, 2, Unit.TrueFalse, Usage.General)]
 public class DptBoolean : Dpt1Bit
 {
+    private DptBoolean()
+    {
+
+    }
+
     public DptBoolean(byte[] payload)
         : base(payload)
     {
