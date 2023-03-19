@@ -29,17 +29,12 @@ public abstract class Dpt2ByteUnsignedValue : DatapointType
         get
         {
             var payload = Payload.Take(2).ToArray();
-
             return BitConverter.ToUInt16(payload, 0);
         }
 
         set
         {
-            if (value < 0 || value > 65535)
-                throw new ArgumentOutOfRangeException("value", "Value must be within 0 ... 65535.");
-
             var bytes = BitConverter.GetBytes(value);
-
             Payload = bytes.Take(2).ToArray();
         }
     }

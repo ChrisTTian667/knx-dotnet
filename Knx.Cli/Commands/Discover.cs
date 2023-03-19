@@ -28,6 +28,8 @@ public class Discover : AsyncCommand
 
                     await Task.Delay(2000);
 
+                    // TODO: ask the user, if he wants to create a configuration for one of those devices
+
                     return 0;
                 });
 }

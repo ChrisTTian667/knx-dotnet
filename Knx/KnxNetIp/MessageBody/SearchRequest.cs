@@ -5,12 +5,11 @@ namespace Knx.KnxNetIp.MessageBody;
 [ResponseMessage(typeof(SearchResponse))]
 public class SearchRequest : TunnelingMessageBody
 {
-    public SearchRequest()
-    {
+    public SearchRequest() =>
         Endpoint = new KnxHpai();
-    }
 
-    public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.SearchRequest;
+    public override KnxNetIpServiceType ServiceType =>
+        KnxNetIpServiceType.SearchRequest;
 
     public KnxHpai Endpoint { get; }
 

@@ -30,8 +30,8 @@ public class DptTimePeriodSeconds : DptTimePeriod
     {
         var value = timeSpan.TotalSeconds;
 
-        if (value < 0 || value > 65535)
-            throw new ArgumentOutOfRangeException("timeSpan", "Timespan must be within 0 ... 65535 seconds.");
+        if (value is < 0 or > 65535)
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), "Timespan must be within 0 ... 65535 seconds.");
 
         return (ushort)value;
     }

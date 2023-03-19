@@ -14,7 +14,7 @@ using System;
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpRouting protocol.
 /// </summary>
-public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
+public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
 {
     private readonly ILogger<KnxNetIpRoutingClient> _logger;
     private UdpClient? _udpClient;
@@ -44,23 +44,25 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         _receivingMessagesCancellationTokenSource = new CancellationTokenSource();
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        Dispose(true);
+        await Dispose(true);
         GC.SuppressFinalize(this);
     }
 
     ~KnxNetIpRoutingClient() =>
-        Dispose(false);
+        _ = Dispose(false);
 
-    private void Dispose(bool disposing)
+    private ValueTask Dispose(bool disposing)
     {
-        if (!disposing)
-            return;
+        if (disposing)
+        {
+            _receivingMessagesCancellationTokenSource.Cancel();
+            _udpClient?.Dispose();
+            _udpClient = null;
+        }
 
-        _receivingMessagesCancellationTokenSource.Cancel();
-        _udpClient?.Dispose();
-        _udpClient = null;
+        return ValueTask.CompletedTask;
     }
 
     /// <summary>
@@ -85,7 +87,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         await SendMessageAsync(knxNetIpMessage, cancellationToken);
     }
 
-    private async Task ReceiveMessagesAsync(UdpClient client, CancellationToken cancellationToken)
+    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
         var receivedBuffer = new List<byte>();
 
@@ -93,7 +95,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         {
             try
             {
-                var udpReceiveResult = await client.ReceiveAsync(cancellationToken);
+                var udpReceiveResult = await _udpClient!.ReceiveAsync(cancellationToken);
                 var receivedData = udpReceiveResult.Buffer.ToArray();
                 receivedBuffer.AddRange(receivedData);
 
@@ -139,9 +141,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         _udpClient.Client.Bind(_localEndpoint);
         _udpClient.JoinMulticastGroup(_remoteEndPoint.Address);
 
-        _ = ReceiveMessagesAsync(
-            _udpClient,
-            _receivingMessagesCancellationTokenSource.Token);
+        _ = ReceiveMessagesAsync(_receivingMessagesCancellationTokenSource.Token);
 
         await Task.CompletedTask;
     }
@@ -149,7 +149,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
     /// <summary>
     ///     Sends a KnxNetIpMessage
     /// </summary>
-    public async Task SendMessageAsync(KnxNetIpMessage message, CancellationToken cancellationToken)
+    private async Task SendMessageAsync(KnxNetIpMessage message, CancellationToken cancellationToken)
     {
         EnsureConnectionEstablished();
 
@@ -188,7 +188,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
                     InvokeKnxDeviceDiscovered(
                         CreateDeviceInfoFromKnxHpai(
                             searchResponse.Endpoint,
-                            searchResponse.Endpoint.Description.FriendlyName));
+                            searchResponse.Endpoint.Description?.FriendlyName ?? "Unknown"));
 
                     break;
                 case RoutingIndication routingIndication:
@@ -221,7 +221,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IDisposable
         var connection = new KnxNetIpConnectionString
         {
             InternalAddress = $"{endpoint.IpAddress}:{endpoint.Port}",
-            DeviceMain = endpoint.Description.Address.Area,
+            DeviceMain = endpoint.Description!.Address.Area,
             DeviceMiddle = endpoint.Description.Address.Line,
             DeviceSub = endpoint.Description.Address.Device
         };

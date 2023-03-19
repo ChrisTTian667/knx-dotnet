@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Knx.Common;
 using Knx.KnxNetIp.MessageBody;
 
@@ -29,14 +28,12 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
     /// </returns>
     public override byte[] ToByteArray()
     {
-        ByteArrayToken totalLengthToken;
-
         var arrayBuilder =
             new ByteArrayBuilder()
                 .AddByte(HeaderLength)
                 .AddByte(ProtocolVersion)
                 .AddInt((int)ServiceType)
-                .AddToken(2, out totalLengthToken);
+                .AddToken(2, out var totalLengthToken);
 
         Body.ToByteArray(arrayBuilder);
 

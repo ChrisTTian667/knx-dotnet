@@ -21,17 +21,14 @@ public class DptTimePeriodMinutes : DptTimePeriod
     {
     }
 
-    protected override TimeSpan TimeSpanFromUInt16(ushort value)
-    {
-        return TimeSpan.FromMinutes(value);
-    }
+    protected override TimeSpan TimeSpanFromUInt16(ushort value) =>
+        TimeSpan.FromMinutes(value);
 
     protected override ushort UInt16FromTimeSpan(TimeSpan timeSpan)
     {
         var value = timeSpan.TotalMinutes;
-
-        if (value < 0 || value > 65535)
-            throw new ArgumentOutOfRangeException("timeSpan", "Timespan must be within 0 ... 65535 minutes.");
+        if (value is < 0 or > 65535)
+            throw new ArgumentOutOfRangeException(nameof(timeSpan), "Timespan must be within 0 ... 65535 minutes.");
 
         return (ushort)value;
     }

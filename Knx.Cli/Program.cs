@@ -86,9 +86,9 @@ internal sealed class Program
         {
             // cfg.AddCommand<InitCommand>("init")
             //     .WithDescription($"Create or Update configuration");
-            //
-            // cfg.AddCommand<SendMessageCommand>("send")
-            //     .WithDescription($"Sends a KnxNetIP message Run [grey]show --help[/] for details.");
+
+            cfg.AddCommand<Send>("send")
+                .WithDescription($"Sends a KnxNetIP message. [grey]show --help[/] for details.");
 
             cfg.AddCommand<Discover>("discover")
                 .WithDescription($"Sends a KnxNetIP discover request to discover KnxNetIp devices in your network. Run [grey]show --help[/] for details.");

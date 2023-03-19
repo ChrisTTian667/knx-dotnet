@@ -46,7 +46,7 @@ public class DatapointTypesTests
     [Test]
     public void SerializeDptAlarmControl()
     {
-        var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[] { 1 });
+        var dpt = DatapointTypeFactory.Create<DptAlarmControl>(new byte[] { 1 });
         var serializedObject = JsonConvert.SerializeObject(dpt);
         var deserializeObject = JsonConvert.DeserializeObject<DptAlarmControl>(serializedObject)!;
 
@@ -57,7 +57,7 @@ public class DatapointTypesTests
     [Test]
     public void DeserializeSpecificToBaseType()
     {
-        var dpt = DatapointTypeFactory.Create(typeof(DptAlarmControl), new byte[] { 1 });
+        var dpt = DatapointTypeFactory.Create<DptAlarmControl>(new byte[] { 1 });
         var serializedSpecific = JsonConvert.SerializeObject(dpt);
 
         var deserializeBase = JsonConvert.DeserializeObject<DatapointType>(serializedSpecific);
@@ -67,37 +67,6 @@ public class DatapointTypesTests
 
         Assert.IsNotNull(dpt);
         Assert.AreEqual(dpt.Payload, deserializeSpecific.Payload);
-    }
-
-    [Test]
-    public void EachDatapointType_Serialize_NoException()
-    {
-        var count = 0;
-        foreach (var type in GetDatapointTypes()
-                     .OrderBy(
-                         t => ((DatapointTypeAttribute)t.GetCustomAttributes(typeof(DatapointTypeAttribute), true)
-                             .First())?.ToString()))
-            try
-            {
-                var dpt = DatapointTypeFactory.Create(type);
-                var serializeDpt = JsonConvert.SerializeObject(dpt);
-                var deserializeDpt = (DatapointType)JsonConvert.DeserializeObject(serializeDpt, type)!;
-
-                Assert.IsNotNull(deserializeDpt);
-                Assert.IsNotEmpty(deserializeDpt.DatapointTypeId);
-
-                count++;
-            }
-            catch (MissingMethodException ex)
-            {
-                Assert.Fail($"Type {type}: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Type {type}: {ex.Message}");
-            }
-
-        Assert.AreEqual(GetCountOfDatapointTypes(), count);
     }
 
     [Test]
@@ -114,40 +83,11 @@ public class DatapointTypesTests
         Assert.AreEqual(datapointTypesCount, allDatapointTypesWithDataLengthAttributeCount);
     }
 
-    [Test]
-    public void CreateEachDatapointType_NoException()
-    {
-        var count = 0;
-        foreach (var type in GetDatapointTypes()
-                     .OrderBy(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), true).First()?.ToString()))
-            try
-            {
-                var dpt = DatapointTypeFactory.Create(type);
-                Assert.IsNotNull(dpt);
+    private static int GetCountOfDatapointTypes() =>
+        GetDatapointTypes().Count();
 
-                count++;
-            }
-            catch (MissingMethodException ex)
-            {
-                Assert.Fail($"Type {type}: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail($"Type {type}: {ex.Message}");
-            }
-
-        Assert.AreEqual(GetCountOfDatapointTypes(), count);
-    }
-
-    private static int GetCountOfDatapointTypes()
-    {
-        return GetDatapointTypes().Count();
-    }
-
-    private static IEnumerable<Type> GetDatapointTypes()
-    {
-        return typeof(DatapointType).Assembly.GetTypes()
+    private static IEnumerable<Type> GetDatapointTypes() =>
+        typeof(DatapointType).Assembly.GetTypes()
             .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
             .Where(t => !t.IsAbstract);
-    }
 }

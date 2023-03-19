@@ -86,47 +86,44 @@ public class KnxNetIpTunnelingClientTests
 
     public async Task ConnectTest()
     {
-        using var tunnelingClient = new KnxNetIpTunnelingClient(
-            new IPEndPoint(IPAddress.Parse("10.0.2.5"), 3671),
-            KnxAddress.Device(1, 1, 2));
+        await using var tunnelingClient = new KnxNetIpTunnelingClient(
+            options =>
+            {
+                options.RemoteAddress = IPAddress.Parse("10.0.7.60");
+                options.DeviceAddress = "1.1.2";
+            });
 
-        await tunnelingClient.Connect();
+        await tunnelingClient.ConnectAsync();
 
-        tunnelingClient.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
-
-
+        tunnelingClient.Write(KnxAddress.Logical(1,1,28), new DptBoolean(true));
     }
 
     public async Task SendKnxMessage()
     {
-        var target = new KnxNetIpTunnelingClient(
-            new IPEndPoint(IPAddress.Parse("10.0.2.5"), 3671),
-            KnxAddress.Device(1, 1, 2));
-
-        try
-        {
-            await target.Connect();
-
-            var message = new KnxMessage
+        await using var tunnelingClient = new KnxNetIpTunnelingClient(
+            options =>
             {
-                MessageType = MessageType.Write,
-                MessageCode = MessageCode.Request,
-                Priority = MessagePriority.Auto,
-                SourceAddress = new KnxDeviceAddress(1, 1, 2),
-                DestinationAddress = new KnxLogicalAddress(1, 1, 28),
-                TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
-                DataPacketCount = 0,
-                Payload = new DptBoolean(false).Payload
-            };
+                options.RemoteAddress = IPAddress.Parse("10.0.7.60");
+                options.DeviceAddress = "1.1.2";
+            });
 
-            await target.SendMessageAsync(message);
+        await tunnelingClient.ConnectAsync();
 
-            // test for simpler SendMessage calls
-            //target.Write(KnxAddress.Logical(9, 3, 0), (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday)));
-        }
-        finally
+        var message = new KnxMessage
         {
-            target.Dispose();
-        }
+            MessageType = MessageType.Write,
+            MessageCode = MessageCode.Request,
+            Priority = MessagePriority.Auto,
+            SourceAddress = new KnxDeviceAddress(1, 1, 2),
+            DestinationAddress = new KnxLogicalAddress(1, 1, 28),
+            TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
+            DataPacketCount = 0,
+            Payload = new DptBoolean(false).Payload
+        };
+
+        await tunnelingClient.SendMessageAsync(message);
+
+        // test for simpler SendMessage calls
+        //target.Write(KnxAddress.Logical(9, 3, 0), (new DptTime(new TimeSpan(13, 36, 00), DayOfWeek.Monday)));
     }
 }

@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Net;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
@@ -10,13 +9,13 @@ public class KnxNetIpRoutingClientTests
 {
     public async Task ConnectTest()
     {
-        using var target = new KnxNetIpRoutingClient();
+        await using var target = new KnxNetIpRoutingClient();
         await target.ConnectAsync();
     }
 
     public async Task SendKnxMessage()
     {
-        using var routingClient = new KnxNetIpRoutingClient();
+        await using var routingClient = new KnxNetIpRoutingClient();
 
         await routingClient.ConnectAsync();
 
@@ -45,7 +44,7 @@ public class KnxNetIpRoutingClientTests
                 options.DeviceAddress = new KnxDeviceAddress(1, 1, 2);
             });
 
-        target.KnxDeviceDiscovered += (sender, info) =>
+        target.KnxDeviceDiscovered += (_, info) =>
         {
             Debug.WriteLine("Device discovered: " + info);
             taskCompletionSource.TrySetResult(info.ToString());

@@ -69,15 +69,13 @@ public class KnxMessage : IKnxMessage
 
     private string GetPayloadAsString()
     {
-        return _payload == null
+        return Payload == null
             ? string.Empty
-            : _payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
+            : Payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
     }
 
     private readonly ControlByte1 _controlByte1 = new();
     private readonly ControlByte2 _controlByte2 = new();
-
-    private byte[] _payload;
 
     /// <summary>
     ///     Gets or sets the message code.
@@ -132,13 +130,13 @@ public class KnxMessage : IKnxMessage
     ///     Gets or sets the source (device-) address.
     /// </summary>
     /// <value>The source address.</value>
-    public KnxDeviceAddress SourceAddress { get; set; }
+    public KnxDeviceAddress? SourceAddress { get; set; } = "0/0/0";
 
     /// <summary>
     ///     Gets or sets the destination address (device or individual/logical address).
     /// </summary>
     /// <value>The destination address.</value>
-    public KnxAddress DestinationAddress { get; set; }
+    public KnxAddress? DestinationAddress { get; set; }
 
     /// <summary>
     ///     Gets the hop count, a message did, till it was received.
@@ -155,17 +153,14 @@ public class KnxMessage : IKnxMessage
     /// <summary>
     ///     Gets or sets the payload of the message (Data)
     /// </summary>
-    public byte[] Payload
-    {
-        get { return _payload ??= new byte[] { }; }
-        set => _payload = value;
-    }
+    public byte[] Payload { get; set; } = Array.Empty<byte>();
 
     /// <summary>
     ///     Gets or sets the transport layer control info.
     /// </summary>
     /// <value>The transport layer control info.</value>
-    public TransportLayerControlInfo TransportLayerControlInfo { get; set; }
+    public TransportLayerControlInfo TransportLayerControlInfo { get; set; } =
+        TransportLayerControlInfo.UnnumberedDataPacket;
 
     /// <summary>
     ///     Gets or sets the data packet count, in case of an numbered transport layer type (e.g. NCD or NDT)

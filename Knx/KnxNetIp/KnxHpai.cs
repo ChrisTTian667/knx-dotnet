@@ -12,6 +12,11 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class KnxHpai
 {
+    public KnxHpai()
+    {
+
+    }
+
     private IPAddress _ipAddress;
 
     public HostProtocolCode HostProtocolCode { get; set; }
@@ -24,7 +29,7 @@ public class KnxHpai
 
     public int Port { get; set; }
 
-    public DeviceDescriptionInformationBlock Description { get; internal set; }
+    public DeviceDescriptionInformationBlock? Description { get; private set; }
 
     /// <summary>
     ///     Parses the specified bytes.
