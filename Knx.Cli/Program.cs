@@ -87,11 +87,17 @@ internal sealed class Program
             // cfg.AddCommand<InitCommand>("init")
             //     .WithDescription($"Create or Update configuration");
 
-            cfg.AddCommand<Send>("send")
-                .WithDescription($"Sends a KnxNetIP message. [grey]show --help[/] for details.");
-
+            cfg.AddCommand<Write>("write")
+                .WithDescription($"Sends a KnxNetIP [green]write[/] message. [grey]show --help[/] for details.")
+                .WithExample(new[] { "write 1/1/28 false" });
+            cfg.AddCommand<Read>("read")
+                .WithDescription($"Sends a KnxNetIP [green]read[/] message. [grey]show --help[/] for details.")
+                .WithExample(new[] { "read 1/1/28" });
+            cfg.AddCommand<Reply>("reply")
+                .WithDescription($"Sends a KnxNetIP [green]reply[/] message. [grey]show --help[/] for details.")
+                .WithExample(new[] { "reply 1/1/28 false" });;
             cfg.AddCommand<Discover>("discover")
-                .WithDescription($"Sends a KnxNetIP discover request to discover KnxNetIp devices in your network. Run [grey]show --help[/] for details.");
+                .WithDescription($"Sends a KnxNetIP [green]discovery[/] request to find all the KnxNetIp devices in your network. Run [grey]show --help[/] for details.");
 
             cfg.SetExceptionHandler(ex =>
             {

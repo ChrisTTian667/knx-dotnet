@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Net;
 using Knx.Cli.Configuration;
 using Knx.DatapointTypes;
@@ -10,11 +9,11 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class Send : AsyncCommand<Send.SendSettings>
+public class Read : AsyncCommand<CommandSettings>
 {
     private readonly IOptions<KnxOptions> _options;
 
-    public Send(IOptions<KnxOptions> options) =>
+    public Read(IOptions<KnxOptions> options) =>
         _options = options;
 
     private IKnxNetIpClient CreateClient() =>
@@ -31,7 +30,7 @@ public class Send : AsyncCommand<Send.SendSettings>
                     options.DeviceAddress = _options.Value.DeviceAddress;
                 });
 
-    public override async Task<int> ExecuteAsync(CommandContext context, SendSettings sendSettings)
+    public override async Task<int> ExecuteAsync(CommandContext context, CommandSettings settings)
     {
         await using var knxNetIpClient = CreateClient();
         await knxNetIpClient.ConnectAsync();
@@ -45,9 +44,9 @@ public class Send : AsyncCommand<Send.SendSettings>
         {
             MessageType = MessageType.Write,
             MessageCode = MessageCode.Request,
-            Priority = sendSettings.Priority,
+            Priority = settings.Priority,
             SourceAddress = _options.Value.DeviceAddress,
-            DestinationAddress = (KnxLogicalAddress)sendSettings.DestinationAddress,
+            DestinationAddress = (KnxLogicalAddress)settings.DestinationAddress,
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
             Payload = new DptBoolean(false).Payload
@@ -56,26 +55,5 @@ public class Send : AsyncCommand<Send.SendSettings>
         await knxNetIpClient.SendMessageAsync(message);
 
         return 0;
-    }
-
-    public class SendSettings : CommandSettings
-    {
-        [Description("The destination (Logical) address of the message. E.g. 1/1/1")]
-        [CommandArgument(0, "<ADDRESS>")]
-        public string DestinationAddress { get; init; } = string.Empty;
-
-        [Description("Message payload")]
-        [CommandArgument(1, "<PAYLOAD>")]
-        public string Payload { get; init; } = string.Empty;
-
-        [Description("Show only failed and partial status releases")]
-        [CommandOption("-t|--datapointType <DATAPOINT_TYPE>")]
-        [DefaultValue("1.001")]
-        public string DatapointType { get; init; } = "1.002";
-
-        [Description("The message priority. E.g. System, Normal, Alarm, , Auto")]
-        [CommandOption("-p|--priority")]
-        [DefaultValue(MessagePriority.Auto)]
-        public MessagePriority Priority { get; init; }
     }
 }
