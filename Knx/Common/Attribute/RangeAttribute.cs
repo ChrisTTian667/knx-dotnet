@@ -53,5 +53,5 @@ public class RangeAttribute : System.Attribute
     ///     Gets or sets the error message.
     /// </summary>
     /// <value>The error message.</value>
-    public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; } = default!;
 }

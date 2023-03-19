@@ -3,7 +3,11 @@ using System;
 namespace Knx.Common.Attribute;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class BooleanEncodingAttribute : System.Attribute
+public abstract class DatapointPropertyEncodingAttribute : System.Attribute
+{
+}
+
+public class BooleanEncodingAttribute : DatapointPropertyEncodingAttribute
 {
     public BooleanEncodingAttribute(UnitEncoding falseEncoding, UnitEncoding trueEncoding)
     {

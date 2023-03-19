@@ -8,65 +8,56 @@ namespace Knx.DatapointTypes;
 
 public static class DatapointTypeFactory
 {
-    private static readonly object CreationLock = new();
-
-    public static T Create<T>() where T : DatapointType
-    {
-        return (T)Create(typeof(T));
-    }
+    public static T Create<T>(byte[]? payload = null)
+        where T : DatapointType =>
+            (T)Create(typeof(T), payload);
 
     public static DatapointType Create(string id, byte[]? payload = null)
     {
-        return Create(GetTypeById(id), payload);
+        var datapointType = DatapointTypesCache.Value.WithId(id);
+        if (datapointType is null)
+            throw new NotSupportedException($"DatapointType '{id}' is not supported.");
+
+        return Create(datapointType, payload);
     }
 
-    public static DatapointType Create(Type datapointTypeType, byte[]? value = null)
+    public static void GetInfo(string id)
     {
-        lock (CreationLock)
-        {
-            var dataLengthAttribute =
-                (DataLengthAttribute)datapointTypeType.GetCustomAttributes(typeof(DataLengthAttribute), true).First();
-            var dataLength = dataLengthAttribute.MinimumRequiredBytes;
-            if (dataLength < 0)
-                dataLength = 0;
+        var dpt = Create(id);
 
-            var defaultPayload = new byte[dataLength];
 
-            if (!(Activator.CreateInstance(datapointTypeType, defaultPayload) is DatapointType instance))
-                throw new InvalidOperationException($"The type '{datapointTypeType}' is no {typeof(DatapointType)}");
 
-            if (value != null)
-                instance.Payload = value;
 
-            return instance;
-        }
+
     }
 
-    public static IEnumerable<string> GetSupportedDatapointTypeIds()
+    private static DatapointType Create(Type datapointTypeType, byte[]? value = null)
     {
-        return GetDatapointTypes()
-            .Select(
-                dptType =>
-                    ((DatapointTypeAttribute)dptType.GetCustomAttributes(typeof(DatapointTypeAttribute), false).First())
-                    .ToString());
+        var dataLengthAttribute = datapointTypeType
+            .GetCustomAttributes<DataLengthAttribute>(true)
+            .FirstOrDefault();
+
+        var defaultPayload = new byte[Math.Max(dataLengthAttribute?.MinimumRequiredBytes ?? 0, 0)];
+
+        if (Activator.CreateInstance(datapointTypeType, defaultPayload) is not DatapointType instance)
+            throw new InvalidOperationException($"The '{datapointTypeType}' is not a {typeof(DatapointType)}");
+
+        if (value != null)
+            instance.Payload = value;
+
+        return instance;
     }
 
-    private static IEnumerable<Type> GetDatapointTypes()
-    {
-        return typeof(DatapointType).GetTypeInfo()
-            .Assembly.DefinedTypes.Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
+    private static Type? WithId(this IEnumerable<Type> types, string id) =>
+        types.FirstOrDefault(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), true)
+            .FirstOrDefault()?.ToString() == id);
+
+    private static readonly Lazy<IEnumerable<Type>> DatapointTypesCache = new(() =>
+        typeof(DatapointType).GetTypeInfo()
+            .Assembly.DefinedTypes
+            .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
             .Where(t => !t.IsAbstract)
-            .Select(ti => ti.AsType());
-    }
-
-    private static Type GetTypeById(string id)
-    {
-        var type = GetDatapointTypes()
-            .FirstOrDefault(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), true).First().ToString() == id);
-
-        if (type == null)
-            throw new Exception($"Unable to find DatapointType with id: '{id}'");
-
-        return type;
-    }
+            .Select(ti => ti.AsType())
+            .ToList()
+    );
 }

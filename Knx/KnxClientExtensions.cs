@@ -8,6 +8,7 @@ using TimeoutException = Knx.Exceptions.TimeoutException;
 
 namespace Knx;
 
+[Obsolete("These extensions shouldn't be used anymore.")]
 public static class KnxClientExtensions
 {
     public static void Write(
@@ -79,10 +80,8 @@ public static class KnxClientExtensions
                 if (knxMessage.DestinationAddress.ToString() != destination.ToString())
                     return;
 
-                var indicationCondition = knxMessage.MessageCode == MessageCode.Indication &&
-                                          knxMessage.MessageType == MessageType.Reply;
+                var indicationCondition = knxMessage is { MessageCode: MessageCode.Indication, MessageType: MessageType.Reply };
                 var confirmationCondition = knxMessage.MessageCode == MessageCode.Confirmation;
-
 
                 // If we receive a confirmation, we cannot be sure that the payload correspond to the current actor value
                 if (confirmationCondition)

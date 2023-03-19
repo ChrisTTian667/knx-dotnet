@@ -1,5 +1,4 @@
 using System.Diagnostics;
-using System.Net;
 using Knx.DatapointTypes.Dpt1Bit;
 using Knx.ExtendedMessageInterface;
 using Knx.KnxNetIp;
@@ -45,7 +44,7 @@ public class KnxNetIpRoutingClientTests
                 options.DeviceAddress = new KnxDeviceAddress(1, 1, 2);
             });
 
-        target.KnxDeviceDiscovered += (sender, info) =>
+        target.KnxDeviceDiscovered += (_, info) =>
         {
             Debug.WriteLine("Device discovered: " + info);
             taskCompletionSource.TrySetResult(info.ToString());

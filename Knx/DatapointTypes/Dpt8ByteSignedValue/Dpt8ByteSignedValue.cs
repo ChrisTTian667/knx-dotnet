@@ -32,10 +32,8 @@ public abstract class Dpt8ByteSignedValue : DatapointType
         get
         {
             var payload = Payload.Take(8).ToArray();
-
             return BitConverter.ToInt64(payload, 0);
         }
-
         set
         {
             var bytes = BitConverter.GetBytes(value);

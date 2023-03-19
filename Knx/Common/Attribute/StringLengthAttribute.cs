@@ -2,10 +2,8 @@ namespace Knx.Common.Attribute;
 
 public class StringLengthAttribute : System.Attribute
 {
-    public StringLengthAttribute(int length)
-    {
+    public StringLengthAttribute(int length) =>
         Length = length;
-    }
 
     /// <summary>
     ///     Gets the length.
@@ -16,5 +14,5 @@ public class StringLengthAttribute : System.Attribute
     ///     Gets or sets the error message.
     /// </summary>
     /// <value>The error message.</value>
-    public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; } = default!;
 }

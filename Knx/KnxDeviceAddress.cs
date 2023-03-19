@@ -30,9 +30,9 @@ public class KnxDeviceAddress : KnxAddress
     public override string ToString() =>
         $"{Area}.{Line}.{Device}";
 
-    private byte _area;
-    private byte _line;
-    private byte _device;
+    private readonly byte _area;
+    private readonly byte _line;
+    private readonly byte _device;
 
     /// <summary>
     ///     Don't use a parameterless constructor; this is only for serialization
