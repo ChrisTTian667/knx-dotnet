@@ -50,7 +50,7 @@ public class Write : AsyncCommand<Write.CommandSettings>
             DestinationAddress = (KnxLogicalAddress)settings.DestinationAddress,
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptBoolean(false).Payload
+            Payload = new DptBoolean(true)
         };
 
         await knxNetIpClient.SendMessageAsync(message);

@@ -5,7 +5,7 @@ using System.Net;
 
 namespace Knx.Common;
 
-internal class ByteArrayBuilder
+internal sealed class ByteArrayBuilder
 {
     private readonly List<byte> _list = new();
 

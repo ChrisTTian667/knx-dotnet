@@ -28,7 +28,7 @@ public class KnxNetIpRoutingClientTests
             DestinationAddress = new KnxLogicalAddress(1, 1, 28),
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptBoolean(false).Payload
+            Payload = new DptBoolean(false)
         };
 
         await routingClient.SendMessageAsync(message);

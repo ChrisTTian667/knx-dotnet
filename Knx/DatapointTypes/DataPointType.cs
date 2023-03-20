@@ -16,7 +16,7 @@ public class DatapointType
     [DataMember(Name = "Id", IsRequired = true)]
     public string DatapointTypeId { get; set; }
 
-    public virtual byte[] Payload
+    public byte[] Payload
     {
         get => _payload;
         set
@@ -154,4 +154,7 @@ public class DatapointType
                     requiredBytes));
         }
     }
+
+    public static implicit operator byte[](DatapointType dpt) =>
+        dpt.Payload;
 }

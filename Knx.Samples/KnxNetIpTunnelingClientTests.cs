@@ -50,7 +50,7 @@ public class KnxNetIpTunnelingClientTests
             DestinationAddress = new KnxLogicalAddress(5, 1, 34),
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptTemperature(22.3).Payload
+            Payload = new DptTemperature(22.3)
         };
     }
 
@@ -65,7 +65,7 @@ public class KnxNetIpTunnelingClientTests
             DestinationAddress = new KnxLogicalAddress(9, 3, 0),
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptTime(new TimeSpan(13, 37, 00), DayOfWeek.Monday).Payload
+            Payload = new DptTime(new TimeSpan(13, 37, 00), DayOfWeek.Monday)
         };
     }
 
@@ -80,7 +80,7 @@ public class KnxNetIpTunnelingClientTests
             DestinationAddress = new KnxLogicalAddress(9, 3, 1),
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptDate(new DateTime(2011, 09, 11)).Payload
+            Payload = new DptDate(new DateTime(2011, 09, 11))
         };
     }
 
@@ -118,7 +118,7 @@ public class KnxNetIpTunnelingClientTests
             DestinationAddress = new KnxLogicalAddress(1, 1, 28),
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
-            Payload = new DptBoolean(false).Payload
+            Payload = new DptBoolean(false)
         };
 
         await tunnelingClient.SendMessageAsync(message);
