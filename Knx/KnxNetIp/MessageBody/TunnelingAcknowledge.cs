@@ -40,7 +40,7 @@ public class TunnelingAcknowledge : TunnelingMessageBody
     /// <summary>
     ///     Serialize to ByteArray.
     /// </summary>
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder) =>
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder) =>
         byteArrayBuilder
             .AddByte(Length)
             .AddByte(CommunicationChannel)

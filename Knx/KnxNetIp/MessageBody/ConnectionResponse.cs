@@ -50,7 +50,7 @@ public class ConnectionResponse : TunnelingMessageBody
     ///     Toes the byte array.
     /// </summary>
     /// <param name="byteArrayBuilder">The byte array builder.</param>
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder.AddByte(CommunicationChannel).AddByte((byte)State);
 

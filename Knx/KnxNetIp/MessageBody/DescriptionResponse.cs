@@ -12,7 +12,7 @@ public class DescriptionResponse : TunnelingMessageBody
         throw new NotImplementedException();
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         throw new NotImplementedException();
     }

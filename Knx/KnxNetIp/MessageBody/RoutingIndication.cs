@@ -25,13 +25,13 @@ public class RoutingIndication : MessageBodyBase
         Cemi = KnxMessage.Deserialize(bytes.ExtractBytes(0));
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder.Add(Cemi.ToByteArray());
     }
 
     public override string ToString()
     {
-        return string.Format("{0} Msg: {1}", base.ToString(), Cemi != null ? Cemi.ToString() : "empty");
+        return $"{base.ToString()} Msg: {(Cemi != null ? Cemi.ToString() : "empty")}";
     }
 }

@@ -19,7 +19,7 @@ public class ConnectionStateResponse : TunnelingMessageBody
         State = (ErrorCode)bytes[1];
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder.AddByte(CommunicationChannel).AddByte((byte)State);
     }

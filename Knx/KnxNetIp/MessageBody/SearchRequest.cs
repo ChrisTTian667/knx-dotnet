@@ -18,7 +18,7 @@ public class SearchRequest : TunnelingMessageBody
         //throw new NotImplementedException();
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder.Add(Endpoint.ToByteArray());
     }

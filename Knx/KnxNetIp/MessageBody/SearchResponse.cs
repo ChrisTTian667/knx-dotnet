@@ -15,7 +15,7 @@ public class SearchResponse : TunnelingMessageBody
         Endpoint = KnxHpai.Parse(bytes);
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         throw new NotImplementedException();
     }

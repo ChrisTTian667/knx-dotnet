@@ -39,7 +39,7 @@ public class LostMessageIndication : MessageBodyBase
         Lost = (bytes[2] << 8) + bytes[3];
     }
 
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder
             .AddByte(Length)

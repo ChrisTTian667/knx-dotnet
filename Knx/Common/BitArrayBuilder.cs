@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Knx.Common;
 
-public sealed class BitArrayBuilder
+internal sealed class BitArrayBuilder
 {
     private readonly List<BitArray> _bitArrayList = new();
 

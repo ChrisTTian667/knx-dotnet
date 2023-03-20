@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Knx.Common;
 
-public static class BitArrayExtensions
+internal static class BitArrayExtensions
 {
     /// <summary>
     ///     Counts the positiv bit's of a BitArray.

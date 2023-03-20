@@ -16,5 +16,5 @@ public abstract class MessageBodyBase
     ///     Serialize to ByteArray.
     /// </summary>
     /// <param name="byteArrayBuilder">The byte array builder.</param>
-    public abstract void ToByteArray(ByteArrayBuilder byteArrayBuilder);
+    internal abstract void ToByteArray(ByteArrayBuilder byteArrayBuilder);
 }

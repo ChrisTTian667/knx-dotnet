@@ -5,20 +5,7 @@ using System.Net;
 
 namespace Knx.Common;
 
-public sealed class ByteArrayToken
-{
-    public ByteArrayToken(int index, int bytesToAdd)
-    {
-        Index = index;
-        BytesToAdd = bytesToAdd;
-    }
-
-    public int BytesToAdd { get; }
-
-    public int Index { get; }
-}
-
-public class ByteArrayBuilder
+internal class ByteArrayBuilder
 {
     private readonly List<byte> _list = new();
 

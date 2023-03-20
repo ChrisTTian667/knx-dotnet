@@ -49,7 +49,7 @@ public class ConnectionRequest : TunnelingMessageBody
     ///     Returns the message as byte array.
     /// </summary>
     /// <returns></returns>
-    public override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
     {
         byteArrayBuilder
             .Add(ControlEndpoint.ToByteArray())

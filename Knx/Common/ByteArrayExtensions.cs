@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Knx.Common;
 
-public static class ByteArrayExtensions
+internal static class ByteArrayExtensions
 {
     /// <summary>
     ///     Extracts the bytes from a given Idx.

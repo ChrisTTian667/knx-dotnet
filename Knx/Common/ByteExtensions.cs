@@ -8,7 +8,7 @@ namespace Knx.Common;
 /// <summary>
 ///     a collection of all extensions needed in the knx namespace.
 /// </summary>
-public static class ByteExtensions
+internal static class ByteExtensions
 {
     public static IEnumerable<bool> ConvertToBits(this int value, byte length)
     {
