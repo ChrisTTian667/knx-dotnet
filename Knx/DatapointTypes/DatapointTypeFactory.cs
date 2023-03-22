@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -21,14 +22,37 @@ public static class DatapointTypeFactory
         return Create(datapointType, payload);
     }
 
-    public static void GetInfo(string id)
+    public static void GetAll()
     {
-        var dpt = Create(id);
+        var alltypes = DatapointTypesCache.Value;
+
+        foreach (var type in alltypes)
+        {
+            var dataLengthAttribute = type
+                .GetCustomAttributes<DataLengthAttribute>(true)
+                .FirstOrDefault();
+
+            var properties = type.GetProperties()
+                .Where(p => p.GetCustomAttributes<DatapointPropertyAttribute>(true).Any());
+
+            Console.WriteLine("");
+            Console.WriteLine($"DatapointType: {type.Name}");
+            Console.WriteLine($" - Length: {dataLengthAttribute.Length}");
+            Console.WriteLine($" - {properties.Count()} properties");
+            Console.WriteLine("Properties:");
+
+            foreach (var property in properties)
+            {
+                Console.WriteLine($" - {property.Name} ({property.PropertyType})");
+
+                // possible values:
 
 
 
 
 
+            }
+        }
     }
 
     private static DatapointType Create(Type datapointTypeType, byte[]? value = null)
@@ -60,4 +84,8 @@ public static class DatapointTypeFactory
             .Select(ti => ti.AsType())
             .ToList()
     );
+
+    public static IEnumerable<Type> GetAllTypes() =>
+        DatapointTypesCache.Value
+            .Where(t => !t.IsAbstract);
 }

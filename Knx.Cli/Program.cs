@@ -1,5 +1,7 @@
 ﻿using Knx.Cli.Commands;
 using Knx.Cli.Configuration;
+using Knx.DatapointTypes;
+using Knx.DatapointTypes.Dpt1Bit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -82,27 +84,42 @@ internal sealed class Program
     {
         var app = new CommandApp(new TypeRegistrar(services));
 
-        app.Configure(cfg =>
+        app.Configure(config =>
         {
-            // cfg.AddCommand<InitCommand>("init")
-            //     .WithDescription($"Create or Update configuration");
+            // TODO add commands for each datatype here...
 
-            cfg.AddCommand<Write>("write")
+            // config.AddBranch<WriteCommandSettings>(
+            //     "write",
+            //     write =>
+            //     {
+            //         foreach (var dpt in DatapointTypeFactory.GetAllTypes())
+            //         {
+            //             typeof(WriteDatapointType<>).MakeGenericType(dpt);
+            //
+            //             write.AddCommand<WriteDatapointType<DptBoolean>>("boolean");
+            //         }
+            //     });
+
+            config.AddCommand<List>("list")
+                .WithDescription($"Lists all the [green]objects of the specified type[/]. Run [grey]list --help[/] for details.")
+                .WithExample(new[] { "list DatapointTypes" });
+
+            config.AddCommand<Write>("write")
                 .WithDescription($"Sends a KnxNetIP [green]write[/] message. [grey]show --help[/] for details.")
                 .WithExample(new[] { "write 1/1/28 false" });
 
-            cfg.AddCommand<Read>("read")
+            config.AddCommand<Read>("read")
                 .WithDescription($"Sends a KnxNetIP [green]read[/] message. [grey]show --help[/] for details.")
                 .WithExample(new[] { "read 1/1/28" });
 
-            cfg.AddCommand<Reply>("reply")
+            config.AddCommand<Reply>("reply")
                 .WithDescription($"Sends a KnxNetIP [green]reply[/] message. [grey]show --help[/] for details.")
                 .WithExample(new[] { "reply 1/1/28 false" });;
 
-            cfg.AddCommand<Discover>("discover")
+            config.AddCommand<Discover>("discover")
                 .WithDescription($"Sends a KnxNetIP [green]discovery[/] request to find all the KnxNetIp devices in your network. Run [grey]show --help[/] for details.");
 
-            cfg.SetExceptionHandler(ex =>
+            config.SetExceptionHandler(ex =>
             {
                 if (ex.InnerException is OptionsValidationException validationException)
                 {

@@ -19,16 +19,14 @@ public class DptDeltaTimePeriodMilliseconds : DptDeltaTime
     {
     }
 
-    protected override TimeSpan TimeSpanFromShort(short value)
-    {
-        return TimeSpan.FromMilliseconds(value);
-    }
+    protected override TimeSpan TimeSpanFromShort(short value) =>
+        TimeSpan.FromMilliseconds(value);
 
     protected override short ShortFromTimeSpan(TimeSpan timeSpan)
     {
         var value = timeSpan.TotalMilliseconds;
 
-        if (value < -32768 || value > 32768)
+        if (value is < -32768 or > 32768)
             throw new ArgumentOutOfRangeException("timeSpan", "Timespan must be within -32768 ... 32768 milliseconds.");
 
         return (short)value;

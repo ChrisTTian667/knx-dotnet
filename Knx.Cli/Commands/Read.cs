@@ -9,7 +9,7 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class Read : AsyncCommand<CommandSettings>
+public class Read : AsyncCommand<WriteCommandSettings>
 {
     private readonly IOptions<KnxOptions> _options;
 
@@ -30,7 +30,7 @@ public class Read : AsyncCommand<CommandSettings>
                     options.DeviceAddress = _options.Value.DeviceAddress;
                 });
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CommandSettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, WriteCommandSettings commandSettings)
     {
         await using var knxNetIpClient = CreateClient();
         await knxNetIpClient.ConnectAsync();
@@ -44,9 +44,9 @@ public class Read : AsyncCommand<CommandSettings>
         {
             MessageType = MessageType.Write,
             MessageCode = MessageCode.Request,
-            Priority = settings.Priority,
+            Priority = commandSettings.Priority,
             SourceAddress = _options.Value.DeviceAddress,
-            DestinationAddress = (KnxLogicalAddress)settings.DestinationAddress,
+            DestinationAddress = (KnxLogicalAddress)commandSettings.DestinationAddress,
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
             Payload = new DptBoolean(false).Payload

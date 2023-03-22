@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Net;
 using Knx.Cli.Configuration;
 using Knx.DatapointTypes;
@@ -10,7 +9,7 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class Write : AsyncCommand<Write.CommandSettings>
+public class Write : AsyncCommand<WriteCommandSettings>
 {
     private readonly IOptions<KnxOptions> _options;
 
@@ -31,7 +30,7 @@ public class Write : AsyncCommand<Write.CommandSettings>
                     options.DeviceAddress = _options.Value.DeviceAddress;
                 });
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CommandSettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, WriteCommandSettings commandSettings)
     {
         await using var knxNetIpClient = CreateClient();
         await knxNetIpClient.ConnectAsync();
@@ -45,9 +44,9 @@ public class Write : AsyncCommand<Write.CommandSettings>
         {
             MessageType = MessageType.Write,
             MessageCode = MessageCode.Request,
-            Priority = settings.Priority,
+            Priority = commandSettings.Priority,
             SourceAddress = _options.Value.DeviceAddress,
-            DestinationAddress = (KnxLogicalAddress)settings.DestinationAddress,
+            DestinationAddress = (KnxLogicalAddress)commandSettings.DestinationAddress,
             TransportLayerControlInfo = TransportLayerControlInfo.UnnumberedDataPacket,
             DataPacketCount = 0,
             Payload = new DptBoolean(true)
@@ -56,12 +55,5 @@ public class Write : AsyncCommand<Write.CommandSettings>
         await knxNetIpClient.SendMessageAsync(message);
 
         return 0;
-    }
-
-    public sealed class CommandSettings : Commands.CommandSettings
-    {
-        [Description("Message payload")]
-        [CommandArgument(1, "<PAYLOAD>")]
-        public string Payload { get; init; } = string.Empty;
     }
 }

@@ -29,7 +29,8 @@ public class DptString_8859_1 : DptString
         {
             var encoding = Encoding.GetEncoding("iso-8859-1");
 
-            if (encoding == null) throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
+            if (encoding == null)
+                throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
 
             return encoding;
         }

@@ -29,17 +29,11 @@ public abstract class Dpt4ByteUnsignedValue : DatapointType
         get
         {
             var payload = Payload.Take(2).ToArray();
-
             return BitConverter.ToUInt16(payload, 0);
         }
 
         set
         {
-            if (value < 0 || value > uint.MaxValue)
-                throw new ArgumentOutOfRangeException(
-                    "value",
-                    string.Format("Value must be within 0 ... {0}.", uint.MaxValue));
-
             var bytes = BitConverter.GetBytes(value);
             Payload = bytes.Take(4).ToArray();
         }
