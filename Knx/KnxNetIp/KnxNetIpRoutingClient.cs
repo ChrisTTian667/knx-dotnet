@@ -1,33 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Knx.KnxNetIp.MessageBody;
+using Microsoft.Extensions.Logging;
 
 namespace Knx.KnxNetIp;
-
-using Microsoft.Extensions.Logging;
-using System;
 
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpRouting protocol.
 /// </summary>
 public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
 {
-    private readonly ILogger<KnxNetIpRoutingClient> _logger;
-    private UdpClient? _udpClient;
-    private readonly IPEndPoint _remoteEndPoint;
     private readonly KnxDeviceAddress _deviceAddress;
     private readonly IPEndPoint _localEndpoint;
+    private readonly ILogger<KnxNetIpRoutingClient> _logger;
     private readonly CancellationTokenSource _receivingMessagesCancellationTokenSource;
+    private readonly IPEndPoint _remoteEndPoint;
+    private UdpClient? _udpClient;
 
     /// <summary>
-    ///     Creates a new instance of the <see cref="KnxNetIpRoutingClient"/> class.
+    ///     Creates a new instance of the <see cref="KnxNetIpRoutingClient" /> class.
     /// </summary>
     /// <param name="configureOptions">Configuration builder</param>
-    /// /// <param name="logger">Optional logger</param>
+    /// ///
+    /// <param name="logger">Optional logger</param>
     public KnxNetIpRoutingClient(
         Action<KnxNetIpRoutingClientOptions>? configureOptions = null,
         ILogger<KnxNetIpRoutingClient>? logger = null)
@@ -50,30 +50,10 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         GC.SuppressFinalize(this);
     }
 
-    ~KnxNetIpRoutingClient() =>
-        _ = Dispose(false);
-
-    private ValueTask Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _receivingMessagesCancellationTokenSource.Cancel();
-            _udpClient?.Dispose();
-            _udpClient = null;
-        }
-
-        return ValueTask.CompletedTask;
-    }
-
     /// <summary>
     ///     Occurs when [KNX message received].
     /// </summary>
     public event EventHandler<IKnxMessage>? KnxMessageReceived;
-
-    /// <summary>
-    ///     Called when knx device has been discovered.
-    /// </summary>
-    public event EventHandler<DeviceInfo>? KnxDeviceDiscovered;
 
     /// <summary>
     ///     Sends a KnxMessage.
@@ -85,41 +65,6 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         ((RoutingIndication)knxNetIpMessage.Body!).Cemi = knxMessage;
 
         await SendMessageAsync(knxNetIpMessage, cancellationToken);
-    }
-
-    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
-    {
-        var receivedBuffer = new List<byte>();
-
-        while (!cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                var udpReceiveResult = await _udpClient!.ReceiveAsync(cancellationToken);
-                var receivedData = udpReceiveResult.Buffer.ToArray();
-                receivedBuffer.AddRange(receivedData);
-
-                var knxNetIpMessage = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
-                OnKnxNetIpMessageReceived(knxNetIpMessage);
-
-                receivedBuffer.Clear();
-            }
-            catch (Exception exception) when (
-                exception is ObjectDisposedException
-                    or OperationCanceledException)
-            {
-                // UdpClient has been disposed or cancelled => stop listening
-                break;
-            }
-            catch (Exception exception)
-            {
-                _logger.LogError(exception, "Error while receiving message");
-            }
-            finally
-            {
-                receivedBuffer.Clear();
-            }
-        }
     }
 
     /// <summary>
@@ -146,6 +91,61 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         await Task.CompletedTask;
     }
 
+    ~KnxNetIpRoutingClient()
+    {
+        _ = Dispose(false);
+    }
+
+    private ValueTask Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _receivingMessagesCancellationTokenSource.Cancel();
+            _udpClient?.Dispose();
+            _udpClient = null;
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    ///     Called when knx device has been discovered.
+    /// </summary>
+    public event EventHandler<DeviceInfo>? KnxDeviceDiscovered;
+
+    private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
+    {
+        var receivedBuffer = new List<byte>();
+
+        while (!cancellationToken.IsCancellationRequested)
+            try
+            {
+                var udpReceiveResult = await _udpClient!.ReceiveAsync(cancellationToken);
+                var receivedData = udpReceiveResult.Buffer.ToArray();
+                receivedBuffer.AddRange(receivedData);
+
+                var knxNetIpMessage = KnxNetIpMessage.Parse(receivedBuffer.ToArray());
+                OnKnxNetIpMessageReceived(knxNetIpMessage);
+
+                receivedBuffer.Clear();
+            }
+            catch (Exception exception) when (
+                exception is ObjectDisposedException
+                    or OperationCanceledException)
+            {
+                // UdpClient has been disposed or cancelled => stop listening
+                break;
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception, "Error while receiving message");
+            }
+            finally
+            {
+                receivedBuffer.Clear();
+            }
+    }
+
     /// <summary>
     ///     Sends a KnxNetIpMessage
     /// </summary>
@@ -163,14 +163,17 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         catch (Exception exception)
         {
             _logger.LogError(exception, "Error sending message: {message}", message);
+
             throw;
         }
     }
 
-    public async Task DiscoverAsync(CancellationToken cancellationToken = default) =>
+    public async Task DiscoverAsync(CancellationToken cancellationToken = default)
+    {
         await SendMessageAsync(
             MessageFactory.GetSearchRequest(_remoteEndPoint),
             cancellationToken);
+    }
 
     private void EnsureConnectionEstablished()
     {
@@ -193,6 +196,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
                     break;
                 case RoutingIndication routingIndication:
                     InvokeKnxMessageReceived(routingIndication.Cemi);
+
                     break;
             }
 
@@ -204,14 +208,18 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         }
     }
 
-    private void InvokeKnxMessageReceived(IKnxMessage knxMessage) =>
+    private void InvokeKnxMessageReceived(IKnxMessage knxMessage)
+    {
         KnxMessageReceived?.Invoke(this, knxMessage);
+    }
 
-    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo) =>
+    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo)
+    {
         KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
+    }
 
     /// <summary>
-    /// Host Protocol Address Information
+    ///     Host Protocol Address Information
     /// </summary>
     /// <param name="endpoint"></param>
     /// <param name="friendlyName"></param>

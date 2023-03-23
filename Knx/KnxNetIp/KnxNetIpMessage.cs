@@ -16,12 +16,6 @@ public abstract class KnxNetIpMessage
     public const byte HeaderLength = 6;
 
     /// <summary>
-    ///     Deserializes the specified bytes.
-    /// </summary>
-    /// <param name="bytes">The bytes to be deserialized.</param>
-    protected abstract void Deserialize(byte[] bytes);
-
-    /// <summary>
     ///     Gets or sets the body.
     /// </summary>
     /// <value>The body.</value>
@@ -34,12 +28,19 @@ public abstract class KnxNetIpMessage
     public KnxNetIpServiceType ServiceType { get; set; }
 
     /// <summary>
+    ///     Deserializes the specified bytes.
+    /// </summary>
+    /// <param name="bytes">The bytes to be deserialized.</param>
+    protected abstract void Deserialize(byte[] bytes);
+
+    /// <summary>
     ///     Creates the specified message by type.
     /// </summary>
     /// <param name="serviceType">Type of the message.</param>
     /// <returns></returns>
-    public static KnxNetIpMessage Create(KnxNetIpServiceType serviceType) =>
-        serviceType switch
+    public static KnxNetIpMessage Create(KnxNetIpServiceType serviceType)
+    {
+        return serviceType switch
         {
             KnxNetIpServiceType.ConnectionRequest => new KnxNetIpMessage<ConnectionRequest>(),
             KnxNetIpServiceType.ConnectionResponse => new KnxNetIpMessage<ConnectionResponse>(),
@@ -57,6 +58,7 @@ public abstract class KnxNetIpMessage
             KnxNetIpServiceType.RoutingLostMessage => new KnxNetIpMessage<LostMessageIndication>(),
             _ => throw new ArgumentException("Knx message body unknown!")
         };
+    }
 
     /// <summary>
     ///     Parses the specified bytes.
@@ -112,9 +114,11 @@ public abstract class KnxNetIpMessage
     /// <returns>
     ///     <c>true</c> if the specified bytes are message of specified service type; otherwise, <c>false</c>.
     /// </returns>
-    public static bool IsService(byte[] bytes, KnxNetIpServiceType service) =>
-        bytes.Length >= HeaderLength &&
-        (KnxNetIpServiceType)((bytes[2] << 8) + bytes[3]) == service;
+    public static bool IsService(byte[] bytes, KnxNetIpServiceType service)
+    {
+        return bytes.Length >= HeaderLength &&
+               (KnxNetIpServiceType)((bytes[2] << 8) + bytes[3]) == service;
+    }
 
     /// <summary>
     ///     Does the byte array.

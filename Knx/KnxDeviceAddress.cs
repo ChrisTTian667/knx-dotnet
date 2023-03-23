@@ -5,34 +5,9 @@ namespace Knx;
 
 public class KnxDeviceAddress : KnxAddress
 {
-    protected override void FillBitArray(BitArray bitArray)
-    {
-        var currentIdx = 0;
-        foreach (var bit in Area.ConvertToBits(4))
-        {
-            bitArray[currentIdx] = bit;
-            currentIdx++;
-        }
-
-        foreach (var bit in Line.ConvertToBits(4))
-        {
-            bitArray[currentIdx] = bit;
-            currentIdx++;
-        }
-
-        foreach (var bit in Device.ConvertToBits(8))
-        {
-            bitArray[currentIdx] = bit;
-            currentIdx++;
-        }
-    }
-
-    public override string ToString() =>
-        $"{Area}.{Line}.{Device}";
-
     private readonly byte _area;
-    private readonly byte _line;
     private readonly byte _device;
+    private readonly byte _line;
 
     /// <summary>
     ///     Don't use a parameterless constructor; this is only for serialization
@@ -107,6 +82,35 @@ public class KnxDeviceAddress : KnxAddress
         }
     }
 
-    public static implicit operator KnxDeviceAddress(string input) =>
-        ParseDevice(input);
+    protected override void FillBitArray(BitArray bitArray)
+    {
+        var currentIdx = 0;
+        foreach (var bit in Area.ConvertToBits(4))
+        {
+            bitArray[currentIdx] = bit;
+            currentIdx++;
+        }
+
+        foreach (var bit in Line.ConvertToBits(4))
+        {
+            bitArray[currentIdx] = bit;
+            currentIdx++;
+        }
+
+        foreach (var bit in Device.ConvertToBits(8))
+        {
+            bitArray[currentIdx] = bit;
+            currentIdx++;
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"{Area}.{Line}.{Device}";
+    }
+
+    public static implicit operator KnxDeviceAddress(string input)
+    {
+        return ParseDevice(input);
+    }
 }

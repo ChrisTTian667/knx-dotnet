@@ -21,8 +21,10 @@ public class DptTimePeriod100Milliseconds : DptTimePeriod
     {
     }
 
-    protected override TimeSpan TimeSpanFromUInt16(ushort value) =>
-        TimeSpan.FromSeconds(value / 10.0);
+    protected override TimeSpan TimeSpanFromUInt16(ushort value)
+    {
+        return TimeSpan.FromSeconds(value / 10.0);
+    }
 
     protected override ushort UInt16FromTimeSpan(TimeSpan timeSpan)
     {

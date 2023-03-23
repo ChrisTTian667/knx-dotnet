@@ -30,6 +30,8 @@ public class DatapointTypeAttribute : System.Attribute
     public Usage Usage { get; }
     public string Description { get; set; }
 
-    public override string ToString() =>
-        $"{MainNumber}.{SubNumber:000}";
+    public override string ToString()
+    {
+        return $"{MainNumber}.{SubNumber:000}";
+    }
 }

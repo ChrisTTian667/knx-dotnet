@@ -29,6 +29,7 @@ public class DptTimePeriodHours : DptTimePeriod
     protected override ushort UInt16FromTimeSpan(TimeSpan timeSpan)
     {
         var value = timeSpan.TotalHours;
+
         if (value is < 0 or > 65535)
             throw new ArgumentOutOfRangeException(nameof(timeSpan), "Timespan must be within 0 ... ~7.4 years.");
 

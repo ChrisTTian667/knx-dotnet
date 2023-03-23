@@ -18,7 +18,6 @@ namespace Knx.KnxNetIp;
 public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
 {
     private readonly object _communicationChannelLock = new();
-    private DateTime _connectionStateTimeStamp;
     private readonly KnxDeviceAddress _deviceAddress;
     private readonly ILogger<KnxNetIpRoutingClient> _logger;
     private readonly KnxNetIpTunnelingClientOptions _options;
@@ -31,8 +30,11 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
     //private readonly AutoResetEvent _terminationEvent = new(false);
 
     private readonly UdpClient _udpClient;
+    private DateTime _connectionStateTimeStamp;
     private byte? _currentCommunicationChannel;
+
     private bool _isDisposed;
+
     //private bool _logicalConnected;
     private byte _sequenceCounter;
 
@@ -91,17 +93,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         }
     }
 
-    public void Dispose()
-    {
-        if (_isDisposed)
-        {
-            _isDisposed = true;
-
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-    }
-
     /// <summary>
     ///     Occurs when [KNX message received].
     /// </summary>
@@ -122,6 +113,54 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
                 ack.Body.CommunicationChannel == message.Body.CommunicationChannel
                 && ack.Body.SequenceCounter == message.Body.SequenceCounter),
             cancellationToken);
+    }
+
+    public async Task ConnectAsync()
+    {
+        _udpClient.Connect(_remoteEndPoint);
+
+        var localEndpoint = _udpClient.Client.LocalEndPoint;
+
+        if (localEndpoint == null)
+            throw new KnxNetIpException("Unable to retrieve local endpoint.");
+
+        _ = ReceiveMessagesAsync(_receivingMessagesCancellationTokenSource.Token);
+
+        try
+        {
+            _connectionStateTimeStamp = DateTime.Now;
+
+            if (_udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
+                throw new KnxNetIpException("Unable to retrieve local endpoint.");
+
+            var connectRequest = MessageFactory.GetConnectRequest(localEndPoint);
+            var connectResponse = await SendAndReceiveReply<KnxNetIpMessage<ConnectionResponse>>(connectRequest);
+
+            if (connectResponse == null)
+                throw new KnxNetIpException("Did not retrieve any reply message.");
+
+            if (connectResponse.Body.State != ErrorCode.NoError)
+                throw new KnxNetIpException(connectResponse.Body.State);
+        }
+        catch (KnxException exception)
+        {
+            throw new KnxException(
+                $"Unable to connect to KNX gateway ('{_remoteEndPoint}'): {exception.Message}",
+                exception);
+        }
+
+        _ = SendKeepAliveMessages(_receivingMessagesCancellationTokenSource.Token);
+    }
+
+    public void Dispose()
+    {
+        if (_isDisposed)
+        {
+            _isDisposed = true;
+
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 
     ~KnxNetIpTunnelingClient()
@@ -183,43 +222,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
             }
     }
 
-    public async Task ConnectAsync()
-    {
-        _udpClient.Connect(_remoteEndPoint);
-
-        var localEndpoint = _udpClient.Client.LocalEndPoint;
-
-        if (localEndpoint == null)
-            throw new KnxNetIpException("Unable to retrieve local endpoint.");
-
-        _ = ReceiveMessagesAsync(_receivingMessagesCancellationTokenSource.Token);
-
-        try
-        {
-            _connectionStateTimeStamp = DateTime.Now;
-
-            if (_udpClient.Client.LocalEndPoint is not IPEndPoint localEndPoint)
-                throw new KnxNetIpException("Unable to retrieve local endpoint.");
-
-            var connectRequest = MessageFactory.GetConnectRequest(localEndPoint);
-            var connectResponse = await SendAndReceiveReply<KnxNetIpMessage<ConnectionResponse>>(connectRequest);
-
-            if (connectResponse == null)
-                throw new KnxNetIpException("Did not retrieve any reply message.");
-
-            if (connectResponse.Body.State != ErrorCode.NoError)
-                throw new KnxNetIpException(connectResponse.Body.State);
-        }
-        catch (KnxException exception)
-        {
-            throw new KnxException(
-                $"Unable to connect to KNX gateway ('{_remoteEndPoint}'): {exception.Message}",
-                exception);
-        }
-
-        _ = SendKeepAliveMessages(_receivingMessagesCancellationTokenSource.Token);
-    }
-
     private async Task DisconnectAsync()
     {
         try
@@ -240,6 +242,7 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         catch (KnxException exception)
         {
             _logger.LogError($"Unable to disconnect from KNX gateway ('{_remoteEndPoint}'): {exception.Message}");
+
             throw;
         }
     }
@@ -252,18 +255,22 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         {
             case KnxNetIpServiceType.ConnectionResponse:
                 HandleConnectionResponse((KnxNetIpMessage<ConnectionResponse>)message);
+
                 break;
 
             case KnxNetIpServiceType.DisconnectResponse:
                 HandleDisconnectResponse((KnxNetIpMessage<DisconnectResponse>)message);
+
                 break;
 
             case KnxNetIpServiceType.ConnectionStateResponse:
                 HandleConnectionStateResponse((KnxNetIpMessage<ConnectionStateResponse>)message);
+
                 break;
 
             case KnxNetIpServiceType.TunnelingRequest:
                 HandleTunnelingRequest((KnxNetIpMessage<TunnelingRequest>)message);
+
                 break;
         }
 
@@ -364,8 +371,10 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         _connectionStateTimeStamp = DateTime.Now;
     }
 
-    private void HandleDisconnectResponse(KnxNetIpMessage<DisconnectResponse> knxNetIpMessage) =>
+    private void HandleDisconnectResponse(KnxNetIpMessage<DisconnectResponse> knxNetIpMessage)
+    {
         _logger.LogTrace("Received disconnect response: {knxNetIpMessage}", knxNetIpMessage);
+    }
 
     private async void HandleTunnelingRequest(KnxNetIpMessage<TunnelingRequest> knxNetIpMessage)
     {
@@ -445,8 +454,10 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         {
             // If the timeout CancellationToken caused the cancellation, throw a NotAcknowledgedException
             if (!cancellationToken.IsCancellationRequested)
+            {
                 throw new NotAcknowledgedException(
                     $"Message could not be sent and acknowledged within the specified timeout of {_options.AcknowledgeTimeout}");
+            }
 
             throw;
         }
@@ -455,7 +466,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
     private async Task SendKeepAliveMessages(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 _logger.LogInformation("Started sending keep alive messages");
@@ -480,9 +490,9 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
             catch (Exception ex) when (ex is OperationCanceledException or TaskCanceledException)
             {
                 _logger.LogInformation("Stopped sending keep alive messages");
+
                 return;
             }
-        }
     }
 
     /// <summary>

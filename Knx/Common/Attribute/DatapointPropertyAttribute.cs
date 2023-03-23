@@ -8,11 +8,15 @@ namespace Knx.Common.Attribute;
 [AttributeUsage(AttributeTargets.Property)]
 public class DatapointPropertyAttribute : System.Attribute
 {
-    public DatapointPropertyAttribute() =>
+    public DatapointPropertyAttribute()
+    {
         Unit = Unit.None;
+    }
 
-    public DatapointPropertyAttribute(Unit unit) =>
+    public DatapointPropertyAttribute(Unit unit)
+    {
         Unit = unit;
+    }
 
     public DatapointPropertyAttribute(string propertyName, Unit unit)
     {

@@ -8,6 +8,32 @@ namespace Knx.DatapointTypes;
 [DataLength(24)]
 public class DptTime : DatapointType
 {
+    public DptTime()
+    {
+    }
+
+    public DptTime(TimeSpan time, DayOfWeek? dayOfWeek)
+    {
+        Value = time;
+        DayOfWeek = dayOfWeek;
+    }
+
+    public DptTime(byte[] bytes)
+    {
+        Payload = bytes;
+    }
+
+    [DatapointProperty]
+    public TimeSpan Value
+    {
+        get => ToValue(Payload).Time;
+
+        set => Payload = ToBytes(value, DayOfWeek);
+    }
+
+    [DatapointProperty]
+    public DayOfWeek? DayOfWeek { get; set; }
+
     public static byte[] ToBytes(TimeSpan time, DayOfWeek? dayOfWeek)
     {
         var day = (byte)GetDayOfWeek(dayOfWeek) << 5;
@@ -50,30 +76,4 @@ public class DptTime : DatapointType
 
         return new TimeAndWeekDay(new TimeSpan(hour, minutes, seconds), GetDayOfWeek(day));
     }
-
-    public DptTime()
-    {
-    }
-
-    public DptTime(TimeSpan time, DayOfWeek? dayOfWeek)
-    {
-        Value = time;
-        DayOfWeek = dayOfWeek;
-    }
-
-    public DptTime(byte[] bytes)
-    {
-        Payload = bytes;
-    }
-
-    [DatapointProperty]
-    public TimeSpan Value
-    {
-        get => ToValue(Payload).Time;
-
-        set => Payload = ToBytes(value, DayOfWeek);
-    }
-
-    [DatapointProperty]
-    public DayOfWeek? DayOfWeek { get; set; }
 }

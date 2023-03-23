@@ -10,15 +10,6 @@ namespace Knx.KnxNetIp.MessageBody;
 [ResponseMessage(typeof(TunnelingAcknowledge))]
 public class TunnelingRequest : TunnelingMessageBody
 {
-    public override string ToString()
-    {
-        return string.Format(
-            "{0} Seq: {1,-3} Msg: {2}",
-            base.ToString(),
-            SequenceCounter,
-            Cemi != null ? Cemi.ToString() : "empty");
-    }
-
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.TunnelingRequest;
 
     /// <summary>
@@ -40,6 +31,15 @@ public class TunnelingRequest : TunnelingMessageBody
     /// </summary>
     /// <value>The length.</value>
     private static byte Length => 4;
+
+    public override string ToString()
+    {
+        return string.Format(
+            "{0} Seq: {1,-3} Msg: {2}",
+            base.ToString(),
+            SequenceCounter,
+            Cemi != null ? Cemi.ToString() : "empty");
+    }
 
     /// <summary>
     ///     Deserializes the specified bytes.

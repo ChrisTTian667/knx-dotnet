@@ -78,8 +78,10 @@ internal static class ByteArrayExtensions
         return collection.ToArray();
     }
 
-    public static string ToReadableString(this byte[] byteArray) =>
-        BitConverter.ToString(byteArray).Replace("-", " ");
+    public static string ToReadableString(this byte[] byteArray)
+    {
+        return BitConverter.ToString(byteArray).Replace("-", " ");
+    }
 
     public static byte[] FromReadableString(string hexString)
     {

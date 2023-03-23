@@ -20,6 +20,8 @@ public class DescriptionInformationBlock
 
     public byte[] Payload { get; }
 
-    public static DescriptionInformationBlock Parse(byte[] bytes) =>
-        new(bytes);
+    public static DescriptionInformationBlock Parse(byte[] bytes)
+    {
+        return new(bytes);
+    }
 }

@@ -28,9 +28,13 @@ public abstract class Dpt1Bit : DatapointType
         set => Payload = ToBytes(value);
     }
 
-    private static byte[] ToBytes(bool value) =>
-        new byte[1] { Convert.ToByte(value) };
+    private static byte[] ToBytes(bool value)
+    {
+        return new byte[1] { Convert.ToByte(value) };
+    }
 
-    private static bool ToValue(IReadOnlyList<byte> bytes) =>
-        Convert.ToBoolean(bytes[0]);
+    private static bool ToValue(IReadOnlyList<byte> bytes)
+    {
+        return Convert.ToBoolean(bytes[0]);
+    }
 }

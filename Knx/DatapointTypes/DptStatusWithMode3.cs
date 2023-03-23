@@ -15,7 +15,7 @@ public class DptStatusWithMode3 : DatapointType
     public DptStatusWithMode3(byte[] payload)
         : base(payload)
     {
-        base.Payload = payload;
+        Payload = payload;
     }
 
     public DptStatusWithMode3(SetClear a, SetClear b, SetClear c, SetClear d, SetClear e, Mode3 mode)

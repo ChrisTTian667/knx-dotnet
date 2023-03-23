@@ -29,6 +29,7 @@ public abstract class Dpt4ByteUnsignedValue : DatapointType
         get
         {
             var payload = Payload.Take(2).ToArray();
+
             return BitConverter.ToUInt16(payload, 0);
         }
 

@@ -25,12 +25,14 @@ internal sealed class ByteArrayBuilder
     public ByteArrayBuilder Add(IEnumerable<byte> array)
     {
         _list.AddRange(array);
+
         return this;
     }
 
     public ByteArrayBuilder Add(IPAddress ipAddress)
     {
         _list.AddRange(ipAddress.GetAddressBytes());
+
         return this;
     }
 
@@ -62,17 +64,21 @@ internal sealed class ByteArrayBuilder
     public ByteArrayBuilder AddByte(byte b)
     {
         _list.Add(b);
+
         return this;
     }
 
     public ByteArrayBuilder AddByte(byte? b)
     {
         _list.Add(b ??= 0x00);
+
         return this;
     }
 
-    public ByteArrayBuilder AddInt(int integer) =>
-        Add(IntToByteArray(integer));
+    public ByteArrayBuilder AddInt(int integer)
+    {
+        return Add(IntToByteArray(integer));
+    }
 
     /// <summary>
     ///     Adds the length byteArrayToken.
@@ -88,8 +94,10 @@ internal sealed class ByteArrayBuilder
         return this;
     }
 
-    private void ReplaceToken(ByteArrayToken byteArrayToken, byte value) =>
+    private void ReplaceToken(ByteArrayToken byteArrayToken, byte value)
+    {
         _list[byteArrayToken.Index] = value;
+    }
 
     public void ReplaceToken(ByteArrayToken byteArrayToken, int value)
     {
@@ -99,11 +107,13 @@ internal sealed class ByteArrayBuilder
         switch (byteArrayToken.BytesToAdd)
         {
             case > 2:
-                throw new NotSupportedException("ByteArrayBuilder supports only tokens with a length of one or two bytes.");
+                throw new NotSupportedException(
+                    "ByteArrayBuilder supports only tokens with a length of one or two bytes.");
             case 1 when value > byte.MaxValue:
                 throw new ArgumentException("Value to big to pass to an single byte");
             case 1:
                 ReplaceToken(byteArrayToken, Convert.ToByte(value));
+
                 return;
         }
 
@@ -116,6 +126,8 @@ internal sealed class ByteArrayBuilder
     ///     Returns the completed byteArray
     /// </summary>
     /// <returns></returns>
-    public byte[] ToByteArray() =>
-        _list.ToArray();
+    public byte[] ToByteArray()
+    {
+        return _list.ToArray();
+    }
 }

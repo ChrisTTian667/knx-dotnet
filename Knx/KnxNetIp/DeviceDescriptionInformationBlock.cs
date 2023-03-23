@@ -43,6 +43,8 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
 
     public KnxDeviceAddress Address { get; }
 
-    public new static DeviceDescriptionInformationBlock Parse(byte[] bytes) =>
-        new (bytes);
+    public new static DeviceDescriptionInformationBlock Parse(byte[] bytes)
+    {
+        return new(bytes);
+    }
 }

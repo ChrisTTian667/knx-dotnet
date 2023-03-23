@@ -7,11 +7,22 @@ internal class NullLogger<T> : ILogger<T>
 {
     public static readonly NullLogger<T> Instance = new();
 
-    public IDisposable BeginScope<TState>(TState state) => NullScope.Instance;
+    public IDisposable BeginScope<TState>(TState state)
+    {
+        return NullScope.Instance;
+    }
 
-    public bool IsEnabled(LogLevel logLevel) => false;
+    public bool IsEnabled(LogLevel logLevel)
+    {
+        return false;
+    }
 
-    public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception, string> formatter)
+    public void Log<TState>(
+        LogLevel logLevel,
+        EventId eventId,
+        TState state,
+        Exception? exception,
+        Func<TState, Exception, string> formatter)
     {
         // Do nothing
     }

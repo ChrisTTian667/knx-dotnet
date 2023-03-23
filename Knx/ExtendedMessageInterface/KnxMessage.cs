@@ -11,6 +11,9 @@ namespace Knx.ExtendedMessageInterface;
 /// </summary>
 public class KnxMessage : IKnxMessage
 {
+    private readonly ControlByte1 _controlByte1 = new();
+    private readonly ControlByte2 _controlByte2 = new();
+
     /// <summary>
     ///     Initializes a new instance of the <see cref="KnxMessage" /> class.
     ///     (sets the default values)
@@ -21,61 +24,6 @@ public class KnxMessage : IKnxMessage
         IsPositiveConfirmation = false;
         AdditionalInfo = new byte[] { 0 };
     }
-
-    /// <summary>
-    ///     Calculates the security byte.
-    /// </summary>
-    /// <param name="messageArray">The message array.</param>
-    /// <returns>a security <c>byte</c> representing the sum of all positiv bits</returns>
-    internal byte CalculateSecurityByte(BitArray messageArray)
-    {
-        return messageArray.Cast<bool>()
-            .Aggregate<bool, byte>(
-                0,
-                (current, bit) =>
-                    (byte)(current + (byte)(bit ? 1 : 0)));
-    }
-
-    /// <summary>
-    ///     Gets the MessageType and Payload byte[]
-    /// </summary>
-    /// <returns>ByteArray containing the Payload combined with the MessageType</returns>
-    private byte[] GetMessageTypeAndPayload()
-    {
-        // use the first 2 Bits for the MessageType
-        // the next 6 Bits representing the first byte of the payload.
-
-        var firstByte = (byte)((Payload.FirstOrDefault() & 0x3F) | (byte)MessageType);
-        var resultBuilder = new ByteArrayBuilder().AddByte(firstByte);
-
-        if (Payload.Length > 1)
-            resultBuilder.Add(Payload.ExtractBytes(1));
-
-        return resultBuilder.ToByteArray();
-    }
-
-    public override string ToString()
-    {
-        return string.Format(
-            "{0,-12} {3, 8} => {4,-8} P:{1,-6} DPC:{6, -1} L:{2,-3} Payload: {5}",
-            MessageCode,
-            Priority,
-            PayloadLength,
-            SourceAddress,
-            DestinationAddress,
-            GetPayloadAsString(),
-            DataPacketCount);
-    }
-
-    private string GetPayloadAsString()
-    {
-        return Payload == null
-            ? string.Empty
-            : Payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
-    }
-
-    private readonly ControlByte1 _controlByte1 = new();
-    private readonly ControlByte2 _controlByte2 = new();
 
     /// <summary>
     ///     Gets or sets the message code.
@@ -213,6 +161,58 @@ public class KnxMessage : IKnxMessage
 
         // and last but not least... return the whole shit as a byte array
         return result.ToByteArray();
+    }
+
+    /// <summary>
+    ///     Calculates the security byte.
+    /// </summary>
+    /// <param name="messageArray">The message array.</param>
+    /// <returns>a security <c>byte</c> representing the sum of all positiv bits</returns>
+    internal byte CalculateSecurityByte(BitArray messageArray)
+    {
+        return messageArray.Cast<bool>()
+            .Aggregate<bool, byte>(
+                0,
+                (current, bit) =>
+                    (byte)(current + (byte)(bit ? 1 : 0)));
+    }
+
+    /// <summary>
+    ///     Gets the MessageType and Payload byte[]
+    /// </summary>
+    /// <returns>ByteArray containing the Payload combined with the MessageType</returns>
+    private byte[] GetMessageTypeAndPayload()
+    {
+        // use the first 2 Bits for the MessageType
+        // the next 6 Bits representing the first byte of the payload.
+
+        var firstByte = (byte)((Payload.FirstOrDefault() & 0x3F) | (byte)MessageType);
+        var resultBuilder = new ByteArrayBuilder().AddByte(firstByte);
+
+        if (Payload.Length > 1)
+            resultBuilder.Add(Payload.ExtractBytes(1));
+
+        return resultBuilder.ToByteArray();
+    }
+
+    public override string ToString()
+    {
+        return string.Format(
+            "{0,-12} {3, 8} => {4,-8} P:{1,-6} DPC:{6, -1} L:{2,-3} Payload: {5}",
+            MessageCode,
+            Priority,
+            PayloadLength,
+            SourceAddress,
+            DestinationAddress,
+            GetPayloadAsString(),
+            DataPacketCount);
+    }
+
+    private string GetPayloadAsString()
+    {
+        return Payload == null
+            ? string.Empty
+            : Payload.Aggregate(string.Empty, (current, b) => current + b.ToString(CultureInfo.InvariantCulture));
     }
 
     /// <summary>

@@ -12,11 +12,6 @@ namespace Knx.KnxNetIp;
 /// </summary>
 public class KnxHpai
 {
-    public KnxHpai()
-    {
-
-    }
-
     private IPAddress _ipAddress;
 
     public HostProtocolCode HostProtocolCode { get; set; }
@@ -46,8 +41,10 @@ public class KnxHpai
         try
         {
             if (bytes.Length > 8)
+            {
                 result.Description =
                     DeviceDescriptionInformationBlock.Parse(bytes.ExtractBytes(8));
+            }
         }
         catch
         {

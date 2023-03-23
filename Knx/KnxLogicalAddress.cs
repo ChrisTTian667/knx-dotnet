@@ -164,11 +164,15 @@ public class KnxLogicalAddress : KnxAddress
         }
     }
 
-    public override string ToString() =>
-        MiddleGroup == null
+    public override string ToString()
+    {
+        return MiddleGroup == null
             ? $"{Group}/{SubGroup}"
             : $"{Group}/{MiddleGroup}/{SubGroup}";
+    }
 
-    public static implicit operator KnxLogicalAddress(string input) =>
-        ParseLogical(input);
+    public static implicit operator KnxLogicalAddress(string input)
+    {
+        return ParseLogical(input);
+    }
 }

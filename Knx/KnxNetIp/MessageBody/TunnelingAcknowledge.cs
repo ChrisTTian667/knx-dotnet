@@ -4,9 +4,6 @@ namespace Knx.KnxNetIp.MessageBody;
 
 public class TunnelingAcknowledge : TunnelingMessageBody
 {
-    public override string ToString() =>
-        $"{base.ToString()} Seq: {SequenceCounter,-3} Err: {State}";
-
     /// <summary>
     ///     Gets or sets the length.
     /// </summary>
@@ -25,6 +22,11 @@ public class TunnelingAcknowledge : TunnelingMessageBody
 
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.TunnelingAcknowledge;
 
+    public override string ToString()
+    {
+        return $"{base.ToString()} Seq: {SequenceCounter,-3} Err: {State}";
+    }
+
     /// <summary>
     ///     Deserializes the specified bytes.
     /// </summary>
@@ -40,10 +42,12 @@ public class TunnelingAcknowledge : TunnelingMessageBody
     /// <summary>
     ///     Serialize to ByteArray.
     /// </summary>
-    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder) =>
+    internal override void ToByteArray(ByteArrayBuilder byteArrayBuilder)
+    {
         byteArrayBuilder
             .AddByte(Length)
             .AddByte(CommunicationChannel)
             .AddByte(SequenceCounter)
             .AddByte((byte)State);
+    }
 }

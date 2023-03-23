@@ -8,7 +8,6 @@ public class DptBoolean : Dpt1Bit
 {
     private DptBoolean()
     {
-
     }
 
     public DptBoolean(byte[] payload)

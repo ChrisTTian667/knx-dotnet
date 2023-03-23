@@ -36,14 +36,20 @@ public abstract class KnxAddress
 
     protected abstract void FillBitArray(BitArray bitArray);
 
-    public static KnxDeviceAddress Device(byte area, byte line, byte device) =>
-        new(area, line, device);
+    public static KnxDeviceAddress Device(byte area, byte line, byte device)
+    {
+        return new(area, line, device);
+    }
 
-    public static KnxLogicalAddress Logical(byte group, byte subGroup) => new
-        (group, subGroup);
+    public static KnxLogicalAddress Logical(byte group, byte subGroup)
+    {
+        return new(group, subGroup);
+    }
 
-    public static KnxLogicalAddress Logical(byte group, byte? middleGroup, byte subGroup) =>
-        new(group, middleGroup, subGroup);
+    public static KnxLogicalAddress Logical(byte group, byte? middleGroup, byte subGroup)
+    {
+        return new(group, middleGroup, subGroup);
+    }
 
     public static KnxDeviceAddress ParseDevice(string address)
     {
@@ -114,14 +120,18 @@ public abstract class KnxAddress
         }
     }
 
-    public override bool Equals(object? obj) =>
-        obj is KnxAddress other &&
-        _bitArray
-            .ToByteArray()
-            .SequenceEqual(other._bitArray.ToByteArray());
+    public override bool Equals(object? obj)
+    {
+        return obj is KnxAddress other &&
+               _bitArray
+                   .ToByteArray()
+                   .SequenceEqual(other._bitArray.ToByteArray());
+    }
 
-    public override int GetHashCode() =>
-        ToString()!.GetHashCode();
+    public override int GetHashCode()
+    {
+        return ToString()!.GetHashCode();
+    }
 
     /// <summary>
     ///     Converts to bits.
@@ -129,8 +139,10 @@ public abstract class KnxAddress
     /// <param name="value">The value.</param>
     /// <param name="length">The length.</param>
     /// <returns>a list of bool values</returns>
-    protected IEnumerable<bool> ConvertToBits(int value, byte length) =>
-        new BitArray(new[] { value }).Cast<bool>().Take(length).Reverse();
+    protected IEnumerable<bool> ConvertToBits(int value, byte length)
+    {
+        return new BitArray(new[] { value }).Cast<bool>().Take(length).Reverse();
+    }
 
     /// <summary>
     ///     Toes the bit array.
@@ -139,6 +151,7 @@ public abstract class KnxAddress
     public BitArray ToBitArray()
     {
         FillBitArray(_bitArray);
+
         return _bitArray;
     }
 }

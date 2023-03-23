@@ -22,8 +22,9 @@ public class KnxNetIpException : KnxException
     {
     }
 
-    private static string GetErrorMessage(ErrorCode errorCode) =>
-        errorCode switch
+    private static string GetErrorMessage(ErrorCode errorCode)
+    {
+        return errorCode switch
         {
             ErrorCode.NoError => "Operation successful",
             ErrorCode.HostProtocolType => "The requested type of host protocol is not supported by the device.",
@@ -41,4 +42,5 @@ public class KnxNetIpException : KnxException
             ErrorCode.TunnelingLayer => "The requested tunneling layer is not supported by the server.",
             _ => "Unknown KnxNetIp Error."
         };
+    }
 }

@@ -21,6 +21,22 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
     }
 
     /// <summary>
+    ///     Gets or sets the body.
+    /// </summary>
+    /// <value>The body.</value>
+    public new T Body
+    {
+        get => base.Body as T;
+        internal set => base.Body = value;
+    }
+
+    /// <summary>
+    ///     Gets the bytearray length.
+    /// </summary>
+    /// <value>The length.</value>
+    public int Length => ToByteArray().Length;
+
+    /// <summary>
     ///     Does the byte array.
     /// </summary>
     /// <returns>
@@ -46,25 +62,13 @@ public class KnxNetIpMessage<T> : KnxNetIpMessage where T : MessageBodyBase, new
     ///     Deserializes the specified bytes.
     /// </summary>
     /// <param name="bytes">The bytes to be deserialized.</param>
-    protected override void Deserialize(byte[] bytes) =>
-        Body.Deserialize(bytes.ExtractBytes(HeaderLength, bytes.Length - HeaderLength));
-
-    public override string ToString() =>
-        $"KnxNetIp {(Body != null ? Body.ToString() : "empty")}";
-
-    /// <summary>
-    ///     Gets or sets the body.
-    /// </summary>
-    /// <value>The body.</value>
-    public new T Body
+    protected override void Deserialize(byte[] bytes)
     {
-        get => base.Body as T;
-        internal set => base.Body = value;
+        Body.Deserialize(bytes.ExtractBytes(HeaderLength, bytes.Length - HeaderLength));
     }
 
-    /// <summary>
-    ///     Gets the bytearray length.
-    /// </summary>
-    /// <value>The length.</value>
-    public int Length => ToByteArray().Length;
+    public override string ToString()
+    {
+        return $"KnxNetIp {(Body != null ? Body.ToString() : "empty")}";
+    }
 }

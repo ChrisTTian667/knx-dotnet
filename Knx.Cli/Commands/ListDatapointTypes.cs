@@ -29,6 +29,21 @@ public class ListDatapointTypes : AsyncCommand<ListCommandSettings>
             {
                 AnsiConsole.WriteLine($" - {property.Name} ({property.PropertyType})");
                 // possible values:
+
+                var boolEncoding = property.GetCustomAttribute<BooleanEncodingAttribute>();
+                if (boolEncoding != null)
+                {
+                    AnsiConsole.WriteLine($"   > {boolEncoding.FalseEncoding}");
+                    AnsiConsole.WriteLine($"   > {boolEncoding.TrueEncoding}");
+                }
+                else
+                {
+                    var unitEncoding = type.GetCustomAttribute<DatapointTypeAttribute>();
+                    if (unitEncoding != null)
+                    {
+                        AnsiConsole.WriteLine($"   > {unitEncoding.Unit}");
+                    }
+                }
             }
         }
 

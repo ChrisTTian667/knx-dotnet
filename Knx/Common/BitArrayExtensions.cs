@@ -14,7 +14,8 @@ internal static class BitArrayExtensions
     {
         return array
             .Cast<bool>()
-            .Aggregate<bool, byte>(0,
+            .Aggregate<bool, byte>(
+                0,
                 (current, bit) => (byte)(current + (byte)(bit ? 1 : 0)));
     }
 

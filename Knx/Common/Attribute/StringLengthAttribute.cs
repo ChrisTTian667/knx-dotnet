@@ -2,8 +2,10 @@ namespace Knx.Common.Attribute;
 
 public class StringLengthAttribute : System.Attribute
 {
-    public StringLengthAttribute(int length) =>
+    public StringLengthAttribute(int length)
+    {
         Length = length;
+    }
 
     /// <summary>
     ///     Gets the length.

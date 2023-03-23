@@ -8,6 +8,18 @@ namespace Knx.KnxNetIp;
 public class ConnectRequestData
 {
     /// <summary>
+    ///     Gets or sets the type of the connection.
+    /// </summary>
+    /// <value>The type of the connection.</value>
+    public ConnectionType ConnectionType { get; set; } = ConnectionType.TunnelingConnection;
+
+    /// <summary>
+    ///     Gets or sets the KNX layer.
+    /// </summary>
+    /// <value>The KNX layer.</value>
+    public KnxNetIpLayer NetIpLayer { get; set; } = KnxNetIpLayer.Link;
+
+    /// <summary>
     ///     Toes the byte array.
     /// </summary>
     /// <returns>a <c>byte[]</c> representing this instance</returns>
@@ -24,16 +36,4 @@ public class ConnectRequestData
 
         return arrayBuilder.ToByteArray();
     }
-
-    /// <summary>
-    ///     Gets or sets the type of the connection.
-    /// </summary>
-    /// <value>The type of the connection.</value>
-    public ConnectionType ConnectionType { get; set; } = ConnectionType.TunnelingConnection;
-
-    /// <summary>
-    ///     Gets or sets the KNX layer.
-    /// </summary>
-    /// <value>The KNX layer.</value>
-    public KnxNetIpLayer NetIpLayer { get; set; } = KnxNetIpLayer.Link;
 }

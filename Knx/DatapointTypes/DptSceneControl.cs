@@ -31,8 +31,10 @@ public class DptSceneControl : DptScene
     }
 
     public DptSceneControl(SceneControl control, byte scene)
-        : base(scene) =>
+        : base(scene)
+    {
         Control = control;
+    }
 
     [DatapointProperty]
     public SceneControl Control

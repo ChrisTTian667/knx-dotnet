@@ -19,8 +19,10 @@ public class DptDeltaTimePeriodMilliseconds : DptDeltaTime
     {
     }
 
-    protected override TimeSpan TimeSpanFromShort(short value) =>
-        TimeSpan.FromMilliseconds(value);
+    protected override TimeSpan TimeSpanFromShort(short value)
+    {
+        return TimeSpan.FromMilliseconds(value);
+    }
 
     protected override short ShortFromTimeSpan(TimeSpan timeSpan)
     {

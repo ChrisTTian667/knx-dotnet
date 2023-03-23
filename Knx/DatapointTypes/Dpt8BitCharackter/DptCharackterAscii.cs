@@ -49,8 +49,10 @@ public class DptCharackterAscii : DatapointType
         var byteString = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
 
         if (byteString.Length != 1)
+        {
             throw new Exception(
                 string.Format("Received bytes contains more or less than one charackter. String='{0}'", byteString));
+        }
 
         return byteString[0];
     }

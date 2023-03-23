@@ -38,8 +38,10 @@ public abstract class Dpt8BitUnsignedValue : DatapointType
             var maxValue = GetMaxValue();
 
             if (value > maxValue)
+            {
                 throw new ArgumentOutOfRangeException(
                     string.Format("Property 'Value' of type {0} is out of range.", GetType().Name));
+            }
 
             var computedValue = (byte)(255.0 / maxValue * value);
 
