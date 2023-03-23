@@ -88,21 +88,26 @@ internal sealed class Program
         {
             // TODO add commands for each datatype here...
 
-            // config.AddBranch<WriteCommandSettings>(
-            //     "write",
-            //     write =>
-            //     {
-            //         foreach (var dpt in DatapointTypeFactory.GetAllTypes())
-            //         {
-            //             typeof(WriteDatapointType<>).MakeGenericType(dpt);
-            //
-            //             write.AddCommand<WriteDatapointType<DptBoolean>>("boolean");
-            //         }
-            //     });
+            config.AddBranch<ListCommandSettings>(
+                "list",
+                list =>
+                {
+                    list.AddCommand<ListDatapointTypes>("DatapointTypes")
+                        .WithDescription($"Lists all the [green]objects of the specified type[/]. Run [grey]list --help[/] for details.")
+                        .WithExample(new[] { "list DatapointTypes" });
+                });
 
-            config.AddCommand<List>("list")
-                .WithDescription($"Lists all the [green]objects of the specified type[/]. Run [grey]list --help[/] for details.")
-                .WithExample(new[] { "list DatapointTypes" });
+            config.AddBranch<WriteCommandSettings>(
+                "write",
+                write =>
+                {
+                    foreach (var dpt in DatapointType.All)
+                    {
+                        typeof(WriteDatapointType<>).MakeGenericType(dpt);
+
+                        write.AddCommand<WriteDatapointType<DptBoolean>>("boolean");
+                    }
+                });
 
             config.AddCommand<Write>("write")
                 .WithDescription($"Sends a KnxNetIP [green]write[/] message. [grey]show --help[/] for details.")

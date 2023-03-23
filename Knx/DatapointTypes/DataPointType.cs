@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -10,138 +11,32 @@ namespace Knx.DatapointTypes;
 [DataContract]
 public class DatapointType
 {
-    private static IQueryable<Type>? _datapointTypes;
+    private static readonly Lazy<IEnumerable<Type>> DatapointTypes = new(
+        () =>
+            typeof(DatapointType)
+                .Assembly
+                .DefinedTypes
+                .Where(t => !t.IsAbstract)
+                .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
+                .OrderBy(t => t.GetCustomAttribute<DataLengthAttribute>()?.Length ?? 0)
+                .Select(ti => ti.AsType())
+                .ToList());
+
     private byte[] _payload = Array.Empty<byte>();
-
-    [DataMember(Name = "Id", IsRequired = true)]
-    public string DatapointTypeId { get; set; }
-
-    public byte[] Payload
-    {
-        get => _payload;
-        set
-        {
-            if (value.Length == 0)
-                throw new ArgumentOutOfRangeException(nameof(Payload), "Datapoint Type needs at least one byte of data");
-
-            _payload = value;
-        }
-    }
-
-    [DataMember(Name = nameof(Payload))]
-    private string ReadablePayload
-    {
-        get => _payload.ToReadableString();
-        set => _payload = ByteArrayExtensions.FromReadableString(value);
-    }
-
-    public static bool VerifyPayload(Type datapointType, byte[] payload, bool exactMatch = false)
-    {
-        var dataLengthAttribute = datapointType.GetTypeInfo()
-            .GetCustomAttributes(typeof(DataLengthAttribute), true)
-            .Cast<DataLengthAttribute>()
-            .FirstOrDefault();
-
-        if (dataLengthAttribute == null || dataLengthAttribute.MinimumRequiredBytes < 0)
-            return true;
-
-        return payload != null && (!exactMatch
-            ? payload.Length >= dataLengthAttribute.MinimumRequiredBytes
-            : payload.Length == dataLengthAttribute.MinimumRequiredBytes);
-    }
-
-    public static bool VerifyPayload(Type datapointType, byte[] payload, bool exactMatch, out int requiredBytes)
-    {
-        var dataLengthAttribute = datapointType.GetTypeInfo()
-            .GetCustomAttributes(typeof(DataLengthAttribute), true)
-            .Cast<DataLengthAttribute>()
-            .FirstOrDefault();
-        if (dataLengthAttribute == null)
-        {
-            requiredBytes = -1;
-
-            return true;
-        }
-
-        var isOk = payload != null && (!exactMatch
-            ? payload.Length >= dataLengthAttribute.MinimumRequiredBytes
-            : payload.Length == dataLengthAttribute.MinimumRequiredBytes);
-        requiredBytes = dataLengthAttribute.MinimumRequiredBytes;
-
-        return isOk;
-    }
-
-    /// <summary>
-    ///     Gets the datapointtype type for the specified id.
-    /// </summary>
-    /// <param name="id">The id.</param>
-    /// <returns>Type</returns>
-    public static Type GetType(string id)
-    {
-        if (!TryGetType(id, out var datapointTypeType))
-            throw new Exception($"There is no datapoint type with the specified id '{id}'");
-
-        return datapointTypeType;
-    }
-
-    /// <summary>
-    ///     Returns a list of types of all supported Datapoint types.
-    /// </summary>
-    public static IQueryable<Type> GetTypes() =>
-        _datapointTypes ??= typeof(DatapointType).GetTypeInfo()
-            .Assembly.DefinedTypes
-            .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any() && !t.IsAbstract)
-            .Select(ti => ti.AsType())
-            .AsQueryable();
-
-    /// <summary>
-    ///     Tries to get the type of the specified id.
-    /// </summary>
-    /// <param name="id">The id.</param>
-    /// <param name="datapointTypeType">Type of the datapoint type.</param>
-    /// <returns><c>true</c> if the type could be found; otherwise <c>false</c></returns>
-    public static bool TryGetType(string id, out Type datapointTypeType)
-    {
-        datapointTypeType = GetTypes()
-            .FirstOrDefault(t =>
-                t.GetCustomAttribute(typeof(DatapointTypeAttribute), false)
-                    .ToString() == id);
-
-        return datapointTypeType != null;
-    }
-
-    public static string GetId(Type datapointTypeType)
-    {
-        if (datapointTypeType == typeof(DatapointType))
-            return string.Empty;
-
-        var datapointTypeAttribute =
-            datapointTypeType
-                    .GetTypeInfo()
-                    .GetCustomAttributes(typeof(DatapointTypeAttribute), true)
-                    .FirstOrDefault()
-                as DatapointTypeAttribute;
-
-        if (datapointTypeAttribute == null)
-            throw new InvalidOperationException("Type is missing DatapointType attribute.");
-
-        return datapointTypeAttribute.ToString();
-    }
 
     protected DatapointType()
     {
-        DatapointTypeId = GetId(GetType());
+        DatapointTypeId = GetType()
+            .GetCustomAttributes<DatapointTypeAttribute>(true)
+            .First()
+            .ToString();
     }
 
-    protected DatapointType(byte[] payload) : this(payload, false) =>
-        DatapointTypeId = GetId(GetType());
-
-    protected DatapointType(byte[] payload, bool verifyExactPayloadLength) : this()
+    protected DatapointType(byte[] payload, bool verifyExactPayloadLength = false) : this()
     {
         Payload = payload;
 
-        var myType = GetType();
-        if (!VerifyPayload(myType, payload, verifyExactPayloadLength, out var requiredBytes))
+        if (!VerifyPayload(payload, verifyExactPayloadLength, out var requiredBytes))
         {
             if (requiredBytes < 0)
                 throw new ArgumentException("Payload verification failed", nameof(Payload));
@@ -156,6 +51,98 @@ public class DatapointType
         }
     }
 
-    public static implicit operator byte[](DatapointType dpt) =>
-        dpt.Payload;
+    [DataMember(Name = "Id", IsRequired = true)]
+    public string DatapointTypeId { get; set; }
+
+    public byte[] Payload
+    {
+        get => _payload;
+        protected internal set
+        {
+            if (value.Length == 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(Payload),
+                    "Datapoint Type needs at least one byte of data");
+            }
+
+            _payload = value;
+        }
+    }
+
+    [DataMember(Name = nameof(Payload))]
+    private string ReadablePayload
+    {
+        get => _payload.ToReadableString();
+        set => _payload = ByteArrayExtensions.FromReadableString(value);
+    }
+
+    /// <summary>
+    ///     Returns a list of types of all supported Datapoint types.
+    /// </summary>
+    public static IEnumerable<Type> All => DatapointTypes.Value;
+
+    public static T Create<T>(byte[]? payload = null)
+        where T : DatapointType
+    {
+        return (T)Create(typeof(T), payload);
+    }
+
+    public static DatapointType Create(string id, byte[]? payload = null)
+    {
+        var datapointType = All
+            .FirstOrDefault(
+                t => t.GetCustomAttributes<DatapointTypeAttribute>(true)
+                    .FirstOrDefault()
+                    ?.ToString() == id);
+
+        if (datapointType is null)
+            throw new NotSupportedException($"DatapointType '{id}' is not supported.");
+
+        return Create(datapointType, payload);
+    }
+
+    private static DatapointType Create(Type datapointTypeType, byte[]? value = null)
+    {
+        var dataLengthAttribute = datapointTypeType
+            .GetCustomAttributes<DataLengthAttribute>(true)
+            .FirstOrDefault();
+
+        var defaultPayload = new byte[Math.Max(dataLengthAttribute?.MinimumRequiredBytes ?? 0, 0)];
+
+        if (Activator.CreateInstance(datapointTypeType, defaultPayload) is not DatapointType instance)
+            throw new InvalidOperationException($"The '{datapointTypeType}' is not a {typeof(DatapointType)}");
+
+        if (value != null)
+            instance.Payload = value;
+
+        return instance;
+    }
+
+    private bool VerifyPayload(IReadOnlyCollection<byte> payload, bool exactMatch, out int requiredBytes)
+    {
+        var dataLengthAttribute = GetType()
+            .GetCustomAttributes(typeof(DataLengthAttribute), true)
+            .Cast<DataLengthAttribute>()
+            .FirstOrDefault();
+
+        if (dataLengthAttribute == null)
+        {
+            requiredBytes = -1;
+
+            return true;
+        }
+
+        var isOk = !exactMatch
+            ? payload.Count >= dataLengthAttribute.MinimumRequiredBytes
+            : payload.Count == dataLengthAttribute.MinimumRequiredBytes;
+        requiredBytes = dataLengthAttribute.MinimumRequiredBytes;
+
+        return isOk;
+    }
+
+    public static implicit operator byte[](DatapointType dpt)
+    {
+        return dpt.Payload;
+    }
 }

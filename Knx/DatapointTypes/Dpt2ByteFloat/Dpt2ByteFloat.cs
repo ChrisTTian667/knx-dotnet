@@ -13,7 +13,6 @@ public abstract class Dpt2ByteFloat : DatapointType
 
     protected Dpt2ByteFloat(byte[] twoBytes) : base(twoBytes, true)
     {
-        Payload = twoBytes;
     }
 
     protected Dpt2ByteFloat(double value)
@@ -31,7 +30,7 @@ public abstract class Dpt2ByteFloat : DatapointType
     private static double ToValue(byte[] bytes)
     {
         if (bytes.Length != 2)
-            throw new ArgumentOutOfRangeException("bytes", "Datapoint Type needs exactly 2 bytes of data.");
+            throw new ArgumentOutOfRangeException(nameof(bytes), "Datapoint Type needs exactly 2 bytes of data.");
 
         var firstByte = bytes[0];
         var secondByte = bytes[1];

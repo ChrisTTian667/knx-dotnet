@@ -28,14 +28,14 @@ public class DatapointTypesTests
     [Test]
     public void CreateSimpleDatapointType()
     {
-        var boolDpt = DatapointTypeFactory.Create("1.001", new byte[] { 1 });
+        var boolDpt = DatapointType.Create("1.001", new byte[] { 1 });
         Assert.IsNotNull(boolDpt);
     }
 
     [Test]
     public void SerializeSimpleBooleanDatapointType()
     {
-        var dpt = DatapointTypeFactory.Create("1.001", new byte[] { 1 });
+        var dpt = DatapointType.Create("1.001", new byte[] { 1 });
         var serializedObject = JsonConvert.SerializeObject(dpt);
         var deserializeObject = JsonConvert.DeserializeObject<DptBoolean>(serializedObject)!;
 
@@ -46,7 +46,7 @@ public class DatapointTypesTests
     [Test]
     public void SerializeDptAlarmControl()
     {
-        var dpt = DatapointTypeFactory.Create<DptAlarmControl>(new byte[] { 1 });
+        var dpt = DatapointType.Create<DptAlarmControl>(new byte[] { 1 });
         var serializedObject = JsonConvert.SerializeObject(dpt);
         var deserializeObject = JsonConvert.DeserializeObject<DptAlarmControl>(serializedObject)!;
 
@@ -57,7 +57,7 @@ public class DatapointTypesTests
     [Test]
     public void DeserializeSpecificToBaseType()
     {
-        var dpt = DatapointTypeFactory.Create<DptAlarmControl>(new byte[] { 1 });
+        var dpt = DatapointType.Create<DptAlarmControl>(new byte[] { 1 });
         var serializedSpecific = JsonConvert.SerializeObject(dpt);
 
         var deserializeBase = JsonConvert.DeserializeObject<DatapointType>(serializedSpecific);

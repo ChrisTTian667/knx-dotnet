@@ -38,7 +38,7 @@ public class Read : AsyncCommand<WriteCommandSettings>
         // TODO: here comes the "funny" part: how to get the DPT from the command line?
         // => we need to interpret based on PropertyAttributes, maybe Json Format or better dynamic parameters with defaults?!
         // => we also need to print a list of available Properties and their potential values for CLI help
-        var dpt = DatapointTypeFactory.Create("1.002");
+        var dpt = DatapointType.Create("1.002");
 
         var message = new KnxMessage
         {
