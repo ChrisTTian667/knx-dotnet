@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Knx.Common;
 using Knx.Common.Attribute;
 
@@ -23,30 +22,21 @@ public class DptVariableString_UTF8 : DptVariableString
     {
     }
 
-    private Encoding Encoding
-    {
-        get
-        {
-            var encoding = Encoding.UTF8;
-
-            if (encoding == null) throw new Exception("Unable to retrieve encoding 'UTF-8'");
-
-            return encoding;
-        }
-    }
-
     protected override byte[] ToBytes(string value)
     {
         var byteArray = new byte[value.Length];
-        var encodedBytes = Encoding.GetBytes(value);
+        var encodedBytes = Encoding.UTF8.GetBytes(value);
 
-        for (var i = 0; i < encodedBytes.Length; i++) byteArray[i] = encodedBytes[i];
+        for (var i = 0; i < encodedBytes.Length; i++)
+            byteArray[i] = encodedBytes[i];
 
         return byteArray;
     }
 
     protected override string ToValue(byte[] bytes)
     {
-        return Encoding.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
+        return Encoding.UTF8
+            .GetString(bytes, 0, bytes.Length)
+            .TrimEnd('\0');
     }
 }

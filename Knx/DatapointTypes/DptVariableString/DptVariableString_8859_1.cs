@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Knx.Common;
 using Knx.Common.Attribute;
 
@@ -23,22 +22,10 @@ public class DptVariableString_8859_1 : DptVariableString
     {
     }
 
-    private Encoding Encoding
-    {
-        get
-        {
-            var encoding = Encoding.GetEncoding("iso-8859-1");
-
-            if (encoding == null) throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
-
-            return encoding;
-        }
-    }
-
     protected override byte[] ToBytes(string value)
     {
         var byteArray = new byte[value.Length];
-        var encodedBytes = Encoding.GetBytes(value);
+        var encodedBytes = Encoding.GetEncoding("iso-8859-1").GetBytes(value);
 
         for (var i = 0; i < encodedBytes.Length; i++) byteArray[i] = encodedBytes[i];
 
@@ -47,6 +34,9 @@ public class DptVariableString_8859_1 : DptVariableString
 
     protected override string ToValue(byte[] bytes)
     {
-        return Encoding.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
+        return Encoding
+            .GetEncoding("iso-8859-1")
+            .GetString(bytes, 0, bytes.Length)
+            .TrimEnd('\0');
     }
 }

@@ -30,7 +30,7 @@ public abstract class Dpt1Bit : DatapointType
 
     private static byte[] ToBytes(bool value)
     {
-        return new byte[1] { Convert.ToByte(value) };
+        return new[] { Convert.ToByte(value) };
     }
 
     private static bool ToValue(IReadOnlyList<byte> bytes)

@@ -1,22 +1,24 @@
 # knx-dotnet Library for .NET Core
 
-This is a .NET Core library that allows communication with KNXnet/IP routers and gateways using either the routing or the tunneling protocol. It provides a simple and easy-to-use interface for sending and receiving KNX telegrams over IP as well as device discovery.
+This is a .NET Core library that allows communication with KNXnet/IP routers and gateways using either the routing or
+the tunneling protocol. It provides a simple and easy-to-use interface for sending and receiving KNX telegrams over IP
+as well as device discovery.
 
 ## Installation
 
-The library can be installed via NuGet package manager. 
+The library can be installed via NuGet package manager.
 Simply search for `knx-dotnet` and install the package to your .NET project.
 
 ```bash
 dotnet add package knx-dotnet --version 0.3.0-alpha
 ```
 
-
 **_Make sure you search for PreRelease packages, as there is currently no stable release available!_**
 
 ## Usage
 
 #### Discovering knx devices
+
 ```csharp
 
 var routingClient = new KnxNetIpRoutingClient(
@@ -82,14 +84,17 @@ tunnelingClient.Write(KnxAddress.Logical(1,1,1), new DptBoolean(true));
 ```
 
 ## Tested devices
- - Siemens N148/21 Gateway
- - Weinzierl KNX IP Router 750
- - ...
+
+- Siemens N148/21 Gateway
+- Weinzierl KNX IP Router 750
+- ...
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
+
 MIT License
 
 Copyright (c) 2023 Christian Daniel

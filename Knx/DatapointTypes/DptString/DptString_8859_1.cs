@@ -23,31 +23,24 @@ public class DptString_8859_1 : DptString
     {
     }
 
-    private Encoding Encoding
-    {
-        get
-        {
-            var encoding = Encoding.GetEncoding("iso-8859-1");
-
-            if (encoding == null)
-                throw new Exception("Unable to retrieve encoding 'iso-8859-1'");
-
-            return encoding;
-        }
-    }
-
     protected override byte[] ToBytes(string value)
     {
         var byteArray = new byte[14];
-        var encodedBytes = Encoding.GetBytes(value);
+        var encodedBytes = Encoding
+            .GetEncoding("iso-8859-1")
+            .GetBytes(value);
 
-        for (var i = 0; i < encodedBytes.Length; i++) byteArray[i] = encodedBytes[i];
+        for (var i = 0; i < encodedBytes.Length; i++)
+            byteArray[i] = encodedBytes[i];
 
         return byteArray;
     }
 
     protected override string ToValue(byte[] bytes)
     {
-        return Encoding.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
+        return Encoding
+            .GetEncoding("iso-8859-1")
+            .GetString(bytes, 0, bytes.Length)
+            .TrimEnd('\0');
     }
 }

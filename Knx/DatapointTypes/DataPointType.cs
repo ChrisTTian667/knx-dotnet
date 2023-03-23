@@ -98,7 +98,7 @@ public class DatapointType
             .FirstOrDefault(
                 t => t.GetCustomAttributes<DatapointTypeAttribute>(true)
                     .First()
-                    ?.ToString() == id);
+                    .ToString() == id);
 
         if (datapointType is null)
             throw new NotSupportedException($"DatapointType '{id}' is not supported.");

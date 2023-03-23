@@ -24,7 +24,8 @@ public class DptStringAscii : DptString
     protected override byte[] ToBytes(string value)
     {
         var result = new byte[14];
-        var content = new ASCIIEncoding().GetBytes(value);
+        var content = new ASCIIEncoding()
+            .GetBytes(value);
 
         for (var i = 0; i < Math.Min(content.Length, 13); i++)
             result[i] = content[i];
@@ -34,6 +35,8 @@ public class DptStringAscii : DptString
 
     protected override string ToValue(byte[] bytes)
     {
-        return Encoding.UTF8.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
+        return new ASCIIEncoding()
+            .GetString(bytes, 0, bytes.Length)
+            .TrimEnd('\0');
     }
 }

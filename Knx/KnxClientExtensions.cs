@@ -80,7 +80,8 @@ public static class KnxClientExtensions
                 if (knxMessage.DestinationAddress.ToString() != destination.ToString())
                     return;
 
-                var indicationCondition = knxMessage is { MessageCode: MessageCode.Indication, MessageType: MessageType.Reply };
+                var indicationCondition = knxMessage is
+                    { MessageCode: MessageCode.Indication, MessageType: MessageType.Reply };
                 var confirmationCondition = knxMessage.MessageCode == MessageCode.Confirmation;
 
                 // If we receive a confirmation, we cannot be sure that the payload correspond to the current actor value
