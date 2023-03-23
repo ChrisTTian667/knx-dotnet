@@ -26,10 +26,14 @@ public class DatapointType
 
     protected DatapointType()
     {
-        DatapointTypeId = GetType()
-            .GetCustomAttributes<DatapointTypeAttribute>(true)
-            .First()
-            .ToString();
+        var datapointType = GetType();
+        if (datapointType != typeof(DatapointType))
+        {
+            DatapointTypeId = GetType()
+                .GetCustomAttributes<DatapointTypeAttribute>(true)
+                .First()
+                .ToString();
+        }
     }
 
     protected DatapointType(byte[] payload, bool verifyExactPayloadLength = false) : this()
@@ -52,7 +56,7 @@ public class DatapointType
     }
 
     [DataMember(Name = "Id", IsRequired = true)]
-    public string DatapointTypeId { get; set; }
+    public string DatapointTypeId { get; set; } = null!;
 
     public byte[] Payload
     {
@@ -93,7 +97,7 @@ public class DatapointType
         var datapointType = All
             .FirstOrDefault(
                 t => t.GetCustomAttributes<DatapointTypeAttribute>(true)
-                    .FirstOrDefault()
+                    .First()
                     ?.ToString() == id);
 
         if (datapointType is null)
