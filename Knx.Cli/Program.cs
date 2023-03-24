@@ -1,7 +1,6 @@
 ﻿using Knx.Cli.Commands;
 using Knx.Cli.Configuration;
 using Knx.DatapointTypes;
-using Knx.DatapointTypes.Dpt1Bit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -88,40 +87,45 @@ internal sealed class Program
         {
             // TODO add commands for each datatype here...
 
+
             config.AddBranch<ListCommandSettings>(
                 "list",
                 list =>
                 {
-                    list.AddCommand<ListDatapointTypes>("DatapointTypes")
-                        .WithDescription($"Lists all the [green]objects of the specified type[/]. Run [grey]list --help[/] for details.")
+                    list.AddCommand<ListDatapointTypesCommand>("DatapointTypes")
+                        .WithAlias("dpt")
+                        .WithAlias("datapointtypes")
+                        .WithDescription(
+                            $"Lists all the [green]objects of the specified type[/]. Run [grey]list --help[/] for details.")
                         .WithExample(new[] { "list DatapointTypes" });
                 });
 
-            config.AddBranch<WriteCommandSettings>(
+            config.AddBranch(
                 "write",
                 write =>
                 {
                     foreach (var dpt in DatapointType.All)
                     {
-                        typeof(WriteDatapointType<>).MakeGenericType(dpt);
+                        var command = DatapointTypeCommandBuilder
+                            .CreateDatapointTypeCommand(dpt);
 
-                        write.AddCommand<WriteDatapointType<DptBoolean>>("boolean");
+                        write.AddCommand(command, dpt.Name);
                     }
+
+                    // write.AddCommand<WriteDatapointTypeCommand<DptBoolean, WriteCommandSettings>>("bool")
+                    //     .WithDescription($"Sends a KnxNetIP [green]write[/] message. [grey]show --help[/] for details.")
+                    //     .WithExample(new[] { "write 1/1/28 false" });
                 });
 
-            config.AddCommand<Write>("write")
-                .WithDescription($"Sends a KnxNetIP [green]write[/] message. [grey]show --help[/] for details.")
-                .WithExample(new[] { "write 1/1/28 false" });
-
-            config.AddCommand<Read>("read")
+            config.AddCommand<ReadCommand>("read")
                 .WithDescription($"Sends a KnxNetIP [green]read[/] message. [grey]show --help[/] for details.")
                 .WithExample(new[] { "read 1/1/28" });
 
-            config.AddCommand<Reply>("reply")
+            config.AddCommand<ReplyCommand>("reply")
                 .WithDescription($"Sends a KnxNetIP [green]reply[/] message. [grey]show --help[/] for details.")
                 .WithExample(new[] { "reply 1/1/28 false" });;
 
-            config.AddCommand<Discover>("discover")
+            config.AddCommand<DiscoverCommand>("discover")
                 .WithDescription($"Sends a KnxNetIP [green]discovery[/] request to find all the KnxNetIp devices in your network. Run [grey]show --help[/] for details.");
 
             config.SetExceptionHandler(ex =>

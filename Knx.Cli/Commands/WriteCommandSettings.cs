@@ -9,11 +9,6 @@ public class WriteCommandSettings : CommandSettings
     [CommandArgument(0, "<ADDRESS>")]
     public string DestinationAddress { get; init; } = string.Empty;
 
-    [Description("Show only failed and partial status releases")]
-    [CommandOption("-t|--datapointType <DATAPOINT_TYPE>")]
-    [DefaultValue("1.001")]
-    public string DatapointType { get; init; } = "1.002";
-
     [Description("The message priority. e.g. System, Normal, Alarm, Auto")]
     [CommandOption("-p|--priority")]
     [DefaultValue(MessagePriority.Auto)]

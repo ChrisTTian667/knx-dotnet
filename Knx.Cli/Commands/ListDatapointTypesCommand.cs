@@ -6,7 +6,7 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class ListDatapointTypes : AsyncCommand<ListCommandSettings>
+public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
 {
     public override Task<int> ExecuteAsync(CommandContext context, ListCommandSettings settings)
     {
@@ -39,10 +39,7 @@ public class ListDatapointTypes : AsyncCommand<ListCommandSettings>
                 else
                 {
                     var unitEncoding = type.GetCustomAttribute<DatapointTypeAttribute>();
-                    if (unitEncoding != null)
-                    {
-                        AnsiConsole.WriteLine($"   > {unitEncoding.Unit}");
-                    }
+                    if (unitEncoding != null) AnsiConsole.WriteLine($"   > {unitEncoding.Unit}");
                 }
             }
         }

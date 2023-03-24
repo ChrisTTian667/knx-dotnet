@@ -4,10 +4,11 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class Discover : AsyncCommand
+public class DiscoverCommand : AsyncCommand
 {
-    public override async Task<int> ExecuteAsync(CommandContext context) =>
-        await AnsiConsole.Status()
+    public override async Task<int> ExecuteAsync(CommandContext context)
+    {
+        return await AnsiConsole.Status()
             .StartAsync(
                 "Discover KnxNetIp devices in your network.",
                 async _ =>
@@ -20,7 +21,8 @@ public class Discover : AsyncCommand
 
                     routingClient.KnxDeviceDiscovered += (_, args) =>
                     {
-                        AnsiConsole.MarkupLine($"[green]Discovered device:[/] {args.FriendlyName} - ConnectionString: {args.ConnectionString}");
+                        AnsiConsole.MarkupLine(
+                            $"[green]Discovered device:[/] {args.FriendlyName} - ConnectionString: {args.ConnectionString}");
                     };
 
                     await routingClient.ConnectAsync();
@@ -32,4 +34,5 @@ public class Discover : AsyncCommand
 
                     return 0;
                 });
+    }
 }

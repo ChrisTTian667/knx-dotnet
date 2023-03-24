@@ -9,15 +9,18 @@ using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class Reply : AsyncCommand<WriteCommandSettings>
+public class ReplyCommand : AsyncCommand<WriteCommandSettings>
 {
     private readonly IOptions<KnxOptions> _options;
 
-    public Reply(IOptions<KnxOptions> options) =>
+    public ReplyCommand(IOptions<KnxOptions> options)
+    {
         _options = options;
+    }
 
-    private IKnxNetIpClient CreateClient() =>
-        _options.Value.Protocol == KnxProtocol.Tunneling
+    private IKnxNetIpClient CreateClient()
+    {
+        return _options.Value.Protocol == KnxProtocol.Tunneling
             ? new KnxNetIpTunnelingClient(
                 options =>
                 {
@@ -29,6 +32,7 @@ public class Reply : AsyncCommand<WriteCommandSettings>
                 {
                     options.DeviceAddress = _options.Value.DeviceAddress;
                 });
+    }
 
     public override async Task<int> ExecuteAsync(CommandContext context, WriteCommandSettings commandSettings)
     {
