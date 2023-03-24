@@ -32,7 +32,6 @@ public class WriteDatapointTypeCommand<TDatapointType, TSettings> : DatapointTyp
 
         try
         {
-
             await using var knxNetIpClient = CreateClient();
             await knxNetIpClient.ConnectAsync();
 

@@ -5,6 +5,8 @@ namespace Knx.Cli.Commands;
 
 public class WriteCommandSettings : CommandSettings
 {
+    protected Dictionary<string, object> DatapointTypeArguments { get; init; } = new();
+
     [Description("The destination (Logical) address of the message. E.g. 1/1/1")]
     [CommandArgument(0, "<ADDRESS>")]
     public string DestinationAddress { get; init; } = string.Empty;

@@ -48,6 +48,7 @@ internal sealed class DatapointTypeSettingsBuilder
         const MethodAttributes propertyMethodAttributes =
             MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig;
 
+        int index = 1;
         foreach (var property in _properties)
         {
             var propertyType = property.PropertyType;
@@ -77,14 +78,24 @@ internal sealed class DatapointTypeSettingsBuilder
                 new object[] { $"Payload: {propertyName}" });
             propertyBuilder.SetCustomAttribute(descriptionAttributeBuilder);
 
-            // add command option attribute
-            var commandOptionAttributeCtor =
-                typeof(CommandOptionAttribute).GetConstructor(new[] { typeof(string) });
-            var commandOptionAttributeBuilder =
+            // add argument attribute
+            var argumentAttributeCtor =
+                typeof(CommandArgumentAttribute)
+                    .GetConstructor(new[] { typeof(int), typeof(string) });
+            var argumentAttributeBuilder =
                 new CustomAttributeBuilder(
-                    commandOptionAttributeCtor!,
-                    new object[] { BuildCommandOption(propertyName) });
-            propertyBuilder.SetCustomAttribute(commandOptionAttributeBuilder);
+                    argumentAttributeCtor!,
+                    new object[] { index, $"<{propertyName.ToUpper()}>" });
+            propertyBuilder.SetCustomAttribute(argumentAttributeBuilder);
+
+            // // add command option attribute
+            // var commandOptionAttributeCtor =
+            //     typeof(CommandOptionAttribute).GetConstructor(new[] { typeof(string) });
+            // var commandOptionAttributeBuilder =
+            //     new CustomAttributeBuilder(
+            //         commandOptionAttributeCtor!,
+            //         new object[] { BuildCommandOption(propertyName) });
+            // propertyBuilder.SetCustomAttribute(commandOptionAttributeBuilder);
         }
 
         // Create the dynamic type
