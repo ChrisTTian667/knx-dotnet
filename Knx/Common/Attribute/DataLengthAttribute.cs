@@ -34,9 +34,6 @@ public class DataLengthAttribute : System.Attribute
     /// <summary>
     ///     Gets the length in bits.
     /// </summary>
-    /// <value>
-    ///     The length.
-    /// </value>
     public int Length { get; }
 
     public int MaximumLength { get; }

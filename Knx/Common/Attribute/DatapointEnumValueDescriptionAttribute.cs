@@ -11,7 +11,7 @@ public class DatapointEnumValueDescriptionAttribute : System.Attribute
     public DatapointEnumValueDescriptionAttribute(byte startIdx, byte endIndex, string description)
     {
         StartIndex = startIdx;
-        EndIndex = EndIndex;
+        EndIndex = endIndex;
         Description = description;
     }
 

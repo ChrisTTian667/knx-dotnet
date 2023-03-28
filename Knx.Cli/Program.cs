@@ -85,9 +85,6 @@ internal sealed class Program
 
         app.Configure(config =>
         {
-            // TODO add commands for each datatype here...
-
-
             config.AddBranch<ListCommandSettings>(
                 "list",
                 list =>

@@ -17,9 +17,16 @@ public class DatapointType
                 .Assembly
                 .DefinedTypes
                 .Where(t => !t.IsAbstract)
-                .Where(t => t.GetCustomAttributes(typeof(DatapointTypeAttribute), false).Any())
-                .OrderBy(t => t.GetCustomAttribute<DataLengthAttribute>()?.Length ?? 0)
-                .Select(ti => ti.AsType())
+                .Select(t => new
+                {
+                    Type = t,
+                    Dpt = t.GetCustomAttributes<DatapointTypeAttribute>(false)
+                        .FirstOrDefault()
+                })
+                .Where(t => t.Dpt != null)
+                .OrderBy(td => td.Dpt!.MainNumber)
+                    .ThenBy(td => td.Dpt!.SubNumber)
+                .Select(td => td.Type)
                 .ToList());
 
     private byte[] _payload = Array.Empty<byte>();

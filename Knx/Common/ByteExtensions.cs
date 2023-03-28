@@ -84,20 +84,28 @@ internal static class ByteExtensions
 
     public static byte SetBit(this byte value, byte index, bool bitValue)
     {
-        if (index > 7) throw new ArgumentOutOfRangeException("index", "Index must be within 0..7.");
+        if (index > 7)
+        {
+            throw new ArgumentOutOfRangeException(nameof(index), "Index must be within 0..7.");
+        }
 
         if (bitValue) return (byte)(value | (byte)(0x80 >> index));
 
         var bitArrayBuilder = new BitArrayBuilder();
 
-        for (var i = 0; i < 8; i++) bitArrayBuilder.Add(i != index);
+        for (var i = 0; i < 8; i++)
+            bitArrayBuilder.Add(i != index);
 
-        return (byte)(bitArrayBuilder.ToBitArray().ToByteArray().First() & value);
+        return (byte)(bitArrayBuilder
+            .ToBitArray()
+            .ToByteArray()
+            .First() & value);
     }
 
     public static bool GetBit(this byte value, byte index)
     {
-        if (index < 0 || index > 7) throw new ArgumentOutOfRangeException("index", "Index must be within 0..7.");
+        if (index is < 0 or > 7)
+            throw new ArgumentOutOfRangeException(nameof(index), "Index must be within 0..7.");
 
         return value.ConvertToBits(8).ToArray()[index];
     }

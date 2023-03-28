@@ -10,11 +10,12 @@ public static class IPEndpointCreator
     {
         if (string.IsNullOrWhiteSpace(addressString))
             return false;
+
         if (Uri.IsWellFormedUriString(addressString, UriKind.Absolute))
             return true;
 
         if (ParsePortNumber(addressString, out _))
-            addressString = addressString.Substring(0, addressString.LastIndexOf(':'));
+            addressString = addressString[..addressString.LastIndexOf(':')];
 
         return IPAddress.TryParse(addressString, out _);
     }
@@ -22,7 +23,7 @@ public static class IPEndpointCreator
     public static IPEndPoint Create(string addressString)
     {
         if (ParsePortNumber(addressString, out var port))
-            addressString = addressString.Substring(0, addressString.LastIndexOf(':'));
+            addressString = addressString[..addressString.LastIndexOf(':')];
 
         IPEndPoint endPoint;
 
@@ -31,8 +32,7 @@ public static class IPEndpointCreator
         else
         {
             // Normal IP Address or a DNS we need to resolve?
-            IPAddress address = null;
-            endPoint = IPAddress.TryParse(addressString, out address)
+            endPoint = IPAddress.TryParse(addressString, out var address)
                 ? new IPEndPoint(address, port)
                 : ResolveHostName(addressString, port);
         }
