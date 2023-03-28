@@ -94,12 +94,13 @@ internal sealed class ByteArrayBuilder
         return this;
     }
 
-    private void ReplaceToken(ByteArrayToken byteArrayToken, byte value)
+    private ByteArrayBuilder ReplaceToken(ByteArrayToken byteArrayToken, byte value)
     {
         _list[byteArrayToken.Index] = value;
+        return this;
     }
 
-    public void ReplaceToken(ByteArrayToken byteArrayToken, int value)
+    public ByteArrayBuilder ReplaceToken(ByteArrayToken byteArrayToken, int value)
     {
         if (byteArrayToken.Index + 1 > _list.Count)
             throw new InvalidOperationException("no more space to add an integer.");
@@ -113,13 +114,14 @@ internal sealed class ByteArrayBuilder
                 throw new ArgumentException("Value to big to pass to an single byte");
             case 1:
                 ReplaceToken(byteArrayToken, Convert.ToByte(value));
-
-                return;
+                return this;
         }
 
         var byteArray = IntToByteArray(value);
         _list[byteArrayToken.Index] = byteArray[0];
         _list[byteArrayToken.Index + 1] = byteArray[1];
+
+        return this;
     }
 
     /// <summary>

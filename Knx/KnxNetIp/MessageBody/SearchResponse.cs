@@ -7,8 +7,7 @@ public class SearchResponse : TunnelingMessageBody
 {
     public override KnxNetIpServiceType ServiceType => KnxNetIpServiceType.SearchResponse;
 
-    public KnxHpai Endpoint { get; set; }
-
+    public KnxHpai Endpoint { get; private set; }
 
     public override void Deserialize(byte[] bytes)
     {

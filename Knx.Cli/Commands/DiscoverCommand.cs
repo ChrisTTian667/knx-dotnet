@@ -1,38 +1,58 @@
+using System.Collections.Concurrent;
 using Knx.KnxNetIp;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Knx.Cli.Commands;
 
-public class DiscoverCommand : AsyncCommand
+public class DiscoverCommand : AsyncCommand<DiscoverCommandSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context)
+    public override async Task<int> ExecuteAsync(CommandContext context, DiscoverCommandSettings settings)
     {
         return await AnsiConsole.Status()
             .StartAsync(
-                "Discover KnxNetIp devices in your network.",
-                async _ =>
+                "Discovering KNXnet/IP devices...",
+                async ctx =>
                 {
-                    var routingClient = new KnxNetIpRoutingClient(
-                        options =>
-                        {
-                            options.DeviceAddress = "1/1/2";
-                        });
+                    var devices = new ConcurrentBag<KnxHpai>();
+                    await using var client = new KnxNetIpRoutingClient();
 
-                    routingClient.KnxDeviceDiscovered += (_, args) =>
+                    client.KnxDeviceDiscovered += (_, device) =>
                     {
-                        AnsiConsole.MarkupLine(
-                            $"[green]Discovered device:[/] {args.FriendlyName} - ConnectionString: {args.ConnectionString}");
+                        devices.Add(device);
+                        ctx.Status($"Discovering KNXnet/IP devices [grey]({devices.Count} found[/])");
                     };
 
-                    await routingClient.ConnectAsync();
-                    await routingClient.DiscoverAsync();
+                    await client.ConnectAsync();
+                    await client.DiscoverAsync();
+                    await Task.Delay(settings.Timeout);
 
-                    await Task.Delay(2000);
+                    // Create a table
+                    var table = new Table();
+                    table.Border(TableBorder.Rounded);
 
-                    // TODO: ask the user, if he wants to create a configuration for one of those devices
+                    // Add some columns
+                    table.AddColumn(new TableColumn("KNXnet/IP Device").LeftAligned());
+                    table.AddColumn(new TableColumn("IP-Address").LeftAligned());
+                    table.AddColumn(new TableColumn("Device Address").LeftAligned());
+                    table.AddColumn(new TableColumn("Mac").LeftAligned());
+                    table.AddColumn(new TableColumn("Medium").LeftAligned());
+
+                    foreach (var device in devices)
+                    {
+                        table.AddRow(
+                            new Markup($"[yellow]{device.Description!.FriendlyName}[/]"),
+                            new Markup($"[grey]{device.IpAddress}[/]"),
+                            new Markup($"[grey]{device.Description!.Address}[/]"),
+                            new Markup($"[grey]{BitConverter.ToString(device.Description!.MacAddress)}[/]"),
+                            new Markup($"[grey]{device.Description!.Medium}[/]")
+                            );
+                    }
+
+                    AnsiConsole.Write(table);
 
                     return 0;
                 });
     }
+
 }

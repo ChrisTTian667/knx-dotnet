@@ -1,18 +1,17 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using Knx.Common;
 
 namespace Knx.KnxNetIp;
 
 /// <summary>
-///     KNXnet/IP Host Protocol Address Information (HPAI).
-///     The address information is used to describe a communication channel. Its structure
-///     varies according to the used underlying protocol. This class is implemented for IPv4.
-///     For IP networks with NAT, consider use of {@link #HPAI(short, InetSocketAddress)}.
-///     UDP is the default communication mode with mandatory support used in KNXnet/IP.
+/// The KNX Host Protocol Address Information (HPAI) is a component
+/// of the KNXnet/IP communication protocol, responsible for encoding
+/// and decoding the address information of the knx devices.
 /// </summary>
 public class KnxHpai
 {
-    private IPAddress _ipAddress;
+    private IPAddress? _ipAddress;
 
     public HostProtocolCode HostProtocolCode { get; set; }
 
@@ -29,7 +28,6 @@ public class KnxHpai
     /// <summary>
     ///     Parses the specified bytes.
     /// </summary>
-    /// <param name="bytes">The bytes.</param>
     public static KnxHpai Parse(byte[] bytes)
     {
         var result = new KnxHpai
@@ -38,17 +36,11 @@ public class KnxHpai
             IpAddress = new IPAddress(bytes.ExtractBytes(2, 4)),
             Port = (bytes[6] << 8) + bytes[7]
         };
-        try
+
+        if (bytes.Length > 8)
         {
-            if (bytes.Length > 8)
-            {
-                result.Description =
-                    DeviceDescriptionInformationBlock.Parse(bytes.ExtractBytes(8));
-            }
-        }
-        catch
-        {
-            // suppress any exceptions.
+            result.Description =
+                DeviceDescriptionInformationBlock.Parse(bytes.ExtractBytes(8));
         }
 
         return result;
@@ -63,8 +55,8 @@ public class KnxHpai
                 .Add(IpAddress)
                 .AddInt(Port);
 
-        arrayBuilder.ReplaceToken(lengthToken, arrayBuilder.Length);
-
-        return arrayBuilder.ToByteArray();
+        return arrayBuilder
+            .ReplaceToken(lengthToken, arrayBuilder.Length)
+            .ToByteArray();
     }
 }

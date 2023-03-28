@@ -11,7 +11,6 @@ public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
 {
     public override Task<int> ExecuteAsync(CommandContext context, ListCommandSettings settings)
     {
-
         // Create a table
         var table = new Table();
         table.Border(TableBorder.Rounded);

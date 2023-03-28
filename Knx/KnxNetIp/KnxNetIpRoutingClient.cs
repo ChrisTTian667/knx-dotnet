@@ -111,7 +111,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
     /// <summary>
     ///     Called when knx device has been discovered.
     /// </summary>
-    public event EventHandler<DeviceInfo>? KnxDeviceDiscovered;
+    public event EventHandler<KnxHpai>? KnxDeviceDiscovered;
 
     private async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
     {
@@ -188,15 +188,10 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
             switch (message.Body)
             {
                 case SearchResponse searchResponse:
-                    InvokeKnxDeviceDiscovered(
-                        CreateDeviceInfoFromKnxHpai(
-                            searchResponse.Endpoint,
-                            searchResponse.Endpoint.Description?.FriendlyName ?? "Unknown"));
-
+                    InvokeKnxDeviceDiscovered(searchResponse.Endpoint);
                     break;
                 case RoutingIndication routingIndication:
                     InvokeKnxMessageReceived(routingIndication.Cemi);
-
                     break;
             }
 
@@ -213,27 +208,8 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         KnxMessageReceived?.Invoke(this, knxMessage);
     }
 
-    private void InvokeKnxDeviceDiscovered(DeviceInfo knxDeviceInfo)
+    private void InvokeKnxDeviceDiscovered(KnxHpai hostProtocolAddressInformation)
     {
-        KnxDeviceDiscovered?.Invoke(this, knxDeviceInfo);
-    }
-
-    /// <summary>
-    ///     Host Protocol Address Information
-    /// </summary>
-    /// <param name="endpoint"></param>
-    /// <param name="friendlyName"></param>
-    /// <returns></returns>
-    private static DeviceInfo CreateDeviceInfoFromKnxHpai(KnxHpai endpoint, string friendlyName)
-    {
-        var connection = new KnxNetIpConnectionString
-        {
-            InternalAddress = $"{endpoint.IpAddress}:{endpoint.Port}",
-            DeviceMain = endpoint.Description!.Address.Area,
-            DeviceMiddle = endpoint.Description.Address.Line,
-            DeviceSub = endpoint.Description.Address.Device
-        };
-
-        return new DeviceInfo(friendlyName, connection.ToString());
+        KnxDeviceDiscovered?.Invoke(this, hostProtocolAddressInformation);
     }
 }

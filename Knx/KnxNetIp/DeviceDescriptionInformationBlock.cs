@@ -8,9 +8,6 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
 {
     private DeviceDescriptionInformationBlock(byte[] bytes) : base(bytes)
     {
-        if (Type != DescriptionType.DeviceInfo)
-            throw new KnxNetIpException("Unable to determine Device Description. Wrong Description Type!");
-
         Medium = (KnxMedium)Information[0];
         Status = Information[1];
         Address = new KnxDeviceAddress(Information.ExtractBytes(2, 2));
@@ -23,10 +20,13 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
         {
             var name = new DptString_8859_1(Information.ExtractBytes(22)).Value;
             if (name.Contains('\0'))
-                name = name.Substring(0, name.IndexOf('\0'));
+                name = name[..name.IndexOf('\0')];
 
             FriendlyName = name;
         }
+
+        if (Type != DescriptionType.DeviceInfo)
+            throw new KnxNetIpException("Unable to determine Device Description. Wrong Description Type!");
     }
 
     public KnxMedium Medium { get; }
