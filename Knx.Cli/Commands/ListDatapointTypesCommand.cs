@@ -3,6 +3,7 @@ using Knx.Common.Attribute;
 using Knx.DatapointTypes;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Rendering;
 
 namespace Knx.Cli.Commands;
 
@@ -13,6 +14,7 @@ public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
 
         // Create a table
         var table = new Table();
+        table.Border(TableBorder.Rounded);
 
         // Add some columns
         table.AddColumn("DatapointType");
@@ -20,6 +22,7 @@ public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
         table.AddColumn(new TableColumn("Length").LeftAligned());
         table.AddColumn(new TableColumn("Unit").LeftAligned());
         table.AddColumn(new TableColumn("Description").LeftAligned());
+        table.AddColumn(new TableColumn("Properties").LeftAligned());
 
         // Add some rows
         // table.AddRow("Baz", "[green]Qux[/]");
@@ -36,6 +39,33 @@ public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
             var properties = type.GetProperties()
                 .Where(p => p.GetCustomAttributes<DatapointPropertyAttribute>(true).Any());
 
+            var propertyGrid = new Grid();
+            propertyGrid.AddColumn();
+            propertyGrid.AddColumn();
+
+            foreach (var property in properties)
+            {
+                var boolEncoding = property.GetCustomAttributes<BooleanEncodingAttribute>()
+                    .FirstOrDefault();
+
+                IRenderable value = new Markup("[grey][/]");
+
+                if (boolEncoding != null)
+                {
+                    var boolOptions = Markup.Escape($"[{boolEncoding.FalseEncoding}, {boolEncoding.TrueEncoding}]");
+                    value = new Markup($"[yellow]{boolOptions}[/]");
+                }
+                else
+                {
+                    var unitEncoding = type.GetCustomAttributes<DatapointTypeAttribute>()
+                        .FirstOrDefault();
+                    if (unitEncoding != null)
+                        value = new Markup($"[yellow]{unitEncoding.Unit}[/]");
+                }
+
+                propertyGrid.AddRow(new Markup($"[bold]{property.Name}[/]"), value);
+            }
+
             table.AddRow(
                 new Markup($"{type.Name}"),
                 new Markup($"{datapointType}"),
@@ -43,35 +73,13 @@ public class ListDatapointTypesCommand : AsyncCommand<ListCommandSettings>
                 new Markup($"{(datapointType.Unit == Unit.None
                     ? ""
                     : datapointType.Unit)}"),
-                new Markup($"{datapointType.Description}"));
+                new Markup($"{datapointType.Description}"),
 
-            AnsiConsole.WriteLine("");
-            AnsiConsole.WriteLine($"DatapointType: {type.Name}");
-            AnsiConsole.WriteLine($" - Length: {dataLengthAttribute?.Length}");
-            AnsiConsole.WriteLine($" - {properties.Count()} properties");
-            AnsiConsole.WriteLine("Properties:");
-
-            // foreach (var property in properties)
-            // {
-            //     AnsiConsole.WriteLine($" - {property.Name} ({property.PropertyType})");
-            //     // possible values:
-            //
-            //     var boolEncoding = property.GetCustomAttribute<BooleanEncodingAttribute>();
-            //     if (boolEncoding != null)
-            //     {
-            //         AnsiConsole.WriteLine($"   > {boolEncoding.FalseEncoding}");
-            //         AnsiConsole.WriteLine($"   > {boolEncoding.TrueEncoding}");
-            //     }
-            //     else
-            //     {
-            //         var unitEncoding = type.GetCustomAttribute<DatapointTypeAttribute>();
-            //         if (unitEncoding != null) AnsiConsole.WriteLine($"   > {unitEncoding.Unit}");
-            //     }
-            // }
+                propertyGrid
+            );
         }
 
         AnsiConsole.Write(table);
-
         return Task.FromResult(0);
     }
 }
