@@ -1,4 +1,5 @@
-﻿using Knx.Common;
+﻿using System;
+using Knx.Common;
 using Knx.DatapointTypes.DptString;
 using Knx.Resources;
 
@@ -12,8 +13,7 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
         Status = Information[1];
         Address = new KnxDeviceAddress(Information.ExtractBytes(2, 2));
         ProjectInstallId = (Information[4] << 8) + Information[5];
-        SerialNumber = new DptString_8859_1(Information.ExtractBytes(6, 6)).Value;
-        MacAddress = Information.ExtractBytes(16, 6);
+        MacAddress = BitConverter.ToString(Information.ExtractBytes(16, 6));
         FriendlyName = Strings.UnknownDevice;
 
         if (Information.Length > 22)
@@ -33,9 +33,7 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
 
     public short Status { get; }
 
-    public byte[] MacAddress { get; }
-
-    public string SerialNumber { get; }
+    public string MacAddress { get; }
 
     public int ProjectInstallId { get; }
 

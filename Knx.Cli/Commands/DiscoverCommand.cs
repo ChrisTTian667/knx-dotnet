@@ -33,9 +33,9 @@ public class DiscoverCommand : AsyncCommand<DiscoverCommandSettings>
 
                     // Add some columns
                     table.AddColumn(new TableColumn("KNXnet/IP Device").LeftAligned());
-                    table.AddColumn(new TableColumn("IP-Address").LeftAligned());
+                    table.AddColumn(new TableColumn("IP Address").LeftAligned());
+                    table.AddColumn(new TableColumn("Mac Address").LeftAligned());
                     table.AddColumn(new TableColumn("Device Address").LeftAligned());
-                    table.AddColumn(new TableColumn("Mac").LeftAligned());
                     table.AddColumn(new TableColumn("Medium").LeftAligned());
 
                     foreach (var device in devices)
@@ -43,8 +43,8 @@ public class DiscoverCommand : AsyncCommand<DiscoverCommandSettings>
                         table.AddRow(
                             new Markup($"[yellow]{device.Description!.FriendlyName}[/]"),
                             new Markup($"[grey]{device.IpAddress}[/]"),
+                            new Markup($"[grey]{device.Description!.MacAddress}[/]"),
                             new Markup($"[grey]{device.Description!.Address}[/]"),
-                            new Markup($"[grey]{BitConverter.ToString(device.Description!.MacAddress)}[/]"),
                             new Markup($"[grey]{device.Description!.Medium}[/]")
                             );
                     }
