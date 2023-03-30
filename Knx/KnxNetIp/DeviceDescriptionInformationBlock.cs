@@ -13,7 +13,7 @@ public sealed class DeviceDescriptionInformationBlock : DescriptionInformationBl
         Address = new KnxDeviceAddress(Information.ExtractBytes(2, 2));
         ProjectInstallId = (Information[4] << 8) + Information[5];
         SerialNumber = new DptString_8859_1(Information.ExtractBytes(6, 6)).Value;
-        MacAddress = Information.ExtractBytes(12, 10);
+        MacAddress = Information.ExtractBytes(16, 6);
         FriendlyName = Strings.UnknownDevice;
 
         if (Information.Length > 22)
