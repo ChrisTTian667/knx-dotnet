@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Knx.KnxNetIp.MessageBody;
@@ -21,6 +22,8 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
     private readonly CancellationTokenSource _receivingMessagesCancellationTokenSource;
     private readonly IPEndPoint _remoteEndPoint;
     private UdpClient? _udpClient;
+    private readonly Subject<KnxNetIpMessage> _knxNetIpMessageSubject;
+    private readonly Subject<IKnxMessage> _knxMessageSubject;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="KnxNetIpRoutingClient" /> class.
@@ -42,6 +45,9 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         _deviceAddress = options.DeviceAddress;
 
         _receivingMessagesCancellationTokenSource = new CancellationTokenSource();
+
+        _knxNetIpMessageSubject = new Subject<KnxNetIpMessage>();
+        _knxMessageSubject = new Subject<IKnxMessage>();
     }
 
     public async ValueTask DisposeAsync()
@@ -91,6 +97,16 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         await Task.CompletedTask;
     }
 
+    IDisposable IObservable<KnxNetIpMessage>.Subscribe(IObserver<KnxNetIpMessage> observer)
+    {
+        throw new NotImplementedException();
+    }
+
+    IDisposable IObservable<IKnxMessage>.Subscribe(IObserver<IKnxMessage> observer)
+    {
+        throw new NotImplementedException();
+    }
+
     ~KnxNetIpRoutingClient()
     {
         _ = Dispose(false);
@@ -103,6 +119,9 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
             _receivingMessagesCancellationTokenSource.Cancel();
             _udpClient?.Dispose();
             _udpClient = null;
+
+            _knxNetIpMessageSubject.Dispose();
+            _knxMessageSubject.Dispose();
         }
 
         return ValueTask.CompletedTask;
@@ -201,15 +220,34 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         {
             throw new KnxNetIpException("Error while handling received message", e);
         }
+
+        _knxNetIpMessageSubject.OnNext(message);
     }
 
     private void InvokeKnxMessageReceived(IKnxMessage knxMessage)
     {
         KnxMessageReceived?.Invoke(this, knxMessage);
+        _knxMessageSubject.OnNext(knxMessage);
     }
 
-    private void InvokeKnxDeviceDiscovered(KnxHpai hostProtocolAddressInformation)
-    {
+    private void InvokeKnxDeviceDiscovered(KnxHpai hostProtocolAddressInformation) =>
         KnxDeviceDiscovered?.Invoke(this, hostProtocolAddressInformation);
-    }
+
+    void IObserver<KnxNetIpMessage>.OnCompleted() =>
+        _knxNetIpMessageSubject.OnCompleted();
+
+    void IObserver<IKnxMessage>.OnError(Exception error) =>
+        _knxMessageSubject.OnError(error);
+
+    void IObserver<IKnxMessage>.OnNext(IKnxMessage value) =>
+        _knxMessageSubject.OnNext(value);
+
+    void IObserver<IKnxMessage>.OnCompleted() =>
+        _knxMessageSubject.OnCompleted();
+
+    void IObserver<KnxNetIpMessage>.OnError(Exception error) =>
+        _knxNetIpMessageSubject.OnError(error);
+
+    void IObserver<KnxNetIpMessage>.OnNext(KnxNetIpMessage value) =>
+        _knxNetIpMessageSubject.OnNext(value);
 }

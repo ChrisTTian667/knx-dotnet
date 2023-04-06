@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,7 +28,6 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
     private readonly IPEndPoint _remoteEndPoint;
 
     private readonly SemaphoreSlim _sendSemaphoreSlim = new(1, 1);
-    //private readonly AutoResetEvent _terminationEvent = new(false);
 
     private readonly UdpClient _udpClient;
     private DateTime _connectionStateTimeStamp;
@@ -37,6 +37,8 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
 
     //private bool _logicalConnected;
     private byte _sequenceCounter;
+    private readonly Subject<KnxNetIpMessage> _knxNetIpMessageSubject;
+    private readonly Subject<IKnxMessage> _knxMessageSubject;
 
     public KnxNetIpTunnelingClient(
         Action<KnxNetIpTunnelingClientOptions>? configureOptions = null,
@@ -52,6 +54,9 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         _udpClient = new UdpClient();
 
         _receivingMessagesCancellationTokenSource = new CancellationTokenSource();
+
+        _knxNetIpMessageSubject = new Subject<KnxNetIpMessage>();
+        _knxMessageSubject = new Subject<IKnxMessage>();
     }
 
     /// <summary>
@@ -152,15 +157,12 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         _ = SendKeepAliveMessages(_receivingMessagesCancellationTokenSource.Token);
     }
 
-    public void Dispose()
-    {
-        if (_isDisposed)
-        {
-            _isDisposed = true;
+    IDisposable IObservable<KnxNetIpMessage>.Subscribe(IObserver<KnxNetIpMessage> observer) =>
+        _knxNetIpMessageSubject.Subscribe(observer);
 
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+    IDisposable IObservable<IKnxMessage>.Subscribe(IObserver<IKnxMessage> observer)
+    {
+        throw new NotImplementedException();
     }
 
     ~KnxNetIpTunnelingClient()
@@ -255,26 +257,23 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         {
             case KnxNetIpServiceType.ConnectionResponse:
                 HandleConnectionResponse((KnxNetIpMessage<ConnectionResponse>)message);
-
                 break;
 
             case KnxNetIpServiceType.DisconnectResponse:
                 HandleDisconnectResponse((KnxNetIpMessage<DisconnectResponse>)message);
-
                 break;
 
             case KnxNetIpServiceType.ConnectionStateResponse:
                 HandleConnectionStateResponse((KnxNetIpMessage<ConnectionStateResponse>)message);
-
                 break;
 
             case KnxNetIpServiceType.TunnelingRequest:
                 HandleTunnelingRequest((KnxNetIpMessage<TunnelingRequest>)message);
-
                 break;
         }
 
-        InvokeKnxNetIpMessageReceived(message);
+        KnxNetIpMessageReceived?.Invoke(this, message);
+        ((ISubject<KnxNetIpMessage>)this).OnNext(message);
     }
 
     private async Task DisposeAsync(bool disposing)
@@ -283,7 +282,13 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
             return;
 
         await DisconnectAsync();
+
+        _knxMessageSubject.OnCompleted();
+        _knxNetIpMessageSubject.OnCompleted();
+
         _udpClient.Dispose();
+        _knxNetIpMessageSubject.Dispose();
+        _knxMessageSubject.Dispose();
     }
 
     /// <summary>
@@ -508,8 +513,21 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         }
     }
 
-    private void InvokeKnxNetIpMessageReceived(KnxNetIpMessage message)
-    {
-        KnxNetIpMessageReceived?.Invoke(this, message);
-    }
+    void IObserver<KnxNetIpMessage>.OnCompleted() =>
+        _knxNetIpMessageSubject.OnCompleted();
+
+    void IObserver<IKnxMessage>.OnError(Exception error) =>
+        _knxMessageSubject.OnError(error);
+
+    void IObserver<IKnxMessage>.OnNext(IKnxMessage value) =>
+        _knxMessageSubject.OnNext(value);
+
+    void IObserver<IKnxMessage>.OnCompleted() =>
+        _knxMessageSubject.OnCompleted();
+
+    void IObserver<KnxNetIpMessage>.OnError(Exception error) =>
+        _knxNetIpMessageSubject.OnError(error);
+
+    void IObserver<KnxNetIpMessage>.OnNext(KnxNetIpMessage value) =>
+        _knxNetIpMessageSubject.OnNext(value);
 }
