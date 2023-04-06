@@ -1,5 +1,4 @@
 using System;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,8 +6,8 @@ namespace Knx.KnxNetIp;
 
 public interface IKnxNetIpClient :
     IAsyncDisposable,
-    ISubject<KnxNetIpMessage>,
-    ISubject<IKnxMessage>
+    IObservable<KnxNetIpMessage>,
+    IObservable<IKnxMessage>
 {
     Task ConnectAsync();
 

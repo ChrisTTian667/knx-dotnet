@@ -14,7 +14,7 @@ namespace Knx.KnxNetIp;
 /// <summary>
 ///     Used to connect to the Knx Bus via KnxNetIpRouting protocol.
 /// </summary>
-public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
+public sealed class KnxNetIpRoutingClient : IKnxNetIpClient, IObservable<KnxHpai>
 {
     private readonly KnxDeviceAddress _deviceAddress;
     private readonly IPEndPoint _localEndpoint;
@@ -22,8 +22,10 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
     private readonly CancellationTokenSource _receivingMessagesCancellationTokenSource;
     private readonly IPEndPoint _remoteEndPoint;
     private UdpClient? _udpClient;
+
     private readonly Subject<KnxNetIpMessage> _knxNetIpMessageSubject;
     private readonly Subject<IKnxMessage> _knxMessageSubject;
+    private readonly Subject<KnxHpai> _knxHpaiSubject;
 
     /// <summary>
     ///     Creates a new instance of the <see cref="KnxNetIpRoutingClient" /> class.
@@ -48,6 +50,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
 
         _knxNetIpMessageSubject = new Subject<KnxNetIpMessage>();
         _knxMessageSubject = new Subject<IKnxMessage>();
+        _knxHpaiSubject = new Subject<KnxHpai>();
     }
 
     public async ValueTask DisposeAsync()
@@ -97,15 +100,14 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         await Task.CompletedTask;
     }
 
-    IDisposable IObservable<KnxNetIpMessage>.Subscribe(IObserver<KnxNetIpMessage> observer)
-    {
-        throw new NotImplementedException();
-    }
+    IDisposable IObservable<KnxNetIpMessage>.Subscribe(IObserver<KnxNetIpMessage> observer) =>
+        _knxNetIpMessageSubject.Subscribe(observer);
 
-    IDisposable IObservable<IKnxMessage>.Subscribe(IObserver<IKnxMessage> observer)
-    {
-        throw new NotImplementedException();
-    }
+    IDisposable IObservable<IKnxMessage>.Subscribe(IObserver<IKnxMessage> observer) =>
+        _knxMessageSubject.Subscribe(observer);
+
+    IDisposable IObservable<KnxHpai>.Subscribe(IObserver<KnxHpai> observer) =>
+        _knxHpaiSubject.Subscribe(observer);
 
     ~KnxNetIpRoutingClient()
     {
@@ -122,6 +124,7 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
 
             _knxNetIpMessageSubject.Dispose();
             _knxMessageSubject.Dispose();
+            _knxHpaiSubject.Dispose();
         }
 
         return ValueTask.CompletedTask;
@@ -230,24 +233,9 @@ public sealed class KnxNetIpRoutingClient : IKnxNetIpClient
         _knxMessageSubject.OnNext(knxMessage);
     }
 
-    private void InvokeKnxDeviceDiscovered(KnxHpai hostProtocolAddressInformation) =>
+    private void InvokeKnxDeviceDiscovered(KnxHpai hostProtocolAddressInformation)
+    {
         KnxDeviceDiscovered?.Invoke(this, hostProtocolAddressInformation);
-
-    void IObserver<KnxNetIpMessage>.OnCompleted() =>
-        _knxNetIpMessageSubject.OnCompleted();
-
-    void IObserver<IKnxMessage>.OnError(Exception error) =>
-        _knxMessageSubject.OnError(error);
-
-    void IObserver<IKnxMessage>.OnNext(IKnxMessage value) =>
-        _knxMessageSubject.OnNext(value);
-
-    void IObserver<IKnxMessage>.OnCompleted() =>
-        _knxMessageSubject.OnCompleted();
-
-    void IObserver<KnxNetIpMessage>.OnError(Exception error) =>
-        _knxNetIpMessageSubject.OnError(error);
-
-    void IObserver<KnxNetIpMessage>.OnNext(KnxNetIpMessage value) =>
-        _knxNetIpMessageSubject.OnNext(value);
+        _knxHpaiSubject.OnNext(hostProtocolAddressInformation);
+    }
 }

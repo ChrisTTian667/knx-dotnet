@@ -78,13 +78,13 @@ public class KnxMessage : IKnxMessage
     ///     Gets or sets the source (device-) address.
     /// </summary>
     /// <value>The source address.</value>
-    public KnxDeviceAddress? SourceAddress { get; set; } = "0/0/0";
+    public KnxDeviceAddress SourceAddress { get; set; } = "0/0/0";
 
     /// <summary>
     ///     Gets or sets the destination address (device or individual/logical address).
     /// </summary>
     /// <value>The destination address.</value>
-    public KnxAddress? DestinationAddress { get; set; }
+    public KnxAddress DestinationAddress { get; set; } = (KnxLogicalAddress)"0/0/0";
 
     /// <summary>
     ///     Gets the hop count, a message did, till it was received.

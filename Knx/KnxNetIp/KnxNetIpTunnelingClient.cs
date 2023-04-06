@@ -273,7 +273,8 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
         }
 
         KnxNetIpMessageReceived?.Invoke(this, message);
-        ((ISubject<KnxNetIpMessage>)this).OnNext(message);
+
+        _knxNetIpMessageSubject.OnNext(message);
     }
 
     private async Task DisposeAsync(bool disposing)
@@ -512,22 +513,4 @@ public sealed class KnxNetIpTunnelingClient : IKnxNetIpClient
             _sequenceCounter++;
         }
     }
-
-    void IObserver<KnxNetIpMessage>.OnCompleted() =>
-        _knxNetIpMessageSubject.OnCompleted();
-
-    void IObserver<IKnxMessage>.OnError(Exception error) =>
-        _knxMessageSubject.OnError(error);
-
-    void IObserver<IKnxMessage>.OnNext(IKnxMessage value) =>
-        _knxMessageSubject.OnNext(value);
-
-    void IObserver<IKnxMessage>.OnCompleted() =>
-        _knxMessageSubject.OnCompleted();
-
-    void IObserver<KnxNetIpMessage>.OnError(Exception error) =>
-        _knxNetIpMessageSubject.OnError(error);
-
-    void IObserver<KnxNetIpMessage>.OnNext(KnxNetIpMessage value) =>
-        _knxNetIpMessageSubject.OnNext(value);
 }
