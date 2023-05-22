@@ -12,7 +12,7 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="7.0.0" />
-      <PackageReference Include="Spectre.Console.Cli" Version="0.46.0" />
+      <PackageReference Include="Spectre.Console.Cli" Version="0.47.0" />
     </ItemGroup>
 
     <ItemGroup>
